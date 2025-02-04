@@ -44,8 +44,9 @@ public class AuthService {
         Member savedMember = memberRepository.save(member);
 
         String jwtToken = jwtService.generateToken(savedMember);
-        
-
+        String refreshToken = jwtService.generateRefreshToken(savedMember);
+        log.info(jwtToken);
+        log.info(refreshToken);
         return null;
     }
 }

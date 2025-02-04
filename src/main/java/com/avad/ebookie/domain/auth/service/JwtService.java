@@ -1,6 +1,5 @@
 package com.avad.ebookie.domain.auth.service;
 
-import com.avad.ebookie.domain.member.entity.Member;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -53,5 +51,9 @@ public class JwtService {
         log.info(String.valueOf(Keys.secretKeyFor(SignatureAlgorithm.HS256)));
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 }
