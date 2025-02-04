@@ -22,6 +22,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Transactional
     public AuthResponseDto register(@Valid RegisterRequestDto request) {
@@ -40,7 +41,10 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+
+        String jwtToken = jwtService.generateToken(savedMember);
+        
 
         return null;
     }
