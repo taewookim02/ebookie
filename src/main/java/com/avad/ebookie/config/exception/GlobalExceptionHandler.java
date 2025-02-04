@@ -1,5 +1,9 @@
-package com.avad.ebookie.config;
+package com.avad.ebookie.config.exception;
 
+import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
+import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +17,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(EmailDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleEmailDuplicateException(EmailDuplicateException ex) {
+        log.error("handleEmailDuplicateException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordMismatchException(PasswordMismatchException ex) {
+        log.error("handlePasswordMismatchException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+    }
 
     /**
      * https://salithachathuranga94.medium.com/validation-and-exception-handling-in-spring-boot-51597b580ffd
      * spring starter validation 예외처리
-     * DTO에서 유효성검사 실패 시 발생 
+     * DTO에서 유효성검사 실패 시 발생
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
