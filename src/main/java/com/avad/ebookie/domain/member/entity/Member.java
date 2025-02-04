@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member extends BaseEntity {
+public class Member extends BaseEntity { // BaseEntity => createdAt, updatedAt
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
