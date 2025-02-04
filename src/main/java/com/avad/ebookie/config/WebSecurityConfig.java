@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -29,18 +31,16 @@ public class WebSecurityConfig {
         return manager;
     }
 
-    /**
-     * 시큐리티를 적용하지 않을 곳
-     * error, favicon 추가
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers("/error", "/favicon.ico");
-    }
+    /*
+    * BCrypt로 비밀번호 해싱
      */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-    /**
+    /*
      * 1. 보호할 URL 선언하기
      * 2. jwtfilter 추가하기
      *
