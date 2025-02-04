@@ -37,16 +37,26 @@ public class AuthService {
             throw new EmailDuplicateException("이메일 중복", ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
+        // 멤버 저장
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        String jwtToken = jwtService.generateToken(savedMember);
+        // 토큰 생성
+        String accessToken = jwtService.generateToken(savedMember);
         String refreshToken = jwtService.generateRefreshToken(savedMember);
-        log.info(jwtToken);
+        log.info(accessToken);
         log.info(refreshToken);
-        return null;
+        
+        
+        // 토큰 저장
+        
+        
+        // 응답
+        return AuthResponseDto
+                .builder()
+                .accessToken(accessToken).build();
     }
 }
