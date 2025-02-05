@@ -42,18 +42,27 @@ public class WebSecurityConfig {
 
         String[] allowedPaths = {"/", "/auth/**"};
         http.csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
+                // 선언된 url에 필터달기
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(allowedPaths)
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션에 정보저장 x
-                .authenticationProvider(authProvider) // 인증하려면 authProvider 필요
+                // 세션에 정보저장 x
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // 인증하려면 authProvider 필요
+                .authenticationProvider(authProvider)
+
+                // jwt 필터
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                // 로그아웃
                 .logout((logoutConfig) -> {
                     logoutConfig.logoutUrl("/auth/logout");
-                    logoutConfig.addLogoutHandler(logoutHandler);
+                    logoutConfig.addLogoutHandler(logoutHandler); // LogoutService implements LogoutHandler
                     logoutConfig.logoutSuccessHandler(((request, response, authentication) -> {
                         clearRefreshTokenCookie(response);
                         response.setStatus(HttpServletResponse.SC_OK);

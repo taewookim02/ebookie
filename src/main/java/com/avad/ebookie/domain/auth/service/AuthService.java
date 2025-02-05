@@ -14,6 +14,7 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.member.entity.Role;
 import com.avad.ebookie.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -141,5 +142,54 @@ public class AuthService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validMemberTokens);
+    }
+
+    public AuthResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        //  request 쿠키에서 리프레시 토큰 추출
+        final String refreshToken = extractRefreshTokenFromCookie(request);
+        if (refreshToken == null) {
+            return null;
+        }
+        log.info("refreshToken: ", refreshToken);
+
+        // 리프레시 토큰에서 유저이메일 추출
+        final String userEmail = jwtService.extractUsername(refreshToken);
+
+        if (userEmail != null) {
+            // 이메일로 유저정보 추출
+            Member userDetails = memberRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+            
+            // 리프레시 토큰이 유효할 경우 
+            if (jwtService.isTokenValid(refreshToken, userDetails)) {
+                // 새로운 accessToken 발급
+                String accessToken = jwtService.generateToken(userDetails);
+                
+                // 존재했던 토큰 만료
+                revokeAllMemberTokens(userDetails);
+                // 새로 발급된 accessToken 저장
+                saveMemberToken(userDetails, accessToken);
+
+                // 응답
+                AuthResponseDto authResponseDto = AuthResponseDto.builder()
+                        .accessToken(accessToken)
+                        .build();
+                return authResponseDto;
+            }
+        }
+        // 응답
+        return null;
+    }
+
+    private String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refresh_token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
