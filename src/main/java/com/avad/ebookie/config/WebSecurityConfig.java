@@ -1,31 +1,31 @@
 package com.avad.ebookie.config;
 
+import com.avad.ebookie.config.filter.JwtAuthenticationFilter;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final UserDetailsService userDetailsService; // 유저 찾기에 필요한 서비스
     private final PasswordEncoder passwordEncoder;
-
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final LogoutHandler logoutHandler;
 
 
     /*
@@ -40,19 +40,38 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
 
-        String[] allowedPaths = { "/", "/auth/**" };
-        http
-                .csrf(AbstractHttpConfigurer::disable)
+        String[] allowedPaths = {"/", "/auth/**"};
+        http.csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(allowedPaths)
                         .permitAll()
                         .anyRequest()
-                        .authenticated()
-                )
+                        .authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션에 정보저장 x
                 .authenticationProvider(authProvider) // 인증하려면 authProvider 필요
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout((logoutConfig) -> {
+                    logoutConfig.logoutUrl("/auth/logout");
+                    logoutConfig.addLogoutHandler(logoutHandler);
+                    logoutConfig.logoutSuccessHandler(((request, response, authentication) -> {
+                        clearRefreshTokenCookie(response);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write("로그아웃 성공");
+                    }));
+                });
         return http.build();
+    }
+
+    // refresh_token 덮어쓰기
+    private void clearRefreshTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("refresh_token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setSecure(true);
+        response.addCookie(cookie);
     }
 
 }

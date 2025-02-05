@@ -1,5 +1,6 @@
 package com.avad.ebookie.config.exception;
 
+import com.avad.ebookie.domain.auth.exception.AuthBearerInvalidException;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
 import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
@@ -22,6 +23,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AuthBearerInvalidException.class)
+    public ResponseEntity<ErrorResponse> handleAuthBearerInvalidException(AuthBearerInvalidException ex) {
+        log.error("handleAuthBearerInvalidException", ex);
+        log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.AUTH_BEARER_INVALID);
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+    }
 
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMemberNotFoundException(MemberNotFoundException ex) {
