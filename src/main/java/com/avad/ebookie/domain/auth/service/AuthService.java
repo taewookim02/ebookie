@@ -5,20 +5,27 @@ import com.avad.ebookie.domain.auth.dto.request.LoginRequestDto;
 import com.avad.ebookie.domain.auth.dto.request.RegisterRequestDto;
 import com.avad.ebookie.domain.auth.dto.response.AuthResponseDto;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
+import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
 import com.avad.ebookie.domain.auth.model.Token;
 import com.avad.ebookie.domain.auth.model.TokenType;
 import com.avad.ebookie.domain.auth.repository.TokenRepository;
 import com.avad.ebookie.domain.member.entity.Member;
+import com.avad.ebookie.domain.member.entity.Role;
 import com.avad.ebookie.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Slf4j
@@ -30,6 +37,7 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
 
     @Transactional
@@ -49,6 +57,7 @@ public class AuthService {
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.MEMBER)
                 .build();
         Member savedMember = memberRepository.save(member);
 
@@ -91,6 +100,46 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
+    @Transactional
     public AuthResponseDto login(@Valid LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        log.info("AuthService.login");
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDto.getEmail(),
+                        loginRequestDto.getPassword()
+                )
+        );
+
+        Member member = memberRepository.findByEmail(loginRequestDto.getEmail())
+                .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // jwt 토큰 생성
+        String accessToken = jwtService.generateToken(member);
+        String refreshToken = jwtService.generateRefreshToken(member);
+
+        // 기존 토큰 만료
+        revokeAllMemberTokens(member);
+        // 새로운 토큰 발급
+        saveMemberToken(member, accessToken);
+        // 쿠키에 리프레시토큰 추가
+        addRefreshTokenCookie(response, refreshToken);
+
+        // 응답
+        return AuthResponseDto.builder()
+                .accessToken(accessToken)
+                .build();
+    }
+
+    private void revokeAllMemberTokens(Member member) {
+        List<Token> validMemberTokens = tokenRepository.findAllValidTokensByMember(member.getId());
+        if (validMemberTokens.isEmpty()) {
+            return;
+        }
+
+        validMemberTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validMemberTokens);
     }
 }

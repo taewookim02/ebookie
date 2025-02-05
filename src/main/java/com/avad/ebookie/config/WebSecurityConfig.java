@@ -1,8 +1,12 @@
 package com.avad.ebookie.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,29 +20,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity(debug = false)
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    /*
-    * 테스트용 기본 세팅
-    * user/password 메모리에 생성
-    * https://docs.spring.io/spring-security/reference/servlet/configuration/java.html
-    * */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build());
-        manager.createUser(User.withDefaultPasswordEncoder().username("taewookim02@gmail.com").password("password").roles("USER").build());
-        return manager;
-    }
+    private final UserDetailsService userDetailsService; // 유저 찾기에 필요한 서비스
+    private final PasswordEncoder passwordEncoder;
 
 
-    /*
-    * BCrypt로 비밀번호 해싱
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     /*
      * 1. 보호할 URL 선언하기
@@ -47,6 +35,11 @@ public class WebSecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(); // 인증하려면 authProvider 필요
+        authProvider.setUserDetailsService(userDetailsService); // 유저찾을 곳 설정
+        authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
+
+
         String[] allowedPaths = { "/", "/auth/**" };
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -56,10 +49,10 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
+                .authenticationProvider(authProvider) // 인증하려면 authProvider 필요
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
-
 
 }

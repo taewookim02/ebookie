@@ -1,12 +1,14 @@
 package com.avad.ebookie.config.exception;
 
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
+import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +22,20 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleMemberNotFoundException(MemberNotFoundException ex) {
+        log.error("handleMemberNotFoundException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MEMBER_NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        log.error("handleBadCredentialsException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.BAD_CREDENTIALS);
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+    }
 
     @ExceptionHandler(EmailDuplicateException.class)
     public ResponseEntity<ErrorResponse> handleEmailDuplicateException(EmailDuplicateException ex) {

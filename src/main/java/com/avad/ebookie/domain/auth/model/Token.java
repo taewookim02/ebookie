@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tokenId;
+    private Long id;
     private String token;
 
     @Enumerated(EnumType.STRING)
