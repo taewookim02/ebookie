@@ -1,11 +1,12 @@
 package com.avad.ebookie.config.exception;
 
-import com.avad.ebookie.domain.auth.exception.AuthBearerInvalidException;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
 import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,26 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AuthBearerInvalidException.class)
-    public ResponseEntity<ErrorResponse> handleAuthBearerInvalidException(AuthBearerInvalidException ex) {
-        log.error("handleAuthBearerInvalidException", ex);
-        log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.AUTH_BEARER_INVALID);
+    // JWT 토큰 유효 x
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex) {
+        log.error("handleSignatureException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SIGNATURE_EXCEPTION);
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+    }
+
+    // JWT 토큰 malformed
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException ex) {
+        log.error("handleSignatureException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MALFORMED_JWT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
+        log.error("handleExpiredJwtException", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.EXPIRED_JWT);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }
 

@@ -1,5 +1,6 @@
 package com.avad.ebookie.config;
 
+import com.avad.ebookie.config.exception.JwtAuthenticationEntryPoint;
 import com.avad.ebookie.config.filter.JwtAuthenticationFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,10 +24,10 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class WebSecurityConfig {
 
     private final UserDetailsService userDetailsService; // 유저 찾기에 필요한 서비스
-    private final PasswordEncoder passwordEncoder;
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final LogoutHandler logoutHandler;
-
+    private final PasswordEncoder passwordEncoder; // Bcrypt 인코더
+    private final JwtAuthenticationFilter jwtAuthFilter; // JWT 필터
+    private final LogoutHandler logoutHandler; // LogoutService implements LogoutHandler
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; //
 
     /*
      * 1. 보호할 URL 선언하기
@@ -41,25 +42,18 @@ public class WebSecurityConfig {
 
 
         String[] allowedPaths = {"/", "/auth/**"};
-        http.csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
-                // 선언된 url에 필터달기
+        http
+                .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(allowedPaths)
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                // 세션에 정보저장 x
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션에 정보저장 x
                 )
-
-                // 인증하려면 authProvider 필요
-                .authenticationProvider(authProvider)
-
-                // jwt 필터
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
-                // 로그아웃
+                .authenticationProvider(authProvider) // 인증하려면 authProvider 필요
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // jwt 필터
                 .logout((logoutConfig) -> {
                     logoutConfig.logoutUrl("/auth/logout");
                     logoutConfig.addLogoutHandler(logoutHandler); // LogoutService implements LogoutHandler
@@ -69,7 +63,10 @@ public class WebSecurityConfig {
                         response.setCharacterEncoding("UTF-8");
                         response.getWriter().write("로그아웃 성공");
                     }));
-                });
+                })
+                .exceptionHandling(exceptionConfig ->
+                        exceptionConfig.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                );
         return http.build();
     }
 
