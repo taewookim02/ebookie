@@ -41,7 +41,7 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
 
-        String[] allowedPaths = {"/", "/auth/**"};
+        String[] allowedPaths = {"/", "/auth/**", "/home", "/css/**"};
         http
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize

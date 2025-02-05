@@ -38,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String userEmail;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            log.info("AuthHeader가 없음");
             return;
             // throw new AuthBearerInvalidException(ErrorCode.AUTH_BEARER_INVALID); // the response is not being sent
         }

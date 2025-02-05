@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/auth/login" method="POST" id="auth-form">
+    <form action="/auth/register" method="POST" id="auth-form">
         <div class="input-field">
             <label for="email">이메일</label>
             <input type="email" name="email" id="email">
@@ -15,7 +15,11 @@
             <label for="password">비밀번호</label>
             <input type="password" name="password" id="password">
         </div>
-        <button type="submit">로그인</button>
+        <div class="input-field">
+            <label for="password">비밀번호 확인</label>
+            <input type="password" name="confirmPassword" id="confirmPassword">
+        </div>
+        <button type="submit">회원가입</button>
     </form>
     <script>
         const form = document.querySelector("#auth-form");
@@ -24,22 +28,22 @@
             e.preventDefault();
             const email = document.querySelector("#email").value;
             const password = document.querySelector("#password").value;
+            const confirmPassword = document.querySelector("#confirmPassword").value;
             const formData = {
                 email,
                 password,
+                confirmPassword
             };
 
-            const res = await fetch("/auth/login", {
+            const res = await fetch("/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData)
             });
-
             console.log(res);
             const data = await res.json();
-            // data.accessToken contains jwt token
             console.log(data);
         })
     </script>
