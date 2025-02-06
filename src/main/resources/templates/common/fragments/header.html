@@ -1,17 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="HeaderFragment">
+<style>
+    .navbar__bottom>a:hover {
+        background-color: #ddd;
+    }
+</style>
+
 <header>
-    <nav class="navbar d-flex">
-        <a href="#" class="d-flex">
-            <img th:src="@{/lib/assets/logo2.png}" alt="Logo">
-        </a>
-        <div class="navbar__search">
-            <th:block th:replace="~{common/fragments/components/searchbar :: SearchBar}"></th:block>
+    <nav class="navbar">
+        <div class="d-flex align-items-center w-100 justify-content-between">
+            <a href="/" class="d-flex">
+                <img th:src="@{/lib/assets/logo2.png}" alt="Logo" style="max-height: 31px; width: auto;">
+            </a>
+            <div class="navbar__search">
+                <th:block th:replace="~{common/fragments/components/searchbar :: SearchBar}"></th:block>
+            </div>
+            <div class="navbar__links">
+                <a th:href="@{/auth/login}" class="link-dark">로그인</a>
+                <a th:href="@{/auth/register}" class="link-dark">회원가입</a>
+                <a href="#">
+                    <img th:src="@{/lib/assets/icons/shopping-cart.svg}" alt="카트 icon">
+                </a>
+                <a th:href="@{/auth/logout}" class="link-dark">로그아웃</a>
+            </div>
         </div>
-        <div class="navbar__links">
-            <a th:href="@{/auth/login}" class="link-dark">로그인</a>
-            <a th:href="@{/auth/register}" class="link-dark">회원가입</a>
-            <!-- <a th:href="@{/auth/logout}" class="link-dark">로그아웃</a> -->
+        <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between">
+            <a href="#" class="flex-grow-1 p-3 text-center dropdown-toggle" role="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+            aria-expanded="false" aria-label="Toggle navigation">카테고리</a>
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+
+
+            <a href="#" class="flex-grow-1 p-3 text-center">베스트상품</a>
+            <a href="#" class="flex-grow-1 p-3 text-center">신상품</a>
+            <a href="#" class="flex-grow-1 p-3 text-center">이벤트</a>
+        </div>
+        <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">
+            <div class="p-4">
+                <h5 class="text-body-emphasis h4">Collapsed content</h5>
+                <span class="text-body-secondary">Toggleable via the navbar brand.</span>
+            </div>
         </div>
     </nav>
 </header>
