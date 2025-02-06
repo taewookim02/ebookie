@@ -46,4 +46,4 @@ logging:
             bind: trace
 server:
   port: 8080
-  
+

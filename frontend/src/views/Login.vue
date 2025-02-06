@@ -3,26 +3,32 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
-
+import router from '@/router';
 const email = ref("");
 const password = ref("");
+const errMsg = ref("");
+
+
 
 const handleLogin = async (e) => {
     e.preventDefault();
 
-    const data = await axios.post("http://localhost:8080/api/auth/login", {
+    axios.post("http://localhost:8080/api/auth/login", {
         email: email.value,
         password: password.value
-    });
-    console.log(data);
-    
-    
-}
+    }).then(res => {
+        console.log(res);
+        // 서버에서 온 토큰 로컬스토리지 저장
+        localStorage.setItem("accessToken", res.data.accessToken);
 
-onMounted(() => {
-    console.log("mounted");
-});
-// const ref:
+        // 보호된 페이지로 이동
+        router.push("/user/edit")
+    }).catch(err => {
+        console.log(err);
+        // 에러 메세지 
+        errMsg.value = err.response.data.message;
+    });  
+}
 </script>
 
 <template>
@@ -34,6 +40,8 @@ onMounted(() => {
             <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" />
             <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" />
             <button type="submit" class="auth__btn">로그인</button>
+            <span class="auth__err">{{errMsg}}</span>
+
             <div class="auth__link">
                 <RouterLink to="/reset-password" class="auth__link--item">비밀번호 찾기</RouterLink>
                 <span>회원이 아니신가요?
@@ -65,9 +73,14 @@ onMounted(() => {
   align-items: center;
   gap: 2.4rem;
 }
+
 .auth__btn {
     width: 100%;
     cursor: pointer;
     padding: .8rem;
+}
+
+.auth__err {
+    color: red;
 }
 </style>

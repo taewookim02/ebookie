@@ -1,19 +1,19 @@
 <template>
   <section class="features">
-    <h2 class="features__heading">Features that we love</h2>
+    <h2 class="features__heading">Lorem ipsum dolor sit.</h2>
     <div class="features__container">
       <div class="features__item">
-        <h3>Feature 1</h3>
+        <h3>Lorem. 1</h3>
         <img src="@/assets/feature-item.png" class="features__img" alt="feature img" />
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, maiores?</p>
       </div>
       <div class="features__item">
-        <h3>Feature 2</h3>
+        <h3>Lorem. 2</h3>
         <img src="@/assets/feature-item.png" class="features__img" alt="feature img" />
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente, ipsum?</p>
       </div>
       <div class="features__item">
-        <h3>Feature 3</h3>
+        <h3>Lorem. 3</h3>
         <img src="@/assets/feature-item.png" class="features__img" alt="feature img" />
         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, impedit.</p>
       </div>

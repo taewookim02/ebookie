@@ -6,15 +6,14 @@ const route = useRoute();
 </script>
 
 <template>
-  <Nav v-if="!route.meta.hideNavFooter" />
-
-  <main class="main" v-if="!route.meta.noMainWrapper">
-    <router-view />
-  </main>
-
-  <router-view v-else />
-
-  <Footer v-if="!route.meta.hideNavFooter" />
+  <div class="container">
+      <Nav v-if="!route.meta.hideNavFooter" />
+      <main class="main" v-if="!route.meta.noMainWrapper">
+        <router-view />
+      </main>
+      <router-view v-else />
+      <Footer v-if="!route.meta.hideNavFooter" />
+  </div>
 </template>
 
 

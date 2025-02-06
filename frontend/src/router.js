@@ -6,7 +6,7 @@ const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
     { path: '/login', component: () => import('./views/Login.vue') },
-    { path: '/signup', component: () => import('./views/Register.vue')},
+    { path: '/register', component: () => import('./views/Register.vue')},
     { path: '/user/edit', component: () => import('./views/EditProfile.vue'), meta: { hideAuthLinks: true }},
     { path: '/:pathMatch(.*)*', component: NotFound },
 ];
