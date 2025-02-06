@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import Home from "./views/HomePage.vue";
 import NotFound from './views/NotFoundPage.vue';
 
+// URL 목록
 const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
