@@ -2,7 +2,7 @@
 import GoogleAuthButton from '../shared/GoogleAuthButton.vue';
 import AuthInputField from './AuthInputField.vue';
 
-defineProps({
+const props = defineProps({
   heading: {
     type: String,
     required: true,
@@ -35,19 +35,29 @@ defineProps({
     type: Boolean,
     default: false,
   },
-})
+  email: String,
+  password: String,
+});
+
+// form submit handling
+const emit = defineEmits(["submit", "update:email", "update:password"]);
+const handleSubmit = (e) => {
+    e.preventDefault();
+    emit('submit')
+}
+
 </script>
 
 <template>
   <section class="auth">
-    <form action="" class="auth__form">
+    <form @submit="handleSubmit" class="auth__form">
       <h1 class="auth__heading">{{ heading }}</h1>
       <GoogleAuthButton type="button" :msg="googleButtonText" />
       <span class="auth__or">or</span>
-      <AuthInputField type="email" id="email" name="email" label="이메일" />
-      <AuthInputField type="password" id="password" name="password" label="비밀번호" />
-      <AuthInputField v-if="isSignUp" type="password" id="confirm-password" name="confirm-password"
-        label="비밀번호 확인" />
+      <AuthInputField type="email" id="email" name="email" label="이메일" v-model:email="props.email" />
+      <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model:password="props.password" />
+      <AuthInputField v-if="isSignUp" type="password" id="confirmPassword" name="confirmPassword"
+        label="비밀번호 확인" v-model:confirmPassword="props?.confirmPassword" />
       <button type="submit" class="auth__btn">{{ submitButtonText }}</button>
       <div class="auth__link">
         <RouterLink v-if="!isSignUp" to="/reset-password" class="auth__link--item">{{ linkText }}</RouterLink>

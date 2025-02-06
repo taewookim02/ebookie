@@ -1,10 +1,3 @@
-<template>
-  <div :class="['input-field', wrapperClass]">
-    <label :for="id" :class="['input-field__label', labelClass]">{{ label }}</label>
-    <input :type="type" :id="id" :name="name" :class="['input-field__input', inputClass]" :value="valueText"
-      v-bind="readonly ? { readonly: true } : {}">
-  </div>
-</template>
 
 <script setup>
 defineProps({
@@ -44,8 +37,22 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  email: String,
+  password: String,
+  confirmPassword: String,
 })
+
+const emit = defineEmits(["update:email", "update:password", "update:confirmPassword"]);
 </script>
+
+<template>
+  <div :class="['input-field', wrapperClass]">
+    <label :for="id" :class="['input-field__label', labelClass]">{{ label }}</label>
+    <input :type="type" :id="id" :name="name" :class="['input-field__input', inputClass]" :value="valueText"
+      v-bind="readonly ? { readonly: true } : {}">
+  </div>
+</template>
+
 
 <style scoped>
 .input-field {
