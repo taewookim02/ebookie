@@ -1,7 +1,7 @@
 <template>
   <section class="cta">
-    <h1>What are you waiting for?</h1>
-    <CtaButton msg="Write now" />
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <CtaButton msg="lorem" />
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto pariatur vitae hic aperiam cumque deserunt facilis
       error repudiandae eum, exercitationem maxime neque voluptates, quaerat eaque.</p>
   </section>

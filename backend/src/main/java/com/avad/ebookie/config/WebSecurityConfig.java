@@ -44,11 +44,12 @@ public class WebSecurityConfig {
         String[] allowedPaths = {"/", "/auth/**", "/lib/**", "favicon.ico"};
         http
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(allowedPaths)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(allowedPaths)
+//                        .permitAll()
+//                        .anyRequest()
+//                        .authenticated()
+//                )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션에 정보저장 x
                 )

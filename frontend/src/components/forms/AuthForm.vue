@@ -44,10 +44,10 @@ defineProps({
       <h1 class="auth__heading">{{ heading }}</h1>
       <GoogleAuthButton type="button" :msg="googleButtonText" />
       <span class="auth__or">or</span>
-      <AuthInputField type="email" id="email" name="email" label="email" />
-      <AuthInputField type="password" id="password" name="password" label="password" />
+      <AuthInputField type="email" id="email" name="email" label="이메일" />
+      <AuthInputField type="password" id="password" name="password" label="비밀번호" />
       <AuthInputField v-if="isSignUp" type="password" id="confirm-password" name="confirm-password"
-        label="confirm password" />
+        label="비밀번호 확인" />
       <button type="submit" class="auth__btn">{{ submitButtonText }}</button>
       <div class="auth__link">
         <RouterLink v-if="!isSignUp" to="/reset-password" class="auth__link--item">{{ linkText }}</RouterLink>
@@ -80,5 +80,10 @@ defineProps({
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
+}
+.auth__btn {
+    width: 100%;
+    cursor: pointer;
+    padding: .8rem;
 }
 </style>

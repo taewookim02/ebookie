@@ -19,7 +19,6 @@ public class ProductController {
 
     @GetMapping("test")
     public ResponseEntity<TestRequestDto> testing(TestRequestDto testRequestDto) {
-
         log.info(testRequestDto.toString());
         return ResponseEntity.ok(testRequestDto);
     }

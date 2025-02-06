@@ -1,0 +1,1 @@
+import{A as o}from"./AuthForm-DawPYGPZ.js";import{c as t,o as e}from"./index-CVkXKuEc.js";import"./AuthInputField-BPBps1io.js";const m={__name:"LoginPage",setup(r){return(n,a)=>(e(),t(o,{heading:"로그인",googleButtonText:"Google 계정으로 로그인",submitButtonText:"로그인",linkText:"비밀번호 찾기",footerLink:"/signup",footerLinkText:"회원가입",footerText:"회원이 아니신가요?"}))}};export{m as default};
