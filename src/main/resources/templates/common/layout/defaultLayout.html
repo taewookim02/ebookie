@@ -3,26 +3,25 @@
 
 
 <head>
-    <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">eBookie</title>
+    <!-- <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">eBookie</title> -->
 
 
     <!-- 공통 JS / CSS -->
     <th:block th:replace="~{common/fragments/config :: ConfigFragment}"></th:block>
 
     <th:block th:replace="~{::PageHead}"></th:block>
-
 </head>
 
 <body>
-    <!-- 헤더 참조 -->
-    <header th:replace="~{common/fragments/header :: HeaderFragment}"></header>
-
-    <!-- 컨텐츠 참조 -->
-    <th:block layout:fragment="Content"></th:block>
-
-    <!-- 푸터 참조 -->
-    <footer th:replace="~{common/fragments/footer :: FooterFragment}"></footer>
+    <div class="container">
+        <!-- 헤더 참조 -->
+        <header th:replace="~{common/fragments/header :: HeaderFragment}"></header>
+        <!-- 컨텐츠 참조 -->
+        <main class="py-5">
+            <th:block layout:fragment="Content"></th:block>
+        </main>
+        <!-- 푸터 참조 -->
+        <footer th:replace="~{common/fragments/footer :: FooterFragment}"></footer>
+    </div>
 </body>
-
-
 </html>

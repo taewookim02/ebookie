@@ -28,7 +28,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register() {
-        return "/auth/register.html";
+        return "/pages/auth/register.html";
     }
 
 
@@ -41,7 +41,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "/auth/login.html";
+        return "/pages/auth/login.html";
     }
 
     @ResponseBody

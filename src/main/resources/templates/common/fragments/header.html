@@ -1,8 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko"
-        xmlns:th="http://www.thymeleaf.org"
-        th:fragment="HeaderFragment">
-        <div style="border: 1px solid yellow;">
-            <h1>Header 영역입니다.</h1>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="HeaderFragment">
+<header>
+    <nav class="navbar d-flex">
+        <a href="#" class="d-flex">
+            <img th:src="@{/lib/assets/logo2.png}" alt="Logo">
+        </a>
+        <div class="navbar__search">
+            <th:block th:replace="~{common/fragments/components/searchbar :: SearchBar}"></th:block>
         </div>
+        <div class="navbar__links">
+            <a th:href="@{/auth/login}" class="link-dark">로그인</a>
+            <a th:href="@{/auth/register}" class="link-dark">회원가입</a>
+            <!-- <a th:href="@{/auth/logout}" class="link-dark">로그아웃</a> -->
+        </div>
+    </nav>
+</header>
+
 </html>

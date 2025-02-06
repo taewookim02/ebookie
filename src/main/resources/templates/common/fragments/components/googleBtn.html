@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="GoogleOAuthBtn">
+
+<button class="oauth__google flex-grow-1 btn btn-outline-dark">Google</button>
+<script>
+    const googleBtn = document.querySelector(".oauth__google");
+    googleBtn.addEventListener("click", e => {
+        console.log("google btn click");
+    })
+</script>
+</html>
