@@ -56,8 +56,8 @@ const handleSubmit = (e) => {
       <span class="auth__or">or</span>
       <AuthInputField type="email" id="email" name="email" label="이메일" v-model:email="props.email" />
       <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model:password="props.password" />
-      <AuthInputField v-if="isSignUp" type="password" id="confirmPassword" name="confirmPassword"
-        label="비밀번호 확인" v-model:confirmPassword="props?.confirmPassword" />
+      <!-- <AuthInputField v-if="isSignUp" type="password" id="confirmPassword" name="confirmPassword"
+        label="비밀번호 확인" v-model:confirmPassword="props?.confirmPassword" /> -->
       <button type="submit" class="auth__btn">{{ submitButtonText }}</button>
       <div class="auth__link">
         <RouterLink v-if="!isSignUp" to="/reset-password" class="auth__link--item">{{ linkText }}</RouterLink>

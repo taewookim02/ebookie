@@ -5,7 +5,7 @@ spring:
     import: env.properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${DB_DATABASE_NAME}?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3307/${DB_DATABASE_NAME}?useUnicode=true&characterEncoding=utf8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
@@ -45,4 +45,5 @@ logging:
           jdbc:
             bind: trace
 server:
-  port: 8081
+  port: 8080
+  

@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                 )
                 .authenticationProvider(authProvider) // 인증하려면 authProvider 필요
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // jwt 필터
+                .formLogin(AbstractHttpConfigurer::disable)
                 .logout((logoutConfig) -> {
                     logoutConfig.logoutUrl("/auth/logout");
                     logoutConfig.addLogoutHandler(logoutHandler); // LogoutService implements LogoutHandler
