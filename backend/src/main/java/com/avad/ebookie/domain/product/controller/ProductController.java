@@ -17,9 +17,5 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("test")
-    public ResponseEntity<TestRequestDto> testing(TestRequestDto testRequestDto) {
-        log.info(testRequestDto.toString());
-        return ResponseEntity.ok(testRequestDto);
-    }
+    // TODO: 필요한 기능 정리
 }

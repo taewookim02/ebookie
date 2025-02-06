@@ -13,6 +13,7 @@ const errMsg = ref("");
 const handleSubmit = (e) => {
     e.preventDefault();
 
+    // TODO: 상대경로로 변경 
     axios.post("http://localhost:8080/api/auth/register", {
         email: email.value,
         password: password.value,

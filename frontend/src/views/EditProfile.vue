@@ -1,7 +1,7 @@
 <template>
   <section class="settings">
     <div class="settings__controls">
-      <RouterLink class="settings__controls--link" to="/">
+      <RouterLink class="settings__controls--link link-dark" to="/">
         <PhArrowLeft :size="32" />
         <span class="settings__controls--text">뒤로가기</span>
       </RouterLink>
