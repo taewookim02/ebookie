@@ -5,9 +5,9 @@ import NotFound from './views/NotFoundPage.vue';
 const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
-    { path: '/login', component: () => import('./views/Login.vue') },
-    { path: '/register', component: () => import('./views/Register.vue')},
-    { path: '/user/edit', component: () => import('./views/EditProfile.vue'), meta: { hideAuthLinks: true }},
+    { path: '/login', component: () => import('./views/LoginPage.vue') },
+    { path: '/register', component: () => import('./views/RegisterPage.vue')},
+    { path: '/user/edit', component: () => import('./views/EditProfilePage.vue'), meta: { requiresAuth: true, hideAuthLinks: true }},
     { path: '/:pathMatch(.*)*', component: NotFound },
 ];
 
@@ -16,6 +16,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+
+// 라우팅 가드
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem("accessToken");
+    const isLoggedIn = !!token;
+    console.log("token:", token);
+
+    if (["/login", "/register"].includes(to.path) && isLoggedIn) {
+        next("/")
+    } else if (to.meta.requiresAuth && !token) {
+        next("/login"); // 로그인 페이지로 이동
+    } else {
+        next(); // 그대로 이동
+    }
+})
 
 
 export default router;

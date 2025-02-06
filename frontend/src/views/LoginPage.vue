@@ -4,22 +4,33 @@ import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
+// import { useTokenStore } from '@/store/token-store';
+
+// state
 const email = ref("");
 const password = ref("");
 const errMsg = ref("");
+// const store = useTokenStore();
 
 
-
-const handleLogin = async (e) => {
-    e.preventDefault();
-
+const handleLogin = async () => {
     axios.post("http://localhost:8080/api/auth/login", {
         email: email.value,
         password: password.value
     }).then(res => {
         console.log(res);
+        
         // 서버에서 온 토큰 로컬스토리지 저장
         localStorage.setItem("accessToken", res.data.accessToken);
+        
+        // TODO: isLoggedIn = true 전역 상태 업데이트하기
+
+
+        // TODO: 메모리에 토큰, 토큰만료시간 저장
+        // store.setLoginResponse(
+        //     response.data.accessToken,
+
+        // )
 
         // 보호된 페이지로 이동
         router.push("/user/edit")
@@ -33,7 +44,7 @@ const handleLogin = async (e) => {
 
 <template>
     <section class="auth">
-        <form @submit="handleLogin" class="auth__form">
+        <form @submit.prevent="handleLogin" class="auth__form">
             <h1 class="auth__heading">로그인</h1>
             <GoogleAuthButton type="button" msg="Google 계정으로 로그인" />
             <span class="auth__or">or</span>

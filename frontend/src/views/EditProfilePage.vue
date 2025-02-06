@@ -22,6 +22,14 @@
 <script setup>
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import { PhArrowLeft } from '@phosphor-icons/vue';
+import { onMounted } from 'vue';
+
+
+onMounted(() => {
+    console.log("페이지 로드되면 'Bearer: jwt 토큰' 회원정보 요청");
+    console.log("응답 오면 값 설정");
+    // 서버
+})
 </script>
 
 <style scoped>

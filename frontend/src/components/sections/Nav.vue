@@ -9,11 +9,17 @@
                 <SearchBar></SearchBar>
             </div>
             <div class="navbar__links d-flex gap-4">
-                <RouterLink to="/login" class="link-dark">로그인</RouterLink>
-                <RouterLink to="/register" class="link-dark">회원가입</RouterLink>
-                <RouterLink to="/user/edit" class="link-dark">마이페이지</RouterLink>
-                <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
-                <RouterLink to="/logout" class="link-dark">로그아웃</RouterLink>
+                <!-- 로그인 안된 상태 -->
+                <template v-if="!isLoggedIn">
+                    <RouterLink to="/login" class="link-dark">로그인</RouterLink>
+                    <RouterLink to="/register" class="link-dark">회원가입</RouterLink>
+                </template>
+                <!-- 로그인된 상태 -->
+                <template v-if="isLoggedIn">
+                    <RouterLink to="/user/edit" class="link-dark">마이페이지</RouterLink>
+                    <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
+                    <a to="#" class="link-dark" @click.prevent="handleLogout" style="cursor: pointer;">로그아웃</a>
+                </template>
             </div>
         </div>
         <!-- 탑 네비게이션 END -->
@@ -40,12 +46,29 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import SearchBar from '../shared/SearchBar.vue';
+import router from '@/router';
 const route = useRoute();
-const hideAuthLinks = computed(() => route.meta.hideAuthLinks);
-console.log(hideAuthLinks);
+
+// state
+const isLoggedIn = ref(false);
+
+// actions
+const handleLogout = (e) => {
+    localStorage.removeItem("accessToken");
+    isLoggedIn.value = false;
+    alert("로그아웃 성공!");
+    router.push("/");
+}
+
+onMounted(() => {
+    console.log("onMounted()");
+    const token = localStorage.getItem("accessToken");
+    isLoggedIn.value = !!token;
+})
+
 </script>
 
 <style scoped>
