@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="ConfigFragment">
+    <!-- 공통 head -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 공통 js -->
+    <script th:inline="javascript" type="text/javascript" th:src="@{/lib/js/common.js}"></script>
+    <!-- 공통 css -->
+    <link rel="stylesheet" th:inline="css" th:href="@{/lib/css/common.css}">
+</th:block>
+
+</html>

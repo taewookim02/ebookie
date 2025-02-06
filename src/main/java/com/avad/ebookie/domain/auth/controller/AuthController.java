@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
+    @GetMapping("test")
+    public String testing() {
+        return "/pages/test/testPage.html";
+    }
+
+
     @GetMapping("/register")
     public String register() {
         return "/auth/register.html";
