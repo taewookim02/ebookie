@@ -4,13 +4,13 @@ import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
-// import { useTokenStore } from '@/store/token-store';
+import { useTokenStore } from '@/store/tokenStoreB';
 
 // state
 const email = ref("");
 const password = ref("");
 const errMsg = ref("");
-// const store = useTokenStore();
+const storeB = useTokenStore();
 
 
 const handleLogin = async () => {
@@ -21,18 +21,15 @@ const handleLogin = async () => {
         console.log(res);
         
         // 서버에서 온 토큰 로컬스토리지 저장
-        localStorage.setItem("accessToken", res.data.accessToken);
+        // localStorage.setItem("accessToken", res.data.accessToken);
         
-        // TODO: isLoggedIn = true 전역 상태 업데이트하기
-
-
         // TODO: 메모리에 토큰, 토큰만료시간 저장
-        // store.setLoginResponse(
-        //     response.data.accessToken,
+        // store.setLoginResponse(res.data.accessToken);
+        console.log(res.data.accessToken);
+        storeB.setAccessToken(res.data.accessToken);
+        console.log("storeB.accessToken:", storeB.accessToken);
 
-        // )
-
-        // 보호된 페이지로 이동
+        // 보호된 url로
         router.push("/user/edit")
     }).catch(err => {
         console.log(err);

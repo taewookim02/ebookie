@@ -24,13 +24,15 @@ import AuthInputField from '@/components/forms/AuthInputField.vue';
 import { PhArrowLeft } from '@phosphor-icons/vue';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
+import { useTokenStore } from '@/store/tokenStoreB';
 
 // 상태
 const email = ref("");
+const store = useTokenStore();
 
 // 라이프사이클 훅
 onMounted(() => {
-    const token = localStorage.getItem("accessToken");
+    const token = store.accessToken;
     // 서버
     axios.get("http://localhost:8080/api/member/detail", {
         headers: {Authorization: `Bearer ${token}`}

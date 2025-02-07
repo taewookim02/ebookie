@@ -44,7 +44,7 @@ public class WebSecurityConfig {
 
         String[] allowedPaths = {"/", "/api/auth/**", "/lib/**", "favicon.ico"};
         http
-                .cors(Customizer.withDefaults()) // WebConfig cors 사용
+                .cors(Customizer.withDefaults()) // WebConfig cors config 사용
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(allowedPaths)

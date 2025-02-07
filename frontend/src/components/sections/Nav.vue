@@ -10,12 +10,12 @@
             </div>
             <div class="navbar__links d-flex gap-4">
                 <!-- 로그인 안된 상태 -->
-                <template v-if="!isLoggedIn">
+                <template v-if="!store.isLoggedIn">
                     <RouterLink to="/login" class="link-dark">로그인</RouterLink>
                     <RouterLink to="/register" class="link-dark">회원가입</RouterLink>
                 </template>
                 <!-- 로그인된 상태 -->
-                <template v-if="isLoggedIn">
+                <template v-if="store.isLoggedIn">
                     <RouterLink to="/user/edit" class="link-dark">마이페이지</RouterLink>
                     <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
                     <a to="#" class="link-dark" @click.prevent="handleLogout" style="cursor: pointer;">로그아웃</a>
@@ -50,23 +50,23 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import SearchBar from '../shared/SearchBar.vue';
 import router from '@/router';
+import { useTokenStore } from '@/store/tokenStoreB';
 const route = useRoute();
 
 // state
-const isLoggedIn = ref(false);
+const store = useTokenStore();
 
 // actions
 const handleLogout = (e) => {
-    localStorage.removeItem("accessToken");
-    isLoggedIn.value = false;
+    store.setAccessToken("");
     alert("로그아웃 성공!");
     router.push("/");
 }
 
 onMounted(() => {
     console.log("onMounted()");
-    const token = localStorage.getItem("accessToken");
-    isLoggedIn.value = !!token;
+    // const token = localStorage.getItem("accessToken");
+    // isLoggedIn.value = !!token;
 })
 
 </script>
