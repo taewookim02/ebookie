@@ -1,8 +1,5 @@
 package com.avad.ebookie.config.filter;
 
-import com.avad.ebookie.config.exception.ErrorCode;
-import com.avad.ebookie.domain.auth.exception.AuthBearerInvalidException;
-import com.avad.ebookie.domain.auth.model.Token;
 import com.avad.ebookie.domain.auth.repository.TokenRepository;
 import com.avad.ebookie.domain.auth.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -48,8 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 유저 이메일로 유저 객체 구하기
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            // 토큰 만료 확인
-            Boolean isTokenValid = tokenRepository.findByToken(jwt)
+            // 토큰 만료 확인 // TODO: Caused by: org.hibernate.NonUniqueResultException: Query did not return a unique result: 2 results were returned
+            Boolean isTokenValid = tokenRepository.findFirstByTokenOrderByIdDesc(jwt)
                     .map(token -> !token.isExpired() && !token.isRevoked())
                     .orElse(false);
 

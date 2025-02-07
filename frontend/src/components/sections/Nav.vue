@@ -51,6 +51,7 @@ import { useRoute } from 'vue-router';
 import SearchBar from '../shared/SearchBar.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStoreB';
+import axios from 'axios';
 const route = useRoute();
 
 // state
@@ -58,6 +59,13 @@ const store = useTokenStore();
 
 // actions
 const handleLogout = (e) => {
+    axios.get("http://localhost:8080/api/auth/logout", {
+        withCredentials: true
+    }).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    })
     store.setAccessToken("");
     alert("로그아웃 성공!");
     router.push("/");

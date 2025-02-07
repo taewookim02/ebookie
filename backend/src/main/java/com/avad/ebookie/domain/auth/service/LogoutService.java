@@ -23,7 +23,7 @@ public class LogoutService implements LogoutHandler {
             return;
         }
         jwt = authHeader.substring(7); // "Bearer " 제외
-        Token storedToken = tokenRepository.findByToken(jwt)
+        Token storedToken = tokenRepository.findFirstByTokenOrderByIdDesc(jwt)
                 .orElse(null);
 
         if (storedToken != null) {
