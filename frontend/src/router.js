@@ -19,7 +19,7 @@ const router = createRouter({
 });
 
 // 라우팅 가드
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => { // 페이지 이동하기 전에 호출되는 함수
     const token = localStorage.getItem("accessToken");
     const isLoggedIn = !!token;
     console.log("token:", token);

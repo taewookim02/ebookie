@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
-
+import router from '@/router';
 
 const email = ref("");
 const password = ref("");

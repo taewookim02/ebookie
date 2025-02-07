@@ -9,7 +9,7 @@
     <form action="" class="settings__form">
 
       <h1>회원 정보 수정</h1>
-      <AuthInputField type="email" id="email" name="email" label="이메일" valueText="hello" :readonly="true" />
+      <AuthInputField type="email" id="email" name="email" label="이메일" valueText="hello" :readonly="true" v-model="email"  />
       <AuthInputField type="password" id="password" name="password" label="새로운 비밀번호" />
       <AuthInputField type="password" id="confirm-password" name="confirm-password" label="새로운 비밀번호 확인" />
       <AuthInputField type="password" id="current-password" name="current-password" label="현재 비밀번호" />
@@ -22,13 +22,26 @@
 <script setup>
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import { PhArrowLeft } from '@phosphor-icons/vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
 
+// 상태
+const email = ref("");
 
+// 라이프사이클 훅
 onMounted(() => {
-    console.log("페이지 로드되면 'Bearer: jwt 토큰' 회원정보 요청");
-    console.log("응답 오면 값 설정");
+    const token = localStorage.getItem("accessToken");
     // 서버
+    axios.get("http://localhost:8080/api/member/detail", {
+        headers: {Authorization: `Bearer ${token}`}
+    })
+    .then(res => {
+        console.log("onMounted token");
+        // console.log(res.data.userEmail);
+        email.value = res.data.email;
+    }).catch(err => {
+        console.log(err);
+    })
 })
 </script>
 

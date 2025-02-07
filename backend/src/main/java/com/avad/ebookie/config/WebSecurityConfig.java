@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,15 +42,16 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
 
-        String[] allowedPaths = {"/", "/auth/**", "/lib/**", "favicon.ico"};
+        String[] allowedPaths = {"/", "/api/auth/**", "/lib/**", "favicon.ico"};
         http
+                .cors(Customizer.withDefaults()) // WebConfig cors 사용
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(allowedPaths)
-//                        .permitAll()
-//                        .anyRequest()
-//                        .authenticated()
-//                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(allowedPaths)
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션에 정보저장 x
                 )
