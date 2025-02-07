@@ -23,11 +23,8 @@ const handleLogin = async () => {
         // 서버에서 온 토큰 로컬스토리지 저장
         // localStorage.setItem("accessToken", res.data.accessToken);
         
-        // TODO: 메모리에 토큰, 토큰만료시간 저장
-        // store.setLoginResponse(res.data.accessToken);
-        console.log(res.data.accessToken);
+        // 메모리에 토큰 저장
         storeB.setAccessToken(res.data.accessToken);
-        console.log("storeB.accessToken:", storeB.accessToken);
 
         // 보호된 url로
         router.push("/user/edit")

@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 import Home from "./views/HomePage.vue";
-import NotFound from './views/NotFoundPage.vue';
+import NotFoundPage from './views/NotFoundPage.vue';
 import { useTokenStore } from './store/tokenStoreB';
 
 // URL 목록
@@ -11,7 +11,7 @@ const routes = [
     { path: '/register', component: () => import('./views/RegisterPage.vue')},
     { path: '/user/edit', component: () => import('./views/EditProfilePage.vue'), meta: { requiresAuth: true, hideAuthLinks: true }},
     {path: '/testing', component: () => import('@/views/TestingPage.vue')},
-    { path: '/:pathMatch(.*)*', component: NotFound },
+    { path: '/:pathMatch(.*)*', component: NotFoundPage },
 ];
 
 const router = createRouter({

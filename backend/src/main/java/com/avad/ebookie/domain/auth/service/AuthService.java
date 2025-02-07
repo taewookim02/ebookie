@@ -144,9 +144,11 @@ public class AuthService {
         tokenRepository.saveAll(validMemberTokens);
     }
 
+    @Transactional
     public AuthResponseDto refreshToken(HttpServletRequest request, HttpServletResponse response) {
         //  request 쿠키에서 리프레시 토큰 추출
         final String refreshToken = extractRefreshTokenFromCookie(request);
+        System.out.println("refreshToken = " + refreshToken);
         if (refreshToken == null) {
             return null;
         }

@@ -42,7 +42,21 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
 
-        String[] allowedPaths = {"/", "/api/auth/**", "/lib/**", "favicon.ico"};
+        String[] allowedPaths = {
+                "/",
+                "/api/auth/**",
+                "/lib/**",
+                "favicon.ico",
+                "/index.html",
+                "/static/**",
+                "/assets/**",
+                "/js/**",
+                "/css/**",
+                "/img/**",
+                "/favicon-32x32.png",
+                "/site.webmanifest"
+        };
+
         http
                 .cors(Customizer.withDefaults()) // WebConfig cors config 사용
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)

@@ -2,7 +2,34 @@
 import Nav from '@/components/sections/Nav.vue';
 import Footer from '@/components/sections/Footer.vue';
 import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { onMounted } from 'vue';
+import { useTokenStore } from './store/tokenStoreB';
 const route = useRoute();
+const store = useTokenStore();
+
+const renewToken = () => {
+    axios.get("http://localhost:8080/api/auth/refresh-token", {
+        withCredentials: true
+    }).then(res => {
+        console.log(res);
+        if (res.data.accessToken) {
+            store.setAccessToken(res.data.accessToken);
+            console.log("갱신완료");
+        } else {
+            throw new Error("토큰 없음");
+        }
+    }).catch(err => {
+        console.log(err);
+        console.log("토큰 갱신 실패 -> 로그아웃 상태");
+        
+    })
+}
+
+
+onMounted(() => {
+    renewToken();
+})
 </script>
 
 // 기본 레이아웃
