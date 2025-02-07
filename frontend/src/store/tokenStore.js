@@ -4,24 +4,36 @@ import { ref, computed } from "vue";
 export const useTokenStore = defineStore("token", () => {
     // state
     const accessToken = ref("");
+    const isLoading = ref(true);
 
     // getter
-    const getAccessToken = computed(() => accessToken.value);
-    const isLoggedIn = computed(() => !!accessToken.value);
+    const isLoggedIn = computed(() => {
+        return !!accessToken.value;
+    });
+    const getAccessToken = computed(() => {
+        return accessToken.value
+    });
+    const getIsLoading = computed(() => {
+        return isLoading.value;
+    })
 
-    // action
+
+    // actions
     const setAccessToken = (token) => {
         accessToken.value = token;
     };
+    const setLoading = (status) => {
+        isLoading.value = status;
+    }
 
-    const setLoginResponse = (accessTokenParam) => {
-        accessToken.value = accessTokenParam;
-    };
 
     return {
         accessToken,
+        isLoading,
+        isLoggedIn,
         getAccessToken,
+        getIsLoading,
         setAccessToken,
-        setLoginResponse
-    };
+        setLoading
+    }
 });

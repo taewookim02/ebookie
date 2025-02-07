@@ -3,27 +3,15 @@
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import { PhArrowLeft } from '@phosphor-icons/vue';
 import { onMounted, ref } from 'vue';
-import axios from 'axios';
-import { useTokenStore } from '@/store/tokenStoreB';
+import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 // 상태
 const email = ref("");
-const store = useTokenStore();
-
 // 라이프사이클 훅
 onMounted(() => {
-    const token = store.accessToken;
-
     // 로그인 유저 정보
-    customAxios.get("/api/member/detail", {
-        headers: {
-            // TODO: handle token in customAxios later
-            Authorization: `Bearer ${token}`
-        }
-    })
+    customAxios.get("/api/member/detail")
     .then(res => {
-        console.log("onMounted token");
-        // console.log(res.data.userEmail);
         email.value = res.data.email;
     }).catch(err => {
         console.log(err);

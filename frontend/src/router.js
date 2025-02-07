@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
-import Home from "./views/HomePage.vue";
-import NotFoundPage from './views/NotFoundPage.vue';
-import { useTokenStore } from './store/tokenStoreB';
+import Home from "@/views/HomePage.vue";
+import NotFoundPage from '@/views/NotFoundPage.vue';
+import { useTokenStore } from '@/store/tokenStore';
 import { watch } from 'vue';
 
 // URL 목록

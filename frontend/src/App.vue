@@ -3,8 +3,8 @@ import Nav from '@/components/sections/Nav.vue';
 import Footer from '@/components/sections/Footer.vue';
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
-import { useTokenStore } from './store/tokenStoreB';
-import { customAxios } from './plugins/axios';
+import { useTokenStore } from '@/store/tokenStore';
+import { customAxios } from '@/plugins/axios';
 
 const route = useRoute();
 const store = useTokenStore();

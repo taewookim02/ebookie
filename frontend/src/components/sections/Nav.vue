@@ -1,3 +1,40 @@
+
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import SearchBar from '../shared/SearchBar.vue';
+import router from '@/router';
+import { useTokenStore } from '@/store/tokenStore';
+import { customAxios } from '@/plugins/axios';
+const route = useRoute();
+
+// state
+const store = useTokenStore();
+
+// actions
+const handleLogout = (e) => {
+    customAxios
+    .get("/api/auth/logout", {
+        withCredentials: true
+    }).then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    })
+    store.setAccessToken("");
+    alert("로그아웃 성공!");
+    router.push("/");
+}
+
+onMounted(() => {
+    console.log("onMounted()");
+    // const token = localStorage.getItem("accessToken");
+    // isLoggedIn.value = !!token;
+})
+
+</script>
+
 <template>
   <nav class="navbar my-5">
         <!-- 탑 네비게이션 START -->
@@ -44,42 +81,6 @@
     </nav>
 
 </template>
-
-<script setup>
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import SearchBar from '../shared/SearchBar.vue';
-import router from '@/router';
-import { useTokenStore } from '@/store/tokenStoreB';
-import { customAxios } from '@/plugins/axios';
-const route = useRoute();
-
-// state
-const store = useTokenStore();
-
-// actions
-const handleLogout = (e) => {
-    customAxios
-    .get("/api/auth/logout", {
-        withCredentials: true
-    }).then(res => {
-        console.log(res);
-    }).catch(err => {
-        console.log(err);
-    })
-    store.setAccessToken("");
-    alert("로그아웃 성공!");
-    router.push("/");
-}
-
-onMounted(() => {
-    console.log("onMounted()");
-    // const token = localStorage.getItem("accessToken");
-    // isLoggedIn.value = !!token;
-})
-
-</script>
-
 <style scoped>
 /* NAV */
 .nav {

@@ -4,16 +4,19 @@ import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
-import { useTokenStore } from '@/store/tokenStoreB';
+import { useTokenStore } from '@/store/tokenStore';
 
 // state
 const email = ref("");
 const password = ref("");
 const errMsg = ref("");
-const storeB = useTokenStore();
+const store = useTokenStore();
 
 
 const handleLogin = async () => {
+    
+
+
     customAxios.post("/api/auth/login", {
         email: email.value,
         password: password.value
@@ -22,11 +25,8 @@ const handleLogin = async () => {
         console.log(res);
         console.log("using customAxios");
         
-        // 서버에서 온 토큰 로컬스토리지 저장
-        // localStorage.setItem("accessToken", res.data.accessToken);
-        
         // 메모리에 토큰 저장
-        storeB.setAccessToken(res.data.accessToken);
+        store.setAccessToken(res.data.accessToken);
 
         // 보호된 url로
         router.push("/user/edit")

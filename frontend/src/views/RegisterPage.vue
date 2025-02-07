@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
-import { useTokenStore } from '@/store/tokenStoreB';
+import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 
 // state
@@ -11,7 +11,7 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const errMsg = ref("");
-const tokenStore = useTokenStore();
+const store = useTokenStore();
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,10 +23,10 @@ const handleSubmit = (e) => {
     })
     .then(res => {
         console.log(res);
-        // 서버에서 온 토큰 로컬스토리지 저장
-        // localStorage.setItem("accessToken", res.data.accessToken);
+        // localStorage.setItem("accessToken", res.data.accessToken); // 서버에서 온 토큰 로컬스토리지 저장
+
         // 메모리에 저장
-        tokenStore.setAccessToken(res.data.accessToken);
+        store.setAccessToken(res.data.accessToken);
 
         // 보호된 페이지로 이동
         router.push("/user/edit")
