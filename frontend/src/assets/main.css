@@ -1,0 +1,29 @@
+@import './base.css';
+
+#app, main, footer {
+  width: 100%;
+  max-width: 100vw;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
+}
+
+main {
+  flex-grow: 1; /* fill remaining space */
+  padding: 2.4rem;
+}
+
+img {
+  width: 100%;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
