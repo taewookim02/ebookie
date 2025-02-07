@@ -42,29 +42,28 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
 
-        String[] allowedPaths = {
-                "/",
-                "/api/auth/**",
-                "/lib/**",
-                "favicon.ico",
-                "/index.html",
-                "/static/**",
-                "/assets/**",
-                "/js/**",
-                "/css/**",
-                "/img/**",
-                "/favicon-32x32.png",
-                "/site.webmanifest"
-        };
+//        String[] allowedPaths = {
+//                "/",
+//                "/api/auth/**",
+//                "/lib/**",
+//                "favicon.ico",
+//                "/index.html",
+//                "/static/**",
+//                "/assets/**",
+//                "/js/**",
+//                "/css/**",
+//                "/img/**",
+//                "/favicon-32x32.png",
+//                "/site.webmanifest"
+//        };
 
         http
                 .cors(Customizer.withDefaults()) // WebConfig cors config 사용
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(allowedPaths)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션에 정보저장 x
@@ -73,7 +72,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // jwt 필터
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout((logoutConfig) -> {
-                    logoutConfig.logoutUrl("/auth/logout");
+                    logoutConfig.logoutUrl("/api/auth/logout");
                     logoutConfig.addLogoutHandler(logoutHandler); // LogoutService implements LogoutHandler
                     logoutConfig.logoutSuccessHandler(((request, response, authentication) -> {
                         clearRefreshTokenCookie(response);
