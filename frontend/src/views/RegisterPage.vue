@@ -1,10 +1,10 @@
 <script setup>
-import axios from 'axios';
 import { ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStoreB';
+import { customAxios } from '@/plugins/axios';
 
 // state
 const email = ref("");
@@ -13,16 +13,15 @@ const confirmPassword = ref("");
 const errMsg = ref("");
 const tokenStore = useTokenStore();
 
-
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    // TODO: 상대경로로 변경 
-    axios.post("http://localhost:8080/api/auth/register", {
+    customAxios.post("/api/auth/register", {
         email: email.value,
         password: password.value,
         confirmPassword: confirmPassword.value
-    }).then(res => {
+    })
+    .then(res => {
         console.log(res);
         // 서버에서 온 토큰 로컬스토리지 저장
         // localStorage.setItem("accessToken", res.data.accessToken);

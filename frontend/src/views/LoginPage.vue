@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios';
+import { customAxios } from "@/plugins/axios";
 import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
@@ -14,11 +14,13 @@ const storeB = useTokenStore();
 
 
 const handleLogin = async () => {
-    axios.post("http://localhost:8080/api/auth/login", {
+    customAxios.post("/api/auth/login", {
         email: email.value,
         password: password.value
-    }).then(res => {
+    })
+    .then(res => {
         console.log(res);
+        console.log("using customAxios");
         
         // 서버에서 온 토큰 로컬스토리지 저장
         // localStorage.setItem("accessToken", res.data.accessToken);
