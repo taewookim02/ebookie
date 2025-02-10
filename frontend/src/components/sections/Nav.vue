@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="navbar my-5">
+  <nav class="navbar mt-5">
         <!-- 탑 네비게이션 START -->
         <div class="d-flex align-items-center w-100 justify-content-between">
             <RouterLink to="/" class="d-flex">

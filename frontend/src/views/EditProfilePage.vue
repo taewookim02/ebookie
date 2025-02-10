@@ -28,6 +28,9 @@ const handleUpdate = () => {
         currentPassword: currentPassword.value
     }).then(res => {
         console.log(res);
+        // TODO: 
+            // alert 성공
+            // push router
     }).catch(err => {
         console.log("err:", err);
         // 비밀번호, 이메일 틀렸을 시 

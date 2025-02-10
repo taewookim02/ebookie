@@ -6,6 +6,7 @@ import { onMounted } from 'vue';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 
+
 const route = useRoute();
 const store = useTokenStore();
 
@@ -34,6 +35,7 @@ const renewToken = async () => {
 
 onMounted(() => {
     renewToken();
+
 })
 </script>
 
