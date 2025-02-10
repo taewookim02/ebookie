@@ -57,8 +57,10 @@ const handleSubmit = (e) => {
     <section class="auth">
         <form @submit="handleSubmit" class="auth__form">
             <h1 class="auth__heading">회원가입</h1>
+            <!-- TODO: Google Register
             <GoogleAuthButton type="button" msg="Google 계정으로 회원가입" />
             <span class="auth__or">or</span>
+             -->
             <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" :required="true" />
             <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password"
                 :required="true" />

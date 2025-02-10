@@ -1,17 +1,19 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import SearchBar from '../shared/SearchBar.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
-const route = useRoute();
+// const route = useRoute();
 
 // state
 const store = useTokenStore();
-
+const shouldShowBottomNav = computed(() => {
+    return !["/login", "/register"].includes(router.currentRoute.value.path);
+})
 // actions
 const handleLogout = (e) => {
     customAxios
@@ -28,9 +30,9 @@ const handleLogout = (e) => {
 }
 
 onMounted(() => {
-    console.log("onMounted()");
-    // const token = localStorage.getItem("accessToken");
-    // isLoggedIn.value = !!token;
+    console.log("Nav onMounted()");
+    console.log("router:", router.currentRoute.value.path);
+    console.log(shouldShowBottomNav);
 })
 
 </script>
@@ -62,20 +64,22 @@ onMounted(() => {
         <!-- 탑 네비게이션 END -->
 
         <!-- 바텀 네비게이션 START -->
-        <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between">
-            <a href="#" class="flex-grow-1 p-3 link-dark text-center dropdown-toggle" role="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-            aria-expanded="false" aria-label="Toggle navigation">카테고리</a>
-            <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
-            <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
-            <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">이벤트</RouterLink>
-        </div>
-        <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">
-            <div class="p-4">
-                <h5 class="text-body-emphasis h4">Collapsed content</h5>
-                <span class="text-body-secondary">Toggleable via the navbar brand.</span>
+        <template v-if="shouldShowBottomNav"> 
+            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between">
+                <a href="#" class="flex-grow-1 p-3 link-dark text-center dropdown-toggle" role="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                aria-expanded="false" aria-label="Toggle navigation">카테고리</a>
+                <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
+                <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
+                <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">이벤트</RouterLink>
             </div>
-        </div>
+            <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">
+                <div class="p-4">
+                    <h5 class="text-body-emphasis h4">Collapsed content</h5>
+                    <span class="text-body-secondary">Toggleable via the navbar brand.</span>
+                </div>
+            </div>
+        </template>
         <!-- 바텀 네비게이션 END -->
 
     </nav>

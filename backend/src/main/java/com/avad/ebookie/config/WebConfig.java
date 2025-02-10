@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+    // vue
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
@@ -44,6 +45,8 @@ public class WebConfig implements WebMvcConfigurer {
                 });
     }
 
+
+    // Vue index.html 사용
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");

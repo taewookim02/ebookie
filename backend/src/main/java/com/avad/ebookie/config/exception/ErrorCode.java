@@ -15,7 +15,8 @@ public enum ErrorCode {
     SIGNATURE_EXCEPTION(403, "MEMBER_403", "토큰이 유효하지 않습니다."),
     MALFORMED_JWT(403, "MEMBER_403", "올바르지 않은 토큰입니다."),
     EXPIRED_JWT(403, "MEMBER_403", "토큰이 만료되었습니다. 다시 로그인 해주세요."),
-    AUTH_FAILURE(401, "MEMBER_401", "인증에 실패했습니다.");
+    AUTH_FAILURE(401, "MEMBER_401", "인증에 실패했습니다."),
+    NOT_AUTHORIZED(403, "MEMBER_403", "허가되지 않은 요청입니다.");
 
     private final int status;
     private final String code;

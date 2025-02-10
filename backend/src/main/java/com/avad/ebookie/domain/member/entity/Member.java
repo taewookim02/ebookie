@@ -71,4 +71,8 @@ public class Member extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

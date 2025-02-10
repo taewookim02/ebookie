@@ -42,8 +42,10 @@ const handleLogin = async () => {
     <section class="auth">
         <form @submit.prevent="handleLogin" class="auth__form">
             <h1 class="auth__heading">로그인</h1>
+            <!-- TODO: Google Login
             <GoogleAuthButton type="button" msg="Google 계정으로 로그인" />
-            <span class="auth__or">or</span>
+            <span class="auth__or">or</span> 
+            -->
             <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" :required="true" />
             <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" :required="true" />
             <button type="submit" class="auth__btn">로그인</button>
