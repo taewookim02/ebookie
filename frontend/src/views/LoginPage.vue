@@ -44,8 +44,8 @@ const handleLogin = async () => {
             <h1 class="auth__heading">로그인</h1>
             <GoogleAuthButton type="button" msg="Google 계정으로 로그인" />
             <span class="auth__or">or</span>
-            <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" />
-            <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" />
+            <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" :required="true" />
+            <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" :required="true" />
             <button type="submit" class="auth__btn">로그인</button>
             <span class="auth__err">{{errMsg}}</span>
 

@@ -16,25 +16,40 @@ const store = useTokenStore();
 const handleSubmit = (e) => {
     e.preventDefault();
 
+    // if password.value.length <8 {
+    if (password.value.length < 8) {
+        errMsg.value = "비밀번호는 최소 8글자여야 합니다.";
+        return;
+    }
+
+    // if password != confirmPassword
+    if (password.value !== confirmPassword.value) {
+        errMsg.value = "비밀번호와 비밀번호 확인이 다릅니다.";
+        return;
+    }
+
+
     customAxios.post("/api/auth/register", {
         email: email.value,
         password: password.value,
         confirmPassword: confirmPassword.value
     })
-    .then(res => {
-        console.log(res);
-        // localStorage.setItem("accessToken", res.data.accessToken); // 서버에서 온 토큰 로컬스토리지 저장
+        .then(res => {
+            console.log(res);
+            // localStorage.setItem("accessToken", res.data.accessToken); // 서버에서 온 토큰 로컬스토리지 저장
 
-        // 메모리에 저장
-        store.setAccessToken(res.data.accessToken);
+            // 메모리에 저장
+            store.setAccessToken(res.data.accessToken);
 
-        // 보호된 페이지로 이동
-        router.push("/user/edit")
-    }).catch(err => {
-        console.log(err);
-        // 에러 메세지 
-        errMsg.value = err.response.data.message;
-    });
+            // 보호된 페이지로 이동
+            router.push("/user/edit");
+            console.log("router.pushed");
+            console.log("router:", router);
+        }).catch(err => {
+            console.log(err);
+            // 에러 메세지 
+            errMsg.value = err.response.data.message;
+        });
 }
 </script>
 
@@ -44,10 +59,11 @@ const handleSubmit = (e) => {
             <h1 class="auth__heading">회원가입</h1>
             <GoogleAuthButton type="button" msg="Google 계정으로 회원가입" />
             <span class="auth__or">or</span>
-            <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" />
-            <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" />
+            <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" :required="true" />
+            <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password"
+                :required="true" />
             <AuthInputField type="password" id="confirmPassword" name="confirmPassword" label="비밀번호 확인"
-                v-model="confirmPassword" />
+                v-model="confirmPassword" :required="true" />
             <button type="submit" class="auth__btn">로그인</button>
             <span class="auth__err">{{ errMsg }}</span>
 

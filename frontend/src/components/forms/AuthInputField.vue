@@ -25,6 +25,9 @@ defineProps({
         required: false,
         default: '',
     },
+    required: {
+        type: Boolean,
+    }
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -33,7 +36,7 @@ const emit = defineEmits(["update:modelValue"]);
 <template>
     <div class="input-field">
         <label :for="id" class="input-field__label">{{ label }}</label>
-        <input :type="type" :id="id" :name="name" class="input-field__input" :value="modelValue"
+        <input :required="required" :type="type" :id="id" :name="name" class="input-field__input" :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)" v-bind="readonly ? { readonly: true } : {}">
     </div>
 </template>
