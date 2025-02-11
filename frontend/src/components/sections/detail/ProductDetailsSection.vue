@@ -43,8 +43,8 @@
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
-    padding-top: 6.4rem;
-    border-top: 1px solid #ccc;
+    padding-bottom: 6.4rem;
+    border-bottom: 1px solid #ccc;
 }
 
 .product-details__table ul {

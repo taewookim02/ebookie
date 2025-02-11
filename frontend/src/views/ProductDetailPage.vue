@@ -1,4 +1,5 @@
 <script setup>
+import BookDetailsSection from '@/components/sections/detail/BookDetailsSection.vue';
 import DetailNavSection from '@/components/sections/detail/DetailNavSection.vue';
 import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
@@ -34,9 +35,12 @@ onMounted(() => {
 
     <!-- 도서정보 -->
     <ProductDetailsSection />
+
     <!-- 도서소개 -->
         <!-- 목차 -->
         <!-- 이미지 -->
+    <BookDetailsSection />
+    
     <!-- 저자소개 -->
         <!-- 만든이 -->
         <!-- 추천평 -->    
