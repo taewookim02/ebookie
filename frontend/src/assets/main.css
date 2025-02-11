@@ -27,3 +27,11 @@ textarea {
   font-family: inherit;
   font-size: inherit;
 }
+
+.link-dark {
+    text-decoration: none;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}

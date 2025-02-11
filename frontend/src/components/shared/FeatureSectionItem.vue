@@ -56,6 +56,7 @@ const formattedCurrency = computed(() => {
 .features__item--title {
     font-size: 1.4rem;
     font-weight: 700;
+    text-align: start;
 
     & a {
         color: inherit;
@@ -68,6 +69,10 @@ const formattedCurrency = computed(() => {
     }
 }
 
+.features__item--author {
+    text-align: start;
+    font-size: 1.3rem;
+}
 .rating-avg {
     font-weight: 700;
 }
