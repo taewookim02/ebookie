@@ -1,5 +1,8 @@
 <script setup>
+import DetailNavSection from '@/components/sections/detail/DetailNavSection.vue';
 import HeroSection from '@/components/sections/detail/HeroSection.vue';
+import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
+import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -24,14 +27,17 @@ onMounted(() => {
 
     <!-- 관련상품 -->
         <!-- 슬라이더 -->
+    <RelatedProductsSection :product-id="productId" />
     
-    <!-- 상세 네비게이션 -->
+    <!-- _상세 네비게이션 -->
+    <!-- <DetailNavSection /> -->
 
     <!-- 도서정보 -->
-        <!-- 소개 -->
+    <ProductDetailsSection />
+    <!-- 도서소개 -->
         <!-- 목차 -->
         <!-- 이미지 -->
-        <!-- 저자소개 -->
+    <!-- 저자소개 -->
         <!-- 만든이 -->
         <!-- 추천평 -->    
     <!-- 리뷰 -->

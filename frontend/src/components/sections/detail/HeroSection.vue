@@ -5,9 +5,10 @@ import { PhStar } from '@phosphor-icons/vue';
 import { ref } from 'vue';
 
 // state
-defineProps({
+const props = defineProps({
     productId: String
 });
+console.log(props.productId);
 
 const isActive = ref(true);
 

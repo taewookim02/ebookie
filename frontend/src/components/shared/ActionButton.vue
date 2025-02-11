@@ -20,6 +20,8 @@ const handleClick = () => {
     padding: 4px 16px;
     border: 1px solid #333333;
     border-radius: 4px;
+    flex-grow: 1;
+    max-width: 12.8rem;
 }
 
 .btn-action.active {
