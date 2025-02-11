@@ -35,7 +35,6 @@ const renewToken = async () => {
 
 onMounted(() => {
     renewToken();
-
 })
 </script>
 
