@@ -36,6 +36,17 @@ onMounted((e) => {
             rows: 2,
             fill: "row"
         },
+        // TODO: breakpoints
+        // breakpoints: {
+        //     640: {
+        //     },
+        //     768: {
+        //     },
+        //     1024: {
+        //     },
+        //     1560: {
+        //     }
+        // },
     }
 
     Object.assign(swiperContainer, params);
@@ -45,10 +56,12 @@ onMounted((e) => {
 </script>
 
 <template>
-<div class="swiper-container-wrapper">
+    <div class="swiper-container-wrapper">
         <div class="header-container">
             <h3>
-                <RouterLink to="#" class="link-dark d-flex align-items-center">일간/주간/월간 베스트셀러<PhCaretRight :size="16" color="#333333" /></RouterLink>
+                <RouterLink to="#" class="link-dark d-flex align-items-center">일간/주간/월간 베스트셀러
+                    <PhCaretRight :size="16" color="#333333" />
+                </RouterLink>
             </h3>
             <div class="header-container__controls">
                 <button class="active" @click="handleDailyClick">일간</button>

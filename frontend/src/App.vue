@@ -40,7 +40,7 @@ onMounted(() => {
 
 // 기본 레이아웃
 <template>
-    <div class="template-container">
+    <div class="template-container container">
         <Nav v-if="!route.meta.hideNavFooter" />
         <main class="main" v-if="!route.meta.noMainWrapper">
             <router-view />
@@ -58,9 +58,9 @@ onMounted(() => {
     flex-direction: column;
     gap: 6.4rem;
 }
-
+/* 
 .template-container {
     max-width: 1200px;
     margin: auto;
-}
+} */
 </style>

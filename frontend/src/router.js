@@ -8,9 +8,10 @@ import { watch } from 'vue';
 const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
-    { path: '/login', component: () => import('./views/LoginPage.vue') },
-    { path: '/register', component: () => import('./views/RegisterPage.vue') },
-    { path: '/user/edit', component: () => import('./views/EditProfilePage.vue'), meta: { requiresAuth: true, hideAuthLinks: true } },
+    { path: '/login', component: () => import('@/views/LoginPage.vue') },
+    { path: '/register', component: () => import('@/views/RegisterPage.vue') },
+    { path: '/user/edit', component: () => import('@/views/EditProfilePage.vue'), meta: { requiresAuth: true, hideAuthLinks: true } },
+    { path: '/product/:id', component: () => import('@/views/ProductDetailPage.vue')},
     { path: '/testing', component: () => import('@/views/TestingPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },
 ];
