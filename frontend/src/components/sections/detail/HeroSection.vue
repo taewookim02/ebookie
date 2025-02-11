@@ -1,4 +1,5 @@
 <script setup>
+import ActionButton from '@/components/shared/ActionButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
 import { PhStar } from '@phosphor-icons/vue';
 import { ref } from 'vue';
@@ -68,9 +69,9 @@ const handleBuyClick = () => {
                 </div>
                 <div class="info-bottom__action">
                     <LikeButton @like="handleLike" :is-active="isActive" />
-                    <button @click="handleSaveClick">찜하기</button>
-                    <button @click="handleCartClick">장바구니</button>
-                    <button @click="handleBuyClick">구매하기</button>
+                    <ActionButton text="찜하기" @action="handleSaveClick"/>
+                    <ActionButton text="장바구니" @action="handleCartClick"/>
+                    <ActionButton text="구매하기" @action="handleBuyClick" :is-active="true"/>
                 </div>
             </div>
 
@@ -126,9 +127,5 @@ strong.price {
 .info-bottom__action {
     display: flex;
     gap: 0.8rem;
-}
-
-.btn-like {
-    
 }
 </style>
