@@ -1,5 +1,8 @@
 @import './base.css';
-
+:root {
+    /* 부트스트랩 오버라이딩 */
+    --bs-border-color: #ccc;
+}
 #app, main, footer {
   width: 100%;
   max-width: 100vw;

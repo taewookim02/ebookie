@@ -21,7 +21,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
-        console.log("hey");
+        // 페이지 이동 시 페이지 top에서 시작
         return { top: 0 }
     }
 });

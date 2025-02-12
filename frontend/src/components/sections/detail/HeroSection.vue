@@ -12,6 +12,11 @@ console.log(props.productId);
 
 const isActive = ref(true);
 
+const emit = defineEmits(['scrollToReview']);
+
+const handleReviewClick = () => {
+    emit('scrollToReview');
+}
 
 const handleSaveClick = () => {
     console.log("handleClick");
@@ -59,7 +64,7 @@ const handleBuyClick = () => {
                     <span class="info-header__review--avg">9.2</span>
                     <span class="spacer text-muted">|</span>
                     <span>
-                        <RouterLink to="#" class="link-dark">회원리뷰(24건)</RouterLink>
+                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰(24건)</a>
                     </span>
                 </div>
             </div>
@@ -102,6 +107,10 @@ const handleBuyClick = () => {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+}
+
+.link-dark {
+    cursor: pointer;
 }
 
 .spacer {
