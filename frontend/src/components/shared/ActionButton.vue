@@ -1,7 +1,8 @@
 <script setup>
 defineProps({
-    text: String,
-    isActive: Boolean
+    // text: String,
+    isActive: Boolean,
+    // icon: Object
 })
 
 const emit = defineEmits(["action"]);
@@ -12,7 +13,9 @@ const handleClick = () => {
 </script>
 
 <template>
-    <button class="btn-action" :class="{ active: isActive }" @click="handleClick">{{ text }}</button>
+    <button class="btn-action" :class="{ active: isActive }" @click="handleClick">
+        <slot></slot>
+    </button>
 </template>
 
 <style scoped>

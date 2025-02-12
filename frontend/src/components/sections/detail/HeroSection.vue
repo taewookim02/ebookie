@@ -70,9 +70,9 @@ const handleBuyClick = () => {
                 </div>
                 <div class="info-bottom__action">
                     <LikeButton @like="handleLike" :is-active="isActive" />
-                    <ActionButton text="찜하기" @action="handleSaveClick"/>
-                    <ActionButton text="장바구니" @action="handleCartClick"/>
-                    <ActionButton text="구매하기" @action="handleBuyClick" :is-active="true"/>
+                    <ActionButton @action="handleSaveClick">찜하기</ActionButton>
+                    <ActionButton @action="handleCartClick">장바구니</ActionButton>
+                    <ActionButton @action="handleBuyClick" :is-active="true">구매하기</ActionButton>
                 </div>
             </div>
 

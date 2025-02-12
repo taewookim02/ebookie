@@ -5,6 +5,7 @@ import DetailNavSection from '@/components/sections/detail/DetailNavSection.vue'
 import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
+import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -51,6 +52,7 @@ onMounted(() => {
         <!-- 헤더 -->
         <!-- 별점 UI -->
         <!-- 리뷰   -->
+    <ReviewSection />
 </template>
 
 <style scoped></style>

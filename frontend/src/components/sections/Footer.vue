@@ -1,14 +1,4 @@
 <template>
-  <!-- <footer class="footer">
-    <span class="footer__desc">eBookie</span>
-    <div class="footer_link">
-      <RouterLink to="#" class="footer__link--item">홈</RouterLink>
-      <RouterLink to="#" class="footer__link--item">카테고리</RouterLink>
-      <RouterLink to="#" class="footer__link--item">베스트셀러</RouterLink>
-      <RouterLink to="#" class="footer__link--item">이벤트</RouterLink>
-    </div>
-    <span class="footer__info">© {{ new Date().getFullYear() }} All Rights Reserved</span>
-  </footer> -->
   <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
     <div class="col mb-3">
         <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
