@@ -1,4 +1,4 @@
-package com.avad.ebookie.domain.auth.model;
+package com.avad.ebookie.domain.auth.entity;
 
 import com.avad.ebookie.domain.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -17,6 +17,7 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String token;
 
     @Enumerated(EnumType.STRING)

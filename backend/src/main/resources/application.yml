@@ -17,7 +17,11 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
+#  sql:
+#    init:
+#      data-locations: classpath*:db/data.sql
+#      mode: always
+#      platform: mysql
   devtools:
     livereload:
       enabled: true  # 정적 리소스에 변화가 있을 때 바로 반영한다.

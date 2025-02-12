@@ -1,6 +1,6 @@
 package com.avad.ebookie.domain.auth.service;
 
-import com.avad.ebookie.domain.auth.model.Token;
+import com.avad.ebookie.domain.auth.entity.Token;
 import com.avad.ebookie.domain.auth.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

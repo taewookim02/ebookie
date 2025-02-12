@@ -1,6 +1,6 @@
 package com.avad.ebookie.domain.member.entity;
 
-import com.avad.ebookie.domain.auth.model.Token;
+import com.avad.ebookie.domain.auth.entity.Token;
 import com.avad.ebookie.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
