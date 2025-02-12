@@ -1,6 +1,7 @@
 <script setup>
 import AuthorDetailsSection from '@/components/sections/detail/AuthorDetailsSection.vue';
 import BookDetailsSection from '@/components/sections/detail/BookDetailsSection.vue';
+import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
 // import DetailNavSection from '@/components/sections/detail/DetailNavSection.vue';
 import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
@@ -64,8 +65,11 @@ onMounted(() => {
     <!-- 리뷰   -->
     <ReviewSection ref="reviewSection" />
 
+    <!-- 관련상품 -->
     <RelatedProductsSection :product-id="productId" />
 
+    <!-- 배송/반품 안내 -->
+    <DeliveryAndRefundSection />
 
 </template>
 
