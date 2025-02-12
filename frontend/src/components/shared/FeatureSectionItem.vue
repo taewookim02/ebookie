@@ -1,7 +1,6 @@
 <script setup>
-import featureImage from "@/assets/feature-item.png";
 import { PhStar } from "@phosphor-icons/vue";
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 const props = defineProps({
     imgSrc: String,
     title: String,
@@ -13,14 +12,24 @@ const props = defineProps({
     id: Number,
 });
 
+
+
 const formattedCurrency = computed(() => {
     return props.price ? `${new Intl.NumberFormat().format(props.price)}원` : "무료";
-})
+});
+
+const getImageUrl = () => {
+    return new URL(`/src/assets/images/product/${props.imgSrc}`, import.meta.url);
+}
+
+
+
 </script>
 
 <template>
     <div class="features__item">
-        <RouterLink :to="`/product/${id}`"><img :src="imgSrc || featureImage" class="features__img" alt="feature img" />
+        <RouterLink :to="`/product/${id}`">
+            <img :src="getImageUrl()" class="features__img" alt="feature img" />
         </RouterLink>
         <div class="features__item--title pt-3">
             <RouterLink :to="`/product/${id}`">{{ title }}</RouterLink>
@@ -73,6 +82,7 @@ const formattedCurrency = computed(() => {
     text-align: start;
     font-size: 1.3rem;
 }
+
 .rating-avg {
     font-weight: 700;
 }

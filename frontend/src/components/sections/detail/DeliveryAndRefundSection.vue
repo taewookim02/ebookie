@@ -71,7 +71,7 @@
 
 .delivery-container,
 .refund-container {
-    gap: 1.6rem;
+    gap: 0.8rem;
     font-size: 1.4rem;
 }
 
