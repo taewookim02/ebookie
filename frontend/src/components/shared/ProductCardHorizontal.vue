@@ -1,5 +1,4 @@
 <script setup>
-import featureImage from "@/assets/feature-item.png";
 import { PhStar } from "@phosphor-icons/vue";
 import { computed } from "vue";
 const props = defineProps({
@@ -17,11 +16,15 @@ const props = defineProps({
 const formattedCurrency = computed(() => {
     return props.price ? `${new Intl.NumberFormat().format(props.price)}원` : "무료";
 })
+
+const getImageUrl = () => {
+    return new URL(`/src/assets/images/product/${props.imgSrc}`, import.meta.url);
+}
 </script>
 
 <template>
     <div class="features__item">
-        <RouterLink :to="`/product/${id}`"><img :src="imgSrc || featureImage" class="features__img" alt="feature img" />
+        <RouterLink :to="`/product/${id}`"><img :src="getImageUrl()" class="features__img" alt="feature img" />
         </RouterLink>
         <div class="features__item-info">
             <span class="features__item--rank">

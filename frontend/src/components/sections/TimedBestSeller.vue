@@ -72,56 +72,56 @@ onMounted((e) => {
         <swiper-container ref="swiperRef" init="false">
             <swiper-slide>
                 <div class="slide-div">
-                    <ProductCardHorizontal title="정보처리기사 필기" author="김영진" img-src="/src/assets/images/product/L.jpeg"
+                    <ProductCardHorizontal title="정보처리기사 필기" author="김영진" img-src="L.jpeg"
                         :price=32000 publisher="위키북스" :rating-avg=8.6 :rating-cnt=4 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="모두를 위한 양자컴퓨터" author="이상민"
-                        img-src="/src/assets/images/product/L (2).jpeg" :price=28000 publisher="한빛미디어" :rating-avg=9.1
+                        img-src="L (2).jpeg" :price=28000 publisher="한빛미디어" :rating-avg=9.1
                         :rating-cnt=7 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="Deep Learning 101" author="박재호"
-                        img-src="/src/assets/images/product/L (3).jpeg" :price=35000 publisher="길벗" :rating-avg=8.9
+                        img-src="L (3).jpeg" :price=35000 publisher="길벗" :rating-avg=8.9
                         :rating-cnt=5 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="2025 AdsP 데이터분석 준전문가" author="최지원"
-                        img-src="/src/assets/images/product/L (4).jpeg" :price=30000 publisher="인사이트" :rating-avg=8.8
+                        img-src="L (4).jpeg" :price=30000 publisher="인사이트" :rating-avg=8.8
                         :rating-cnt=6 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="정보처리기사 필기 기본서" author="정민우"
-                        img-src="/src/assets/images/product/L (5).jpeg" :price=27000 publisher="에이콘" :rating-avg=9.2
+                        img-src="L (5).jpeg" :price=27000 publisher="에이콘" :rating-avg=9.2
                         :rating-cnt=8 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="정보처리기능사 필기 기본서" author="한소영"
-                        img-src="/src/assets/images/product/L (6).jpeg" :price=33000 publisher="제이펍" :rating-avg=8.7
+                        img-src="L (6).jpeg" :price=33000 publisher="제이펍" :rating-avg=8.7
                         :rating-cnt=3 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="나의 첫 노션 마스터북" author="윤성준"
-                        img-src="/src/assets/images/product/L (7).jpeg" :price=29000 publisher="프리렉" :rating-avg=9.0
+                        img-src="L (7).jpeg" :price=29000 publisher="프리렉" :rating-avg=9.0
                         :rating-cnt=5 />
                 </div>
             </swiper-slide>
             <swiper-slide>
                 <div class="slide-div">
                     <ProductCardHorizontal title="1400만 직장인을 위한 챗GPT 비즈니스 프롬프트" author="강민석"
-                        img-src="/src/assets/images/product/L (8).jpeg" :price=31000 publisher="루비페이퍼" :rating-avg=8.5
+                        img-src="L (8).jpeg" :price=31000 publisher="루비페이퍼" :rating-avg=8.5
                         :rating-cnt=4 />
                 </div>
             </swiper-slide>
