@@ -38,7 +38,7 @@ public class DummyDataLoader {
         List<Publisher> publishers = publisherDataLoader.generatePublisherData();
 
         // 출판사 데이터 생성 후 상품 생성 및 DB 저장
-        List<Product> products = productDataLoader.generateProductFromPublisher(publishers);
+        List<Product> products = productDataLoader.generateProduct(categories, publishers);
 
     }
 
