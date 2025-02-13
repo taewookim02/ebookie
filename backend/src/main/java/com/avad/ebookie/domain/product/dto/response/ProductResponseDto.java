@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class ProductResponseDto {
     private String publisherName;
     private Long categoryId;
     private String categoryName;
+    private LocalDate publishedDate;
     private List<AuthorResponseDto> authors;
 
 

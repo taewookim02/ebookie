@@ -40,6 +40,7 @@ public class ProductMapper {
                 .publisherName(entity.getPublisher().getName())
                 .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getName())
+                .publishedDate(entity.getPublishedDate())
                 .authors(authorResponseDtos) // 저자 정보 set
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.product.entity;
 
 import com.avad.ebookie.domain.category.entity.Category;
+import com.avad.ebookie.domain.common.entity.BaseEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -8,18 +9,19 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +30,8 @@ public class Product {
     private String name;
 
     private Long price;
+
+    private LocalDate publishedDate;
 
     // 출판사
     @ManyToOne(
@@ -47,4 +51,5 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ProductAuthor> authors = new ArrayList<>();
+
 }

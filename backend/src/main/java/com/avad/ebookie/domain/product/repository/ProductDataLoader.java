@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Slf4j
 @Component
@@ -20,6 +22,7 @@ public class ProductDataLoader {
     public List<Product> generateProduct(List<Category> categories, List<Publisher> publishers) {
         log.info("상품 더미데이터 체크");
 
+        // 데이터 넣을지 결정
         long count = productRepository.count();
         if (count != 0) {
             log.info("상품 데이터가 존재하니 더미데이터를 넣지 않습니다. 개수: " + count);
@@ -50,6 +53,7 @@ public class ProductDataLoader {
                         .price(25000L + (i * 1000)) // 가격 다양화
                         .publisher(publisher)
                         .category(category)
+                        .publishedDate(LocalDate.parse("2024-10-10")) // need random LocalDateTime
                         .build();
                 productsToSave.add(product);
             }
