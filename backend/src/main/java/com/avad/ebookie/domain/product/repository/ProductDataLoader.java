@@ -6,14 +6,14 @@ import com.avad.ebookie.domain.publisher.entity.Publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
-import net.datafaker.providers.base.DateAndTime;
-import net.datafaker.providers.base.TimeAndDate;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class ProductDataLoader {
     private final ProductRepository productRepository;
 
-    public List<Product> generateProduct(List<Category> categories, List<Publisher> publishers) {
+    public List<Product> generateProductData(List<Category> categories, List<Publisher> publishers) {
         log.info("상품 더미데이터 체크");
 
         // 데이터 넣을지 결정
