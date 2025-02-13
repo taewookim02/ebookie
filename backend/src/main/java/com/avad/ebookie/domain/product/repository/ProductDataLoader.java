@@ -56,13 +56,15 @@ public class ProductDataLoader {
             if (bookTitles != null) {
                 String title = bookTitles[i % bookTitles.length];
                 LocalDate randomPastDate = faker.timeAndDate().past(365, TimeUnit.DAYS).atZone(ZoneId.systemDefault()).toLocalDate();
+                Double randomDiscountRate = faker.number().randomDouble(1, 0, 100);
 
                 Product product = Product.builder()
                         .name(title)
-                        .price(25000L + (i * 1000)) // 가격 다양화
+                        .price(25000d + (i * 1000)) // 가격 다양화
                         .publisher(publisher)
                         .category(category)
-                        .publishedDate(randomPastDate) // random LocalDate
+                        .publishedDate(randomPastDate) // 랜덤 LocalDate
+                        .discountRate(randomDiscountRate) // 랜덤 할인율 (0~100)
                         .build();
                 productsToSave.add(product);
             }

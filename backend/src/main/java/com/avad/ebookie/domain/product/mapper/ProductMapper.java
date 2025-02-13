@@ -3,7 +3,7 @@ package com.avad.ebookie.domain.product.mapper;
 import com.avad.ebookie.domain.author.dto.response.AuthorResponseDto;
 import com.avad.ebookie.domain.author.entity.Author;
 import com.avad.ebookie.domain.author.mapper.AuthorMapper;
-import com.avad.ebookie.domain.product.dto.response.ProductResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ public class ProductMapper {
 
     private final AuthorMapper authorMapper;
 
-    public ProductResponseDto toDto(Product entity) {
+    public ProductDetailResponseDto toDto(Product entity) {
         // 저자 정보 리스트
         List<AuthorResponseDto> authorResponseDtos = new ArrayList<>();
 
         // ProductAuthor 테이블 접근
         for (ProductAuthor productAuthor : entity.getAuthors()) {
-            // 저자 정보 구하기
+            // Author 테이블 접근
             Author author = productAuthor.getAuthor();
 
             // 저자 entity -> 저자응답Dto 변환
@@ -32,7 +32,7 @@ public class ProductMapper {
             authorResponseDtos.add(dto);
         }
 
-        return ProductResponseDto.builder()
+        return ProductDetailResponseDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
@@ -41,6 +41,7 @@ public class ProductMapper {
                 .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getName())
                 .publishedDate(entity.getPublishedDate())
+                .discountRate(entity.getDiscountRate())
                 .authors(authorResponseDtos) // 저자 정보 set
                 .build();
     }

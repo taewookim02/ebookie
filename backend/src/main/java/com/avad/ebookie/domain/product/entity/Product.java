@@ -29,7 +29,9 @@ public class Product extends BaseEntity {
     @Column(length = 128)
     private String name;
 
-    private Long price;
+    private Double price;
+
+    private Double discountRate;
 
     private LocalDate publishedDate;
 
