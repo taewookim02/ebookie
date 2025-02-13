@@ -1,5 +1,8 @@
 package com.avad.ebookie.domain.author.entity;
 
+import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,11 +28,10 @@ public class Author {
     @Column(length = 255, nullable = false)
     private String description;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ProductAuthor> products = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "author",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true,
-//            fetch = FetchType.LAZY)
-//    private List<AuthorProduct> products = new ArrayList<>();
+
 
 }

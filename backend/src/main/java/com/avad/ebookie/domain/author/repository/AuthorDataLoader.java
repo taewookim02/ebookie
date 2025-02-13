@@ -17,13 +17,13 @@ import static java.util.Map.entry;
 public class AuthorDataLoader {
     private final AuthorRepository authorRepository;
 
-    public void init() {
+    public List<Author> generateAuthorData() {
         log.info("저자 더미데이터 체크");
         // 데이터 있는지 확인
         long count = authorRepository.count();
         if (count != 0) {
             log.info("저자 데이터가 존재하니 더미데이터를 넣지 않습니다. 개수: " + count);
-            return;
+            return new ArrayList<>();
         }
 
         Map<String, String> defaultNameAndDesc = Map.ofEntries(
@@ -56,6 +56,6 @@ public class AuthorDataLoader {
             authorsToSave.add(author); // 저장용 리스트에 엔티티 추가
         }
 
-        authorRepository.saveAll(authorsToSave); // db 저장
+        return authorRepository.saveAll(authorsToSave); // db 저장
     }
 }

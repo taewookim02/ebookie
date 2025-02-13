@@ -26,7 +26,7 @@ public class ProductDataLoader {
             return new ArrayList<>();
         }
 
-        // 카테고리별 책 제목 예시
+        // 카테고리별 책 제목
         Map<String, String[]> categoryBooks = Map.of(
                 "자격증", new String[]{"2024 정보처리기사 실기", "리눅스마스터 2급 핵심정리", "AWS 공인 솔루션스 아키텍트"},
                 "백엔드", new String[]{"스프링 부트와 AWS로 혼자 구현하는 웹 서비스", "Java Spring 완벽 가이드", "실전! MSA 구축과 운영"},

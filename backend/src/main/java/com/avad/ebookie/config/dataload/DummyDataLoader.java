@@ -1,10 +1,14 @@
 package com.avad.ebookie.config.dataload;
 
+import com.avad.ebookie.domain.author.entity.Author;
+import com.avad.ebookie.domain.author.repository.AuthorDataLoader;
 import com.avad.ebookie.domain.category.entity.Category;
 import com.avad.ebookie.domain.category.repository.CategoryDataLoader;
 import com.avad.ebookie.domain.category.repository.CategoryRepository;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductDataLoader;
+import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.avad.ebookie.domain.product_author.repository.ProductAuthorDataLoader;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.publisher.repository.PublisherDataLoader;
 import com.avad.ebookie.domain.publisher.repository.PublisherRepository;
@@ -25,7 +29,9 @@ public class DummyDataLoader {
 
     private final CategoryDataLoader categoryDataLoader;
     private final PublisherDataLoader publisherDataLoader;
+    private final AuthorDataLoader authorDataLoader;
     private final ProductDataLoader productDataLoader;
+    private final ProductAuthorDataLoader productAuthorDataLoader;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
@@ -37,8 +43,14 @@ public class DummyDataLoader {
         // 출판사 더미데이터 생성 후 DB 저장
         List<Publisher> publishers = publisherDataLoader.generatePublisherData();
 
+        // 저자 더미데이터 생성 후 DB 저장
+        List<Author> authors = authorDataLoader.generateAuthorData();
+
         // 출판사 데이터 생성 후 상품 생성 및 DB 저장
         List<Product> products = productDataLoader.generateProduct(categories, publishers);
+
+        // 저자, 상품 맵핑 및 DB 저장
+        List<ProductAuthor> productAuthors = productAuthorDataLoader.generateProductAuthorData(products, authors);
 
     }
 

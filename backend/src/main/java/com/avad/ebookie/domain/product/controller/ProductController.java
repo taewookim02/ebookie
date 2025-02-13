@@ -27,9 +27,10 @@ public class ProductController {
     // TODO: 필요한 기능 정리
     @GetMapping("test/product")
     public ResponseEntity<List<ProductResponseDto>> testProduct() {
-        List<ProductResponseDto> responses = productRepository.findAll().stream().map(product ->
-                ProductResponseDto.toDto(product)
-        ).collect(Collectors.toList());
+//        List<ProductResponseDto> responses = productRepository.findAll().stream().map(product ->
+//                ProductResponseDto.toDto(product)
+//        ).collect(Collectors.toList());
+        List<ProductResponseDto> responses = productService.testProduct();
         return ResponseEntity.ok(responses);
     }
 }

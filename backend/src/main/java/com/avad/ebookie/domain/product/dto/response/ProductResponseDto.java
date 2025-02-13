@@ -1,10 +1,16 @@
 package com.avad.ebookie.domain.product.dto.response;
 
+import com.avad.ebookie.domain.author.dto.response.AuthorResponseDto;
+import com.avad.ebookie.domain.author.entity.Author;
 import com.avad.ebookie.domain.product.entity.Product;
+import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,13 +21,10 @@ public class ProductResponseDto {
     private String name;
     private Long price;
     private Long publisherId;
+    private String publisherName;
+    private Long categoryId;
+    private String categoryName;
+    private List<AuthorResponseDto> authors;
 
-    public static ProductResponseDto toDto(Product entity) {
-        return ProductResponseDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .price(entity.getPrice())
-                .publisherId(entity.getPublisher().getId())
-                .build();
-    }
+
 }
