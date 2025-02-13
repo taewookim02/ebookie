@@ -32,3 +32,15 @@ public class Token {
     @JsonBackReference
     private Member member;
 }
+
+/*
+* create table token (
+        expired bit not null,
+        revoked bit not null,
+        id bigint not null auto_increment,
+        member_id bigint,
+        token varchar(255),
+        token_type enum ('BEARER'),
+        primary key (id)
+    ) engine=InnoDB
+* */

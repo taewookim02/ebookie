@@ -16,6 +16,14 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(length = 32)
     private String description;
 }
+
+/*
+*     create table category (
+        id bigint not null auto_increment,
+        description varchar(32),
+        primary key (id)
+    ) engine=InnoDB
+* */
