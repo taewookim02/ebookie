@@ -1,13 +1,33 @@
 package com.avad.ebookie.domain.publisher.entity;
 
-import jakarta.persistence.Entity;
-import lombok.*;
+import com.avad.ebookie.domain.product.entity.Product;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Data
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Publisher {
+public class Publisher { // 출판사
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 64)
+    private String name;
+
+    @OneToMany(mappedBy = "publisher"
+            , cascade = CascadeType.ALL
+            , orphanRemoval = true
+            , fetch = FetchType.LAZY) // why does publisherRepository.findAll() still get all the products?
+//    @JsonManagedReference // json 재귀 에러 해결
+    private List<Product> products;
+
 }

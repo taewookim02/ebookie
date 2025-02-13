@@ -17,12 +17,9 @@ import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CategoryDataLoader {
-    private CategoryRepository categoryRepository;
-
-    public CategoryDataLoader(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class) // 스프링 컨테이너 모두 띄워졌을 때
