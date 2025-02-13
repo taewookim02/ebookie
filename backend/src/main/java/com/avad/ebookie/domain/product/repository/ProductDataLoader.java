@@ -41,7 +41,7 @@ public class ProductDataLoader {
             Category category = categories.get(i % categories.size());
 
             // 해당 카테고리의 책 제목 배열 가져오기
-            String[] bookTitles = categoryBooks.get(category.getDescription());
+            String[] bookTitles = categoryBooks.get(category.getName());
             if (bookTitles != null) {
                 String title = bookTitles[i % bookTitles.length];
 

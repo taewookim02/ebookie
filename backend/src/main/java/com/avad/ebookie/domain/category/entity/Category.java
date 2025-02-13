@@ -1,7 +1,6 @@
 package com.avad.ebookie.domain.category.entity;
 
 import com.avad.ebookie.domain.product.entity.Product;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class Category {
     private Long id;
 
     @Column(length = 32)
-    private String description;
+    private String name;
 
     @OneToMany(
             mappedBy = "category",

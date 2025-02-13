@@ -27,7 +27,7 @@ public class CategoryDataLoader {
         for (String desc : defaultData) {
             Category category = Category
                     .builder()
-                    .description(desc)
+                    .name(desc)
                     .build();
             categoriesToSave.add(category); // 저장용 리스트에 엔티티 추가
         }
