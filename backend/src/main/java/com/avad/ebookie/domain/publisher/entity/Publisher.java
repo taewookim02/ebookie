@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,7 +28,7 @@ public class Publisher { // 출판사
             , cascade = CascadeType.ALL
             , orphanRemoval = true
             , fetch = FetchType.LAZY) // why does publisherRepository.findAll() still get all the products?
-//    @JsonManagedReference // json 재귀 에러 해결
-    private List<Product> products;
+    @JsonManagedReference // json 재귀 에러 해결
+    private List<Product> products = new ArrayList<>();
 
 }

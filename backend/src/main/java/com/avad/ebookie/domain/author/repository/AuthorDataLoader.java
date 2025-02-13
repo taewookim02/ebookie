@@ -3,10 +3,7 @@ package com.avad.ebookie.domain.author.repository;
 import com.avad.ebookie.domain.author.entity.Author;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +17,6 @@ import static java.util.Map.entry;
 public class AuthorDataLoader {
     private final AuthorRepository authorRepository;
 
-    @Transactional
-    @EventListener(ApplicationReadyEvent.class)
     public void init() {
         log.info("저자 더미데이터 체크");
         // 데이터 있는지 확인

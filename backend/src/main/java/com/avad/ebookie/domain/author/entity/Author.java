@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +24,12 @@ public class Author {
 
     @Column(length = 255, nullable = false)
     private String description;
+
+
+//    @OneToMany(mappedBy = "author",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private List<AuthorProduct> products = new ArrayList<>();
+
 }

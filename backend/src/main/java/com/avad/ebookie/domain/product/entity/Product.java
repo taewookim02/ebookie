@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,13 +25,18 @@ public class Product {
 
     private Long price;
 
-
     // 출판사
     @ManyToOne(
             fetch = FetchType.LAZY,
             optional = false) // optional=false JPA 런타임 조건
-    @JoinColumn(name = "publisher_id"
-            , nullable = false) // nullable=false DDL 조건
-    @JsonBackReference // json 재귀 에러 해결
+    @JoinColumn(name = "publisher_id",
+            nullable = false) // nullable=false DDL 조건
+    @JsonBackReference // json 변환 시 publisher 미포함
     private Publisher publisher;
+
+//    @OneToMany(mappedBy = "product",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.LAZY)
+//    private List<AuthorProduct> authors;
 }
