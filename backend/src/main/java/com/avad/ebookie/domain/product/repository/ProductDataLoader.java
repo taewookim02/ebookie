@@ -5,13 +5,16 @@ import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
+import net.datafaker.providers.base.DateAndTime;
+import net.datafaker.providers.base.TimeAndDate;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -38,7 +41,12 @@ public class ProductDataLoader {
                 "AI", new String[]{"업무시간을 반으로 줄이는 AI 활용법", "파이썬으로 배우는 딥러닝", "실전 MLOps 가이드"}
         );
 
+        // 상품 저장용 리스트
         List<Product> productsToSave = new ArrayList<>();
+
+        // 더미데이터 생성용
+        Faker faker = new Faker(new Locale("ko"));
+
         for (int i = 0; i < publishers.size(); i++) {
             Publisher publisher = publishers.get(i);
             Category category = categories.get(i % categories.size());
@@ -47,13 +55,14 @@ public class ProductDataLoader {
             String[] bookTitles = categoryBooks.get(category.getName());
             if (bookTitles != null) {
                 String title = bookTitles[i % bookTitles.length];
+                LocalDate randomPastDate = faker.timeAndDate().past(365, TimeUnit.DAYS).atZone(ZoneId.systemDefault()).toLocalDate();
 
                 Product product = Product.builder()
                         .name(title)
                         .price(25000L + (i * 1000)) // 가격 다양화
                         .publisher(publisher)
                         .category(category)
-                        .publishedDate(LocalDate.parse("2024-10-10")) // need random LocalDateTime
+                        .publishedDate(randomPastDate) // random LocalDate
                         .build();
                 productsToSave.add(product);
             }

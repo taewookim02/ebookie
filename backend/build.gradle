@@ -34,6 +34,8 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // 유효성검사
 
+	implementation 'net.datafaker:datafaker:2.4.2' // 더미데이터 용도
+
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5' // jwt
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5' // jwt-impl
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5' // jwt-jackson
