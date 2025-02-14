@@ -1,5 +1,18 @@
 <script setup>
+import { formatYYYYMMDDKr } from '@/helper/format';
+import { computed, onMounted } from 'vue';
 
+const props = defineProps({
+    detailDto: Object
+});
+
+const myDate = computed(() => {
+    return formatYYYYMMDDKr(props.detailDto.publishedDate);
+})
+
+onMounted(() => {
+    console.log(props.detailDto.publishedDate);
+})
 </script>
 
 <template>
@@ -13,7 +26,7 @@
             <tbody>
                 <tr>
                     <th>발행일</th>
-                    <td>2023년 02월 08일</td>
+                    <td>{{ formatYYYYMMDDKr(props.detailDto.publishedDate) }}</td>
                 </tr>
                 <tr>
                     <th>이용안내</th>
@@ -26,6 +39,7 @@
                     </td>
                 </tr>
                 <tr>
+                    <!-- TODO: -->
                     <th>파일포맷</th>
                     <td>PDF</td>
                 </tr>

@@ -7,6 +7,7 @@ import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
+import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
 import { customAxios } from '@/plugins/axios';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -27,7 +28,7 @@ const scrollToReview = () => {
 
 customAxios.get(`/api/v1/products/${productId}`)
     .then(res => {
-        detailDto.value = res.data; 
+        detailDto.value = res.data;
         console.log(detailDto); // this has all the correct values
     })
     .catch(err => {
@@ -40,46 +41,48 @@ console.log(detailDto.value);
 </script>
 
 <template>
+    <template v-if="detailDto">
+        <!-- 히어로 -->
+        <!-- 히어로__이미지 -->
+        <!-- 히어로__정보 -->
+        <!-- 정보 -->
+        <!-- 액션 -->
+        <HeroSection :detail-dto="detailDto" :product-id="productId" @scroll-to-review="scrollToReview" />
 
-    <!-- 히어로 -->
-    <!-- 히어로__이미지 -->
-    <!-- 히어로__정보 -->
-    <!-- 정보 -->
-    <!-- 액션 -->
-    <HeroSection v-if="detailDto" :detail-dto="detailDto" :product-id="productId" @scroll-to-review="scrollToReview" />
+        <!-- 관련상품 -->
+        <!-- 슬라이더 -->
+        <RelatedProductsSection :product-id="productId" />
 
-    <!-- 관련상품 -->
-    <!-- 슬라이더 -->
-    <RelatedProductsSection :product-id="productId" />
+        <!-- _상세 네비게이션 -->
+        <!-- <DetailNavSection /> -->
 
-    <!-- _상세 네비게이션 -->
-    <!-- <DetailNavSection /> -->
+        <!-- 도서정보 -->
+        <ProductDetailsSection :detail-dto="detailDto" />
 
-    <!-- 도서정보 -->
-    <ProductDetailsSection />
+        <!-- 도서소개 -->
+        <!-- 목차 -->
+        <!-- 이미지 -->
+        <BookDetailsSection />
 
-    <!-- 도서소개 -->
-    <!-- 목차 -->
-    <!-- 이미지 -->
-    <BookDetailsSection />
+        <!-- 저자소개 -->
+        <!-- 만든이 -->
+        <!-- 추천평 -->
+        <AuthorDetailsSection />
 
-    <!-- 저자소개 -->
-    <!-- 만든이 -->
-    <!-- 추천평 -->
-    <AuthorDetailsSection />
+        <!-- 리뷰 -->
+        <!-- 헤더 -->
+        <!-- 별점 UI -->
+        <!-- 리뷰   -->
+        <ReviewSection ref="reviewSection" />
 
-    <!-- 리뷰 -->
-    <!-- 헤더 -->
-    <!-- 별점 UI -->
-    <!-- 리뷰   -->
-    <ReviewSection ref="reviewSection" />
+        <!-- 관련상품 -->
+        <RelatedProductsSection :product-id="productId" />
 
-    <!-- 관련상품 -->
-    <RelatedProductsSection :product-id="productId" />
-
-    <!-- 배송/반품 안내 -->
-    <DeliveryAndRefundSection />
-
+        <!-- 배송/반품 안내 -->
+        <DeliveryAndRefundSection />
+    </template>
+    <LoadingSpinner v-else />
+    
 </template>
 
 <style scoped></style>

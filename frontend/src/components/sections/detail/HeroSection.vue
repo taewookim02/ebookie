@@ -74,10 +74,11 @@ const computedReviewAvg = computed(() => {
     props.detailDto.reviews?.forEach(review => {
         total += review.rating;
     })
-    return total ? (total / props.detailDto.reviews.length).toFixed(1) : 0;
+    return total ? (total / props.detailDto.reviews?.length).toFixed(1) : 0;
 });
 
 // 판매가
+// TODO: is determining price on frontend ideal?
 const computedSellingPrice = computed(() => {
     return (props.detailDto.price - (props.detailDto.price * props.detailDto.discountRate / 100)).toLocaleString();
 })
@@ -88,7 +89,7 @@ const computedStars = computed(() => {
     const avg = parseFloat(computedReviewAvg.value); 
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-        stars.push(false); // TODO:  
+        stars.push(false); // TODO: fill based on avg
     }
     return stars;
 });
@@ -136,13 +137,13 @@ const computedStars = computed(() => {
                     <span class="info-header__review--avg">{{ computedReviewAvg }}</span>
                     <span class="spacer text-muted">|</span>
                     <span>
-                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews.length }}건)</a>
+                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length }}건)</a>
                     </span>
                 </div>
             </div>
             <div class="info-bottom pt-4">
                 <div class="info-bottom__price">
-                    <span>정가 <span class="price text-muted price-original">{{ detailDto.price.toLocaleString()
+                    <span>정가 <span class="price text-muted price-original">{{ detailDto.price?.toLocaleString()
                             }}원</span></span>
                     <span>판매가 <strong class="price">{{ computedSellingPrice }}원</strong> <span
                             v-if="detailDto.discountRate" class="badge text-bg-danger">{{ detailDto.discountRate
