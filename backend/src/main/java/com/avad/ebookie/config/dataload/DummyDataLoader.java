@@ -10,6 +10,8 @@ import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductDataLoader;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.product_author.repository.ProductAuthorDataLoader;
+import com.avad.ebookie.domain.product_image.entity.ProductImage;
+import com.avad.ebookie.domain.product_image.repository.ProductImageDataLoader;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.publisher.repository.PublisherDataLoader;
 import com.avad.ebookie.domain.review.entity.Review;
@@ -35,6 +37,7 @@ public class DummyDataLoader {
     private final ProductAuthorDataLoader productAuthorDataLoader;
     private final MemberDataLoader memberDataLoader;
     private final ReviewDataLoader reviewDataLoader;
+    private final ProductImageDataLoader productImageDataLoader;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
@@ -52,8 +55,11 @@ public class DummyDataLoader {
         // 저자 더미데이터 생성 후 DB 저장
         List<Author> authors = authorDataLoader.generateAuthorData();
 
-        // 출판사 데이터 생성 후 상품 생성 및 DB 저장
+        // 상품 생성 및 DB 저장
         List<Product> products = productDataLoader.generateProductData(categories, publishers);
+
+        // 상품 이미지 생성 및 DB 저장
+        List<ProductImage> productImages = productImageDataLoader.generateProductImageData(products);
 
         // 리뷰 데이터 생성 및 DB 저장
         List<Review> reviews = reviewDataLoader.generateReviewData(members, products);

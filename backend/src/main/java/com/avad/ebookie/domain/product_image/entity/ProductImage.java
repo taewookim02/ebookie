@@ -2,6 +2,7 @@ package com.avad.ebookie.domain.product_image.entity;
 
 import com.avad.ebookie.domain.common.entity.BaseEntity;
 import com.avad.ebookie.domain.product.entity.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,6 @@ public class ProductImage extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product parentProduct;
 }

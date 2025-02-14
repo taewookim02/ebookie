@@ -1,18 +1,17 @@
 package com.avad.ebookie.domain.product.dto.response;
 
 import com.avad.ebookie.domain.author.dto.response.AuthorResponseDto;
+import com.avad.ebookie.domain.product_image.dto.response.ProductImageResponseDto;
 import com.avad.ebookie.domain.review.dto.response.ReviewResponseDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+//@Data
+@Getter
 @Builder
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 public class ProductDetailResponseDto {
     private Long id;
@@ -26,6 +25,7 @@ public class ProductDetailResponseDto {
     private Double discountRate;
     private List<ReviewResponseDto> reviews;
     private List<AuthorResponseDto> authors;
+    private List<ProductImageResponseDto> images;
 
     // TODO:
     // 1. private List<ProductRelatedResponseDto> relatedProducts;

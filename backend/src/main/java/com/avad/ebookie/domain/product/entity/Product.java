@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.product.entity;
 import com.avad.ebookie.domain.category.entity.Category;
 import com.avad.ebookie.domain.common.entity.BaseEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.avad.ebookie.domain.product_image.entity.ProductImage;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.review.entity.Review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -59,5 +60,10 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Review> reviews = new ArrayList<>();
+
+    // 이미지 목록
+    @OneToMany(mappedBy = "parentProduct", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ProductImage> images = new ArrayList<>();
 
 }
