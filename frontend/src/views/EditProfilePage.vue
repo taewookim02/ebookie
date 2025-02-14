@@ -21,7 +21,7 @@ const handleUpdate = () => {
         return;
     }
 
-    customAxios.patch("/api/member/update", {
+    customAxios.patch("/api/v1/members/update", {
         email: email.value,
         newPassword: newPassword.value,
         newPasswordConfirm: newPasswordConfirm.value,
@@ -43,7 +43,7 @@ const handleUpdate = () => {
 // 라이프사이클 훅
 onMounted(() => {
     // 로그인 유저 정보
-    customAxios.get("/api/member/detail")
+    customAxios.get("/api/v1/members/detail")
     .then(res => {
         email.value = res.data.email;
     }).catch(err => {

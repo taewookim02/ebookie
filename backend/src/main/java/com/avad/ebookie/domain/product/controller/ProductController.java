@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
 
@@ -25,7 +25,7 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     // TODO: 필요한 기능 정리
-    @GetMapping("test/product")
+    @GetMapping("/test")
     public ResponseEntity<List<ProductDetailResponseDto>> testProduct() {
 //        List<ProductResponseDto> responses = productRepository.findAll().stream().map(product ->
 //                ProductResponseDto.toDto(product)
@@ -34,7 +34,8 @@ public class ProductController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/products/{id}")
+    // 상품 상세
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDetailResponseDto> details(@PathVariable("id") Long id) {
         ProductDetailResponseDto productDetailResponseDto = productService.details(id);
         return ResponseEntity.ok(productDetailResponseDto);

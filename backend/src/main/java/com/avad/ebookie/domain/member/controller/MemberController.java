@@ -17,14 +17,14 @@ import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/v1/members")
 public class MemberController {
     private final MemberService memberService;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     // TODO: 회원정보 수정
-    @PatchMapping("update")
+    @PatchMapping("/update")
     public ResponseEntity<EditDetailResponseDto> update(@Valid @RequestBody MemberEditRequestDto memberEditRequestDto, HttpServletRequest request) {
         System.out.println("memberEditRequestDto = " + memberEditRequestDto);
         String authHeader = request.getHeader("Authorization");
@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     // 유저 정보
-    @GetMapping("detail")
+    @GetMapping("/detail")
     public ResponseEntity<EditDetailResponseDto> detail(HttpServletRequest request) {
         // 요청에서 토큰 구하기
         String authHeader = request.getHeader("Authorization");

@@ -56,6 +56,7 @@ public class ProductMapper {
         }
 
 
+
         return ProductDetailResponseDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())

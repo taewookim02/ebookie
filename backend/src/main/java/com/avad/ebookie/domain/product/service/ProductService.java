@@ -30,6 +30,9 @@ public class ProductService {
     public ProductDetailResponseDto details(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(""));
-        return productMapper.toDetailDto(product);
+        ProductDetailResponseDto detailDto = productMapper.toDetailDto(product);
+
+        // TODO: 관련상품 추가
+        return detailDto;
     }
 }
