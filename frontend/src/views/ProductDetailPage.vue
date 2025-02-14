@@ -17,6 +17,7 @@ let productId = route.currentRoute.value.params.id;
 
 // state
 const reviewSection = ref(null);
+const detailDto = ref({});
 
 // actions
 const scrollToReview = () => {
@@ -24,12 +25,17 @@ const scrollToReview = () => {
 }
 
 
+customAxios.get(`/api/v1/products/${productId}`)
+    .then(res => {
+        detailDto.value = res.data; 
+        console.log(detailDto); // this has all the correct values
+    })
+    .catch(err => {
+        console.log("err: ", err);
+    })
 
-// lifecycle
-onMounted(() => {
-    // productID로 서버에 상품 정보 요청
-    
-})
+console.log(detailDto.value);
+
 
 </script>
 
@@ -40,7 +46,7 @@ onMounted(() => {
     <!-- 히어로__정보 -->
     <!-- 정보 -->
     <!-- 액션 -->
-    <HeroSection :product-id="productId" @scroll-to-review="scrollToReview" />
+    <HeroSection v-if="detailDto" :detail-dto="detailDto" :product-id="productId" @scroll-to-review="scrollToReview" />
 
     <!-- 관련상품 -->
     <!-- 슬라이더 -->
