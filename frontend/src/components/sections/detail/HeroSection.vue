@@ -31,6 +31,8 @@ const handleBuyClick = () => {
     console.log("handleClick");
 };
 
+const SERVER_URL = "http://localhost:8080";
+
 </script>
 
 <template>
@@ -41,7 +43,8 @@ const handleBuyClick = () => {
     <!-- 액션 -->
     <section class="hero">
         <div class="hero__image">
-            <img src="@/assets/images/product/L (25).jpeg" alt="">
+            <!-- <img src="@/assets/images/product/L (25).jpeg" alt=""> -->
+            <img :src="`${SERVER_URL}/api/image?name=L (25).jpeg`" alt="">
         </div>
         <div class="hero__info">
             <div class="info-header">

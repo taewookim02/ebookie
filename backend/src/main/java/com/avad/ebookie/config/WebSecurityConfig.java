@@ -62,6 +62,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/image").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
