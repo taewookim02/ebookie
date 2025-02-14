@@ -17,7 +17,7 @@ const handleLogin = async () => {
     
 
 
-    customAxios.post("/api/auth/login", {
+    customAxios.post("/api/v1/auth/login", {
         email: email.value,
         password: password.value
     })

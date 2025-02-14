@@ -29,7 +29,7 @@ const handleSubmit = (e) => {
     }
 
 
-    customAxios.post("/api/auth/register", {
+    customAxios.post("/api/v1/auth/register", {
         email: email.value,
         password: password.value,
         confirmPassword: confirmPassword.value

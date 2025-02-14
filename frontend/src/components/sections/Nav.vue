@@ -17,7 +17,7 @@ const shouldShowBottomNav = computed(() => {
 // actions
 const handleLogout = (e) => {
     customAxios
-    .get("/api/auth/logout", {
+    .get("/api/v1/auth/logout", {
         withCredentials: true
     }).then(res => {
         console.log(res);

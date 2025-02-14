@@ -15,7 +15,7 @@ const store = useTokenStore();
 const renewToken = async () => {
     try {
         const res = await customAxios
-        .get("/api/auth/refresh-token", {
+        .get("/api/v1/auth/refresh-token", {
             withCredentials: true
         });
         if (res.data.accessToken) {
