@@ -12,6 +12,7 @@ public class ReviewMapper {
                 .id(entity.getId())
                 .content(entity.getContent())
                 .writerId(entity.getWriter().getId())
+                .writerEmail(entity.getWriter().getEmail())
                 .rating(entity.getRating())
                 .createdAt(entity.getCreatedAt())
                 .build();

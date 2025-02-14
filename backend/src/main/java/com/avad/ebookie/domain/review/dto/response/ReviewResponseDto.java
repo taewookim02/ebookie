@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class ReviewResponseDto {
     private Long id;
     private Long writerId;
+    private String writerEmail;
     private Double rating;
     private String content;
     private LocalDateTime createdAt;
