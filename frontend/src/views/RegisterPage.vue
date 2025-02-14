@@ -66,7 +66,7 @@ const handleSubmit = (e) => {
                 :required="true" />
             <AuthInputField type="password" id="confirmPassword" name="confirmPassword" label="비밀번호 확인"
                 v-model="confirmPassword" :required="true" />
-            <button type="submit" class="auth__btn">로그인</button>
+            <button type="submit" class="auth__btn">회원가입</button>
             <span class="auth__err">{{ errMsg }}</span>
 
             <div class="auth__link">

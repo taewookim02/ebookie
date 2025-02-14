@@ -33,8 +33,8 @@ public class MemberDataLoader {
         // 10개의 계정
         for (int i = 0; i < 10; i++) {
             // 아이디, 비밀번호
-            String email = faker.name().firstName() + "." + faker.name().lastName() + "@gmail.com";
-            String password = "12341234";
+            String email = (faker.name().firstName() + "." + faker.name().lastName()).toLowerCase() + "@gmail.com";
+            String password = "12341234!@"; // 기본 비밀번호
             // 비밀번호 해싱
             String encodedPassword = passwordEncoder.encode(password);
 

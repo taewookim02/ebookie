@@ -4,6 +4,7 @@ import com.avad.ebookie.domain.category.entity.Category;
 import com.avad.ebookie.domain.common.entity.BaseEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
+import com.avad.ebookie.domain.review.entity.Review;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -53,5 +54,10 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ProductAuthor> authors = new ArrayList<>();
+
+    // 리뷰목록
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Review> reviews = new ArrayList<>();
 
 }
