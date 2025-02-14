@@ -6,6 +6,9 @@ import com.avad.ebookie.domain.author.mapper.AuthorMapper;
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.avad.ebookie.domain.review.dto.response.ReviewResponseDto;
+import com.avad.ebookie.domain.review.entity.Review;
+import com.avad.ebookie.domain.review.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +20,13 @@ import java.util.List;
 public class ProductMapper {
 
     private final AuthorMapper authorMapper;
+    private final ReviewMapper reviewMapper;
 
+    // 상품 상세 페이지 응답 DTO
     public ProductDetailResponseDto toDto(Product entity) {
-        // 저자 정보 리스트
+        // 저자, 리뷰 리스트
         List<AuthorResponseDto> authorResponseDtos = new ArrayList<>();
+        List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();
 
         // ProductAuthor 테이블 접근
         for (ProductAuthor productAuthor : entity.getAuthors()) {
@@ -31,6 +37,13 @@ public class ProductMapper {
             AuthorResponseDto dto = authorMapper.toDto(author);
             authorResponseDtos.add(dto);
         }
+
+        // 리뷰 dto 추가
+        for (Review review : entity.getReviews()) {
+            ReviewResponseDto dto = reviewMapper.toDto(review);
+            reviewResponseDtos.add(dto);
+        }
+
 
         return ProductDetailResponseDto.builder()
                 .id(entity.getId())
@@ -43,6 +56,7 @@ public class ProductMapper {
                 .publishedDate(entity.getPublishedDate())
                 .discountRate(entity.getDiscountRate())
                 .authors(authorResponseDtos) // 저자 정보 set
+                .reviews(reviewResponseDtos) // 리뷰 정보 set
                 .build();
     }
 }

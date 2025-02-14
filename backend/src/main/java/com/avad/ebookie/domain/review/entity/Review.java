@@ -5,6 +5,8 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Getter
@@ -17,7 +19,10 @@ public class Review extends BaseEntity { // baseEntity: createdAt, updatedAt
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Float rating; // float
+    // TODO: check if min, max works with double
+    @Min(1)
+    @Max(10)
+    private Double rating; // double
 
     @Column(length = 50)
     private String content;

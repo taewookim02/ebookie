@@ -12,6 +12,8 @@ import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.product_author.repository.ProductAuthorDataLoader;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.publisher.repository.PublisherDataLoader;
+import com.avad.ebookie.domain.review.entity.Review;
+import com.avad.ebookie.domain.review.repository.ReviewDataLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -32,6 +34,7 @@ public class DummyDataLoader {
     private final ProductDataLoader productDataLoader;
     private final ProductAuthorDataLoader productAuthorDataLoader;
     private final MemberDataLoader memberDataLoader;
+    private final ReviewDataLoader reviewDataLoader;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
@@ -51,6 +54,9 @@ public class DummyDataLoader {
 
         // 출판사 데이터 생성 후 상품 생성 및 DB 저장
         List<Product> products = productDataLoader.generateProductData(categories, publishers);
+
+        // 리뷰 데이터 생성 및 DB 저장
+        List<Review> reviews = reviewDataLoader.generateReviewData(members, products);
 
         // 저자, 상품 맵핑 및 DB 저장
         List<ProductAuthor> productAuthors = productAuthorDataLoader.generateProductAuthorData(products, authors);

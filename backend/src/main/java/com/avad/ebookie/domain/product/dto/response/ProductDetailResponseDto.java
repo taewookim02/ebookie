@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.product.dto.response;
 
 import com.avad.ebookie.domain.author.dto.response.AuthorResponseDto;
+import com.avad.ebookie.domain.review.dto.response.ReviewResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,9 @@ public class ProductDetailResponseDto {
     private String categoryName;
     private LocalDate publishedDate;
     private Double discountRate;
+    private List<ReviewResponseDto> reviews;
     private List<AuthorResponseDto> authors;
+
     // TODO:
     // 1. private List<ProductRelatedResponseDto> relatedProducts;
     // 2. Review
