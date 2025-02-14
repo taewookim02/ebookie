@@ -33,6 +33,9 @@ public class Product extends BaseEntity {
 
     private Double price;
 
+    @Lob
+    private String description;
+
     private Double discountRate;
 
     private LocalDate publishedDate;

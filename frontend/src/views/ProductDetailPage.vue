@@ -62,7 +62,7 @@ console.log(detailDto.value);
         <!-- 도서소개 -->
         <!-- 목차 -->
         <!-- 이미지 -->
-        <BookDetailsSection />
+        <BookDetailsSection :detail-dto="detailDto"/>
 
         <!-- 저자소개 -->
         <!-- 만든이 -->

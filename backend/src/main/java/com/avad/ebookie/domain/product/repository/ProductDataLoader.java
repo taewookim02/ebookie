@@ -63,6 +63,7 @@ public class ProductDataLoader {
                         .price(25000d + (i * 1000)) // 가격 다양화
                         .publisher(publisher)
                         .category(category)
+                        .description(faker.lorem().paragraphs(3).toString())
                         .publishedDate(randomPastDate) // 랜덤 LocalDate
                         .discountRate(randomDiscountRate) // 랜덤 할인율 (0~100)
                         .build();
