@@ -27,7 +27,7 @@ public class ProductMapper {
     private final ProductImageMapper productImageMapper;
 
     // 상품 상세 페이지 응답 DTO
-    public ProductDetailResponseDto toDto(Product entity) {
+    public ProductDetailResponseDto toDetailDto(Product entity) {
         // 저자, 리뷰 리스트
         List<AuthorResponseDto> authorResponseDtos = new ArrayList<>();
         List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();

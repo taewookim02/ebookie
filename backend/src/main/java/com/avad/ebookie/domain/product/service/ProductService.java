@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.product.service;
 
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,18 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public List<ProductDetailResponseDto> testProduct() {
-        List<ProductDetailResponseDto> responses = productRepository.findAll().stream().map(product ->
-                productMapper.toDto(product)
-        ).collect(Collectors.toList());
+        List<ProductDetailResponseDto> responses = productRepository.findAll()
+                .stream()
+                .map(product ->
+                        productMapper.toDetailDto(product)
+                ).collect(Collectors.toList());
 
         return responses;
+    }
+
+    public ProductDetailResponseDto details(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(""));
+        return productMapper.toDetailDto(product);
     }
 }
