@@ -7,7 +7,6 @@ const props = defineProps({
     productId: String
 });
 
-console.log(props.productId);
 </script>
 
 <template>

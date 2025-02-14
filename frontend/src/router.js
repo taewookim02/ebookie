@@ -11,7 +11,7 @@ const routes = [
     { path: '/login', component: () => import('@/views/LoginPage.vue') },
     { path: '/register', component: () => import('@/views/RegisterPage.vue') },
     { path: '/user/edit', component: () => import('@/views/EditProfilePage.vue'), meta: { requiresAuth: true, hideAuthLinks: true } },
-    { path: '/product/:id', component: () => import('@/views/ProductDetailPage.vue') },
+    { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },
     { path: '/testing', component: () => import('@/views/TestingPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },
 ];

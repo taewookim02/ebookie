@@ -7,6 +7,7 @@ import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
+import { customAxios } from '@/plugins/axios';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -23,9 +24,11 @@ const scrollToReview = () => {
 }
 
 
+
 // lifecycle
 onMounted(() => {
     // productID로 서버에 상품 정보 요청
+    
 })
 
 </script>

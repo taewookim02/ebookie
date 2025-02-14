@@ -24,7 +24,7 @@ const getImageUrl = () => {
 
 <template>
     <div class="features__item">
-        <RouterLink :to="`/product/${id}`"><img :src="getImageUrl()" class="features__img" alt="feature img" />
+        <RouterLink :to="`/products/${id}`"><img :src="getImageUrl()" class="features__img" alt="feature img" />
         </RouterLink>
         <div class="features__item-info">
             <span class="features__item--rank">
@@ -32,7 +32,7 @@ const getImageUrl = () => {
                 {{ rank }}
             </span>
             <div class="features__item--title pt-3">
-                <RouterLink :to="`/product/${id}`">{{ title }}</RouterLink>
+                <RouterLink :to="`/products/${id}`">{{ title }}</RouterLink>
             </div>
             <div class="features__item--author py-1 text-muted">
                 <div class="author-name"><small>{{ author }} 저</small></div>
