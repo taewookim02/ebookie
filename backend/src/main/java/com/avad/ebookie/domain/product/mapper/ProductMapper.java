@@ -4,6 +4,7 @@ import com.avad.ebookie.domain.author.dto.response.AuthorResponseDto;
 import com.avad.ebookie.domain.author.entity.Author;
 import com.avad.ebookie.domain.author.mapper.AuthorMapper;
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.product_image.dto.response.ProductImageResponseDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +58,6 @@ public class ProductMapper {
         }
 
 
-
         return ProductDetailResponseDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -72,5 +73,36 @@ public class ProductMapper {
                 .reviews(reviewResponseDtos) // 리뷰 정보 set
                 .images(productImageResponseDtos) // 이미지 정보 set
                 .build();
+    }
+
+    public List<ProductRelatedResponseDto> toRelatedDtos(List<Product> relatedProductsByCategory) {
+
+        List<ProductRelatedResponseDto> relatedDtos = relatedProductsByCategory
+                .stream()
+                .map(product -> {
+                    List<String> authorNames = new ArrayList<>();
+                    product.getAuthors().forEach(productAuthor -> {
+                        Author author = productAuthor.getAuthor();
+                        String name = author.getName();
+                        authorNames.add(name);
+                    });
+
+                    ProductImage productImage = product.getImages().get(0);
+                    ProductImageResponseDto thumbnail = productImageMapper.toDto(productImage);
+
+
+                    return ProductRelatedResponseDto.builder()
+                            .id(product.getId())
+                            .name(product.getName())
+                            .authorNames(String.join(", ", authorNames))
+                            .publisherName(product.getPublisher().getName())
+                            .price(product.getPrice())
+                            .reviewCount(product.getReviews().size())
+                            .reviewRating(product.getAverageRating())
+                            .thumbnail(thumbnail)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return relatedDtos;
     }
 }

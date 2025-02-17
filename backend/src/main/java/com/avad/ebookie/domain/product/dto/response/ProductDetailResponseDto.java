@@ -10,6 +10,7 @@ import java.util.List;
 
 //@Data
 @Getter
+@Setter
 @Builder
 //@NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +28,7 @@ public class ProductDetailResponseDto {
     private List<ReviewResponseDto> reviews;
     private List<AuthorResponseDto> authors;
     private List<ProductImageResponseDto> images;
+    private List<ProductRelatedResponseDto> relatedProducts;
 
     // TODO:
     // 1. private List<ProductRelatedResponseDto> relatedProducts;

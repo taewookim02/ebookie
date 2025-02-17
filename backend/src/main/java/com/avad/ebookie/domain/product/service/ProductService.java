@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.product.service;
 
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -31,7 +32,9 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(""));
         ProductDetailResponseDto detailDto = productMapper.toDetailDto(product);
-
+        List<Product> relatedProductsByCategory = productRepository.findTop15ByCategoryIdOrderByPublishedDateDesc(product.getCategory().getId());
+        List<ProductRelatedResponseDto> relatedProducts = productMapper.toRelatedDtos(relatedProductsByCategory);
+        detailDto.setRelatedProducts(relatedProducts);
         // TODO: 관련상품 추가
         return detailDto;
     }

@@ -69,4 +69,15 @@ public class Product extends BaseEntity {
     @JsonManagedReference
     private List<ProductImage> images = new ArrayList<>();
 
+
+    // 리뷰 평균 평점 구하기
+    public double getAverageRating() {
+        if (reviews == null || reviews.isEmpty()) {
+            return 0.0;
+        }
+        return reviews.stream()
+                .mapToDouble(Review::getRating)
+                .average()
+                .orElse(0.0);
+    }
 }
