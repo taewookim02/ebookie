@@ -1,15 +1,23 @@
 <script setup>
-import AuthorDescription from '@/components/shared/AuthorDescription.vue';
-
+defineProps({
+    detailDto: Object
+});
 
 </script>
 
 <template>
     <section class="author-details">
         <h3>저자 소개</h3>
-        <div class="author-details-container">
-            <!-- TODO: pass props (name, imgPath, description) -->
-            <AuthorDescription />
+        <div class="author-details-container" v-for="author in detailDto.authors">
+            <div class="author-container">
+                <div class="author-header">
+                    <span class="author-header__name">{{ author.name }} 저</span>
+                </div>
+                <div class="author-body">
+                    <!-- <img class="author-img" src="https://placehold.co/120x120/orange/white/png" alt="profileimg"> -->
+                    <p>{{ author.description }}</p>
+                </div>
+            </div>
         </div>
     </section>
 </template>
@@ -27,5 +35,26 @@ import AuthorDescription from '@/components/shared/AuthorDescription.vue';
     flex-direction: column;
     gap: 4rem;
     border-bottom: 1px solid #ccc;
+}
+
+.author-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.author-header__name {
+    font-weight: 700;
+}
+
+.author-body {
+    display: flex;
+    gap: 2.4rem;
+}
+
+.author-img {
+    width: 112px;
+    height: auto;
+    border-radius: 50%;
 }
 </style>

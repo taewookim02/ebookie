@@ -67,7 +67,7 @@ console.log(detailDto.value);
         <!-- 저자소개 -->
         <!-- 만든이 -->
         <!-- 추천평 -->
-        <AuthorDetailsSection />
+        <AuthorDetailsSection :detail-dto="detailDto" />
 
         <!-- 리뷰 -->
         <!-- 헤더 -->

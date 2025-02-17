@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1")
 public class ProductController {
 
 
@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     // 상품 상세
-    @GetMapping("/{id}")
+    @GetMapping("/products/{id}")
     public ResponseEntity<ProductDetailResponseDto> details(@PathVariable("id") Long id) {
         ProductDetailResponseDto productDetailResponseDto = productService.details(id);
         return ResponseEntity.ok(productDetailResponseDto);

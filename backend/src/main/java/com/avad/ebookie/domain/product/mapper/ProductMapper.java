@@ -61,6 +61,7 @@ public class ProductMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
+                .description(entity.getDescription())
                 .publisherId(entity.getPublisher().getId())
                 .publisherName(entity.getPublisher().getName())
                 .categoryId(entity.getCategory().getId())

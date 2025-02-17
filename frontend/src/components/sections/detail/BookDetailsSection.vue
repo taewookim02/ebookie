@@ -20,7 +20,11 @@ defineProps({
                     (단, 로그인 및 결제 후 다운로드 이용 가능)
                 </p>
 
-                <!-- TODO: 상세 이미지? -->
+                <br>
+
+                 <p>
+                    {{ detailDto.description }}
+                 </p>
             </div>
         </div>
     </section>

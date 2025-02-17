@@ -17,6 +17,7 @@ public class ProductDetailResponseDto {
     private Long id;
     private String name;
     private Double price;
+    private String description;
     private Long publisherId;
     private String publisherName;
     private Long categoryId;
