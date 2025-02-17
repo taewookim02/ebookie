@@ -74,7 +74,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // jwt 필터
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout((logoutConfig) -> {
-                    logoutConfig.logoutUrl("/api/auth/logout");
+                    logoutConfig.logoutUrl("/api/v1/auth/logout");
                     logoutConfig.addLogoutHandler(logoutHandler); // LogoutService implements LogoutHandler
                     logoutConfig.logoutSuccessHandler(((request, response, authentication) -> {
                         clearRefreshTokenCookie(response);

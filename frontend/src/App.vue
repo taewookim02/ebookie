@@ -44,6 +44,7 @@ const fetchMemberInfo = async () => {
         // TODO: set memberStore;
     } catch (err) {
         console.log("fetchMemberInfo() err:", err);
+        memberStore.setMember(null);
     }
 };
 

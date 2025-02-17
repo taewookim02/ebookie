@@ -7,10 +7,12 @@ import SearchBar from '../shared/SearchBar.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
+import { useMemberStore } from '@/store/memberStore';
 // const route = useRoute();
 
 // state
-const store = useTokenStore();
+const tokenStore = useTokenStore();
+const memberStore = useMemberStore();
 const shouldShowBottomNav = computed(() => {
     return !["/login", "/register"].includes(router.currentRoute.value.path);
 })
@@ -24,7 +26,8 @@ const handleLogout = (e) => {
     }).catch(err => {
         console.log(err);
     })
-    store.setAccessToken("");
+    tokenStore.setAccessToken("");
+    memberStore.setMember(null);
     alert("로그아웃 성공!");
     router.push("/");
 }
@@ -49,12 +52,12 @@ onMounted(() => {
             </div>
             <div class="navbar__links d-flex gap-4">
                 <!-- 로그인 안된 상태 -->
-                <template v-if="!store.isLoggedIn">
+                <template v-if="!tokenStore.isLoggedIn">
                     <RouterLink to="/login" class="link-dark">로그인</RouterLink>
                     <RouterLink to="/register" class="link-dark">회원가입</RouterLink>
                 </template>
                 <!-- 로그인된 상태 -->
-                <template v-if="store.isLoggedIn">
+                <template v-if="tokenStore.isLoggedIn">
                     <RouterLink to="/user/edit" class="link-dark">마이페이지</RouterLink>
                     <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
                     <a to="#" class="link-dark" @click.prevent="handleLogout" style="cursor: pointer;">로그아웃</a>
