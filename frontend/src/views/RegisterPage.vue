@@ -40,7 +40,7 @@ const handleSubmit = (e) => {
             store.setAccessToken(res.data.accessToken);
 
             // 보호된 페이지로 이동
-            router.push("/user/edit");
+            router.push("/member/edit");
             console.log("router.pushed");
             console.log("router:", router);
         }).catch(err => {

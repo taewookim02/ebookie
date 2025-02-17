@@ -11,11 +11,11 @@ const routes = [
     { path: '/login', component: () => import('@/views/LoginPage.vue') },
     { path: '/register', component: () => import('@/views/RegisterPage.vue') },
     {
-        path: '/user/edit', component: () => import('@/views/EditProfilePage.vue'),
+        path: '/member/edit', component: () => import('@/views/EditProfilePage.vue'),
         meta: { requiresAuth: true, hideAuthLinks: true }
     },
     {
-        path: "/user/liked", component: () => import("@/views/LikedPage.vue"),
+        path: "/member/liked", component: () => import("@/views/LikedPage.vue"),
         meta: { requiresAuth: true }
     },
     { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },

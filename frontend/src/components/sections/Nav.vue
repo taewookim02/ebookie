@@ -58,7 +58,7 @@ onMounted(() => {
                 </template>
                 <!-- 로그인된 상태 -->
                 <template v-if="tokenStore.isLoggedIn">
-                    <RouterLink to="/user/edit" class="link-dark">마이페이지</RouterLink>
+                    <RouterLink to="/member/edit" class="link-dark">마이페이지</RouterLink>
                     <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
                     <a to="#" class="link-dark" @click.prevent="handleLogout" style="cursor: pointer;">로그아웃</a>
                 </template>

@@ -30,7 +30,7 @@ const handleLogin = async () => {
         store.setAccessToken(res.data.accessToken);
 
         // 보호된 url로
-        router.push("/user/edit")
+        router.push("/member/edit")
     }).catch(err => {
         console.log(err);
         // 에러 메세지 

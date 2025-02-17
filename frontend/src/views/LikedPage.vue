@@ -1,8 +1,19 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
+import { customAxios } from '@/plugins/axios';
+import { ref } from 'vue';
 
+const likedDto = ref({});
 
-
+const fetchLikedProducts = async () => {
+    try {
+        const res = await customAxios.get(`/api/v1/liked`);
+        likedDto.value = res.data;
+    } catch (err) {
+        console.log("fetchLikedProducts() err:", err);
+    }
+}
+fetchLikedProducts();
 
 </script>
 

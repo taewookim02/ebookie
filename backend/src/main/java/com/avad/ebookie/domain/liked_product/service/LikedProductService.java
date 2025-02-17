@@ -1,7 +1,9 @@
 package com.avad.ebookie.domain.liked_product.service;
 
 
+import com.avad.ebookie.domain.liked_product.dto.response.LikedProductResponseDto;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
+import com.avad.ebookie.domain.liked_product.mapper.LikedProductMapper;
 import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
@@ -12,13 +14,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LikedProductService {
 
     private final LikedProductRepository likedProductRepository;
     private final ProductRepository productRepository;
-
+    private final LikedProductMapper likedProductMapper;
+    
     @Transactional
     public String toggleLike(Long productId) {
         // 로그인한 유저 구해오기
@@ -51,5 +56,19 @@ public class LikedProductService {
                 .product(product)
                 .build();
         likedProductRepository.save(build);
+    }
+
+    public List<LikedProductResponseDto> getLikedProducts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        List<LikedProduct> likedProducts = likedProductRepository.findAllByMemberIdOrderByIdDesc(loggedInMember.getId());
+
+        // TODO: 맵핑
+        List<LikedProductResponseDto> likedProductResponseDtos = 
+
+        return null;
+
+
     }
 }
