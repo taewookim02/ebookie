@@ -1,6 +1,7 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
+import SaveButton from '@/components/shared/SaveButton.vue';
 import { PhStar } from '@phosphor-icons/vue';
 import { computed, onMounted, ref } from 'vue';
 import { VueSpinner } from "vue3-spinners";
@@ -9,7 +10,7 @@ import { VueSpinner } from "vue3-spinners";
 const props = defineProps({
     detailDto: Object
 });
-const isActive = ref(true);
+// const isActive = ref(true);
 const SERVER_URL = "http://localhost:8080";
 
 
@@ -19,21 +20,15 @@ const emit = defineEmits(["scrollToReview", "save", "like", "cart", "buy"]);
 const handleReviewClick = () => {
     emit("scrollToReview");
 }
-const handleSaveClick = () => {
-    // 찜하기
-    emit("save");
-};
+const handleSaveClick = () => emit("save");
+
 const handleLikeClick = () => {
-    // 좋아요
     emit("like");
 };
 const handleCartClick = () => {
-    // 장바구니
     emit("cart");
 };
 const handleBuyClick = () => {
-    // 구매
-    console.log("handleClick");
     emit("buy");
 };
 
@@ -86,7 +81,7 @@ const computedSellingPrice = computed(() => {
 
 // 
 const computedStars = computed(() => {
-    const avg = parseFloat(computedReviewAvg.value); 
+    const avg = parseFloat(computedReviewAvg.value);
     const stars = [];
     for (let i = 1; i <= 5; i++) {
         stars.push(false); // TODO: fill based on avg
@@ -130,28 +125,30 @@ const computedStars = computed(() => {
                     </span> -->
                     <!-- FIXME: buggy -->
                     <div class="info-header__review--icons">
-                        <PhStar v-for="(filled, index) in computedStars" :key="index" :size="16" :color="filled ? 'blue' : '#ccc'"
-                            weight="fill" :class="{ 'empty-star': !filled }" />
+                        <PhStar v-for="(filled, index) in computedStars" :key="index" :size="16"
+                            :color="filled ? 'blue' : '#ccc'" weight="fill" :class="{ 'empty-star': !filled }" />
                     </div>
 
                     <span class="info-header__review--avg">{{ computedReviewAvg }}</span>
                     <span class="spacer text-muted">|</span>
                     <span>
-                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length }}건)</a>
+                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length
+                            }}건)</a>
                     </span>
                 </div>
             </div>
             <div class="info-bottom pt-4">
                 <div class="info-bottom__price">
                     <span>정가 <span class="price text-muted price-original">{{ detailDto.price?.toLocaleString()
-                            }}원</span></span>
+                    }}원</span></span>
                     <span>판매가 <strong class="price">{{ computedSellingPrice }}원</strong> <span
                             v-if="detailDto.discountRate" class="badge text-bg-danger">{{ detailDto.discountRate
                             }}%</span></span>
                 </div>
                 <div class="info-bottom__action">
-                    <LikeButton @like="handleLikeClick" :is-active="isActive" />
-                    <ActionButton @action="handleSaveClick">찜하기</ActionButton>
+                    <LikeButton @like="handleLikeClick" :is-active="detailDto.isLiked" />
+                    <SaveButton @save="handleSaveClick" :is-active="detailDto.isSaved" />
+                    <!-- <ActionButton @action="handleSaveClick">찜하기</ActionButton> -->
                     <ActionButton @action="handleCartClick">장바구니</ActionButton>
                     <ActionButton @action="handleBuyClick" :is-active="true">구매하기</ActionButton>
                 </div>
@@ -223,8 +220,8 @@ strong.price {
 .price-original {
     text-decoration: line-through;
 }
-.empty-star {
-    color: #ccc; 
-}
 
+.empty-star {
+    color: #ccc;
+}
 </style>

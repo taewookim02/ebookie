@@ -25,6 +25,8 @@ public class ProductDetailResponseDto {
     private String categoryName;
     private LocalDate publishedDate;
     private Double discountRate;
+    private Boolean isLiked;
+    private Boolean isSaved;
     private List<ReviewResponseDto> reviews;
     private List<AuthorResponseDto> authors;
     private List<ProductImageResponseDto> images;

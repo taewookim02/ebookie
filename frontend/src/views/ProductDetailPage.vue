@@ -16,7 +16,6 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-console.log(route.params.id);
 // state
 const reviewSection = ref(null);
 const detailDto = ref({});
@@ -46,12 +45,12 @@ watch(
     {immediate: true}
 )
 
-// 찜하기
+
 const handleSave = async () => {
     try {
         const productId = route.params.id;
-        const res = await customAxios.post(`/api/v1/save/${productId}`);
-        console.log(res);
+        await customAxios.post(`/api/v1/save/${productId}`);
+        detailDto.value.isSaved = !detailDto.value.isSaved;
     } catch (err) {
         console.log("handleSave() err:", err);
         const isNotLoggedIn = err.status === 401;
@@ -64,8 +63,8 @@ const handleSave = async () => {
 const handleLike = async () => {
     try {
         const productId = route.params.id;
-        const res = await customAxios.post(`/api/v1/like/${productId}`);
-        console.log(res);
+        await customAxios.post(`/api/v1/like/${productId}`);
+        detailDto.value.isLiked = !detailDto.value.isLiked;
     } catch (err) {
         console.log("handleLike() err:", err);
         const isNotLoggedIn = err.status === 401;

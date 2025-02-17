@@ -35,6 +35,7 @@ public class ProductMapper {
         List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();
         List<ProductImageResponseDto> productImageResponseDtos = new ArrayList<>();
 
+
         // ProductAuthor 테이블 접근
         for (ProductAuthor productAuthor : entity.getAuthors()) {
             // Author 테이블 접근
