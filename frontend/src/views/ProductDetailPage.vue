@@ -11,6 +11,7 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
 import { customAxios } from '@/plugins/axios';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 
 // 상품id 가져오기
 const route = useRoute();
@@ -19,6 +20,9 @@ const router = useRouter();
 // state
 const reviewSection = ref(null);
 const detailDto = ref({});
+const toast = useToast();
+
+// const showToast = () => toast.success("HEYEYE");
 
 // actions
 const scrollToReview = () => {
@@ -51,6 +55,11 @@ const handleSave = async () => {
         const productId = route.params.id;
         await customAxios.post(`/api/v1/save/${productId}`);
         detailDto.value.isSaved = !detailDto.value.isSaved;
+        if (detailDto.value.isSaved) {
+            toast.success("찜 목록에 저장 완료!");
+        } else {
+            toast.info("찜 목록에서 삭제 완료!");
+        }
     } catch (err) {
         console.log("handleSave() err:", err);
         const isNotLoggedIn = err.status === 401;
@@ -65,6 +74,11 @@ const handleLike = async () => {
         const productId = route.params.id;
         await customAxios.post(`/api/v1/like/${productId}`);
         detailDto.value.isLiked = !detailDto.value.isLiked;
+        if (detailDto.value.isLiked) {
+            toast.success("좋아요 목록에 저장 완료!");
+        } else {
+            toast.info("좋아요 목록에서 삭제 완료!");
+        }
     } catch (err) {
         console.log("handleLike() err:", err);
         const isNotLoggedIn = err.status === 401;
@@ -79,6 +93,11 @@ const handleCart = async () => {
         const productId = route.params.id;
         await customAxios.post(`/api/v1/cart/${productId}`);
         detailDto.value.isInCart = !detailDto.value.isInCart;
+        if (detailDto.value.isInCart) {
+            toast.success("장바구니 목록에 저장 완료!");
+        } else {
+            toast.info("장바구니 목록에서 삭제 완료!");
+        }
     } catch (err) {
         console.log("handleLike() err:", err);
         const isNotLoggedIn = err.status === 401;

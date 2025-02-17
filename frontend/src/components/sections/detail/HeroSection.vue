@@ -22,16 +22,9 @@ const handleReviewClick = () => {
     emit("scrollToReview");
 }
 const handleSaveClick = () => emit("save");
-
-const handleLikeClick = () => {
-    emit("like");
-};
-const handleCartClick = () => {
-    emit("cart");
-};
-const handleBuyClick = () => {
-    emit("buy");
-};
+const handleLikeClick = () => emit("like");
+const handleCartClick = () => emit("cart");
+const handleBuyClick = () => emit("buy");
 
 
 // 이미지 경로
@@ -134,14 +127,14 @@ const computedStars = computed(() => {
                     <span class="spacer text-muted">|</span>
                     <span>
                         <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length
-                            }}건)</a>
+                        }}건)</a>
                     </span>
                 </div>
             </div>
             <div class="info-bottom pt-4">
                 <div class="info-bottom__price">
                     <span>정가 <span class="price text-muted price-original">{{ detailDto.price?.toLocaleString()
-                    }}원</span></span>
+                            }}원</span></span>
                     <span>판매가 <strong class="price">{{ computedSellingPrice }}원</strong> <span
                             v-if="detailDto.discountRate" class="badge text-bg-danger">{{ detailDto.discountRate
                             }}%</span></span>

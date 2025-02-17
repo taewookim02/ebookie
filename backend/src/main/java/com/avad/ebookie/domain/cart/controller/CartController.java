@@ -18,6 +18,6 @@ public class CartController {
     public ResponseEntity<?> toggleCart(@PathVariable("productId") Long productId) {
         String result = cartService.toggleCart(productId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(result);
     }
 }
