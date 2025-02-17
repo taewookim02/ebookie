@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.member.controller;
 import com.avad.ebookie.domain.auth.service.JwtService;
 import com.avad.ebookie.domain.member.dto.request.MemberEditRequestDto;
 import com.avad.ebookie.domain.member.dto.response.EditDetailResponseDto;
+import com.avad.ebookie.domain.member.dto.response.MemberInfoResponseDto;
 import com.avad.ebookie.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -22,6 +23,12 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+
+    @GetMapping("/info")
+    public ResponseEntity<MemberInfoResponseDto> info() {
+        MemberInfoResponseDto memberInfoResponseDto = memberService.info();
+        return ResponseEntity.ok(memberInfoResponseDto);
+    }
 
     // TODO: 회원정보 수정
     @PatchMapping("/update")

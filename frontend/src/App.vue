@@ -5,33 +5,47 @@ import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
+import { useMemberStore } from './store/memberStore';
 
 
 const route = useRoute();
-const store = useTokenStore();
-
+const tokenStore = useTokenStore();
+const memberStore = useMemberStore();
 
 
 const renewToken = async () => {
     try {
         const res = await customAxios
-        .get("/api/v1/auth/refresh-token", {
-            withCredentials: true
-        });
+            .get("/api/v1/auth/refresh-token", {
+                withCredentials: true
+            });
         if (res.data.accessToken) {
-            store.setAccessToken(res.data.accessToken);
+            tokenStore.setAccessToken(res.data.accessToken);
+            await fetchMemberInfo(); // 유저 정보 세팅
             console.log("액세스토큰 갱신");
         } else {
             throw new Error("토큰 없음");
         }
     } catch (err) {
         console.log("토큰 갱신 실패 -> 로그아웃 상태");
-        store.setAccessToken("");
+        tokenStore.setAccessToken("");
     } finally {
-        store.setLoading(false);
+        tokenStore.setLoading(false);
     }
-}
+};
 
+const fetchMemberInfo = async () => {
+    try {
+        if (tokenStore.accessToken) {
+
+            const res = await customAxios.get("/api/v1/members/info");
+            memberStore.setMember(res.data)
+        }
+        // TODO: set memberStore;
+    } catch (err) {
+        console.log("fetchMemberInfo() err:", err);
+    }
+};
 
 onMounted(() => {
     renewToken();
@@ -58,6 +72,7 @@ onMounted(() => {
     flex-direction: column;
     gap: 6.4rem;
 }
+
 /* 
 .template-container {
     max-width: 1200px;

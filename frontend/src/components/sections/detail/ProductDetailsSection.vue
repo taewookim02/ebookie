@@ -11,7 +11,7 @@ const myDate = computed(() => {
 })
 
 onMounted(() => {
-    console.log(props.detailDto.publishedDate);
+    // console.log(props.detailDto.publishedDate);
 })
 </script>
 

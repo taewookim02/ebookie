@@ -5,6 +5,7 @@ export const useTokenStore = defineStore("token", () => {
     // state
     const accessToken = ref("");
     const isLoading = ref(true);
+    const userEmail = ref("");
 
     // getter
     const isLoggedIn = computed(() => {
@@ -34,6 +35,6 @@ export const useTokenStore = defineStore("token", () => {
         getAccessToken,
         getIsLoading,
         setAccessToken,
-        setLoading
+        setLoading,
     }
 });

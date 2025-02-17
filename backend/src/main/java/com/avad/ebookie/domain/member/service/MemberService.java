@@ -6,12 +6,15 @@ import com.avad.ebookie.domain.auth.exception.UnauthorizedAccessException;
 import com.avad.ebookie.domain.auth.service.JwtService;
 import com.avad.ebookie.domain.member.dto.request.MemberEditRequestDto;
 import com.avad.ebookie.domain.member.dto.response.EditDetailResponseDto;
+import com.avad.ebookie.domain.member.dto.response.MemberInfoResponseDto;
 import com.avad.ebookie.domain.member.entity.Member;
+import com.avad.ebookie.domain.member.mapper.MemberMapper;
 import com.avad.ebookie.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class MemberService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final MemberMapper memberMapper;
 
     @Transactional
     public EditDetailResponseDto update(MemberEditRequestDto memberEditRequestDto, String userEmailFromJwt) throws PasswordMismatchException, UnauthorizedAccessException {
@@ -53,5 +57,12 @@ public class MemberService {
         System.out.println("member.getPassword() = " + member.getPassword());
         memberRepository.save(member);
         return null;
+    }
+
+    public MemberInfoResponseDto info() {
+        // get
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = (Member) authentication.getPrincipal();
+        return memberMapper.toDto(member);
     }
 }

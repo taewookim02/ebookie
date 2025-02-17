@@ -11,17 +11,12 @@ customAxios.interceptors.request.use(
     (config) => {
         const store = useTokenStore();
         const token = store.accessToken;
-        console.log("전역 axios interceptors 시작");
-        console.log("token:", token);
 
         // this buggy bro
         if (token && !config.url.includes("/auth/")) {
             config.headers["Authorization"] = `Bearer ${token}`;
         }
-
-        // this buggy
-        console.log(config.headers['Authorization']);
-
+        
         return config;
     },
     (error) => {

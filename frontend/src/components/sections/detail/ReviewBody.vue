@@ -1,25 +1,37 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
+import { formatYYYYMMDDKr } from '@/helper/format';
+import { useMemberStore } from '@/store/memberStore';
+import { useTokenStore } from '@/store/tokenStore';
 import { PhPencil, PhPencilSimpleLine, PhStar, PhTrash } from '@phosphor-icons/vue';
+import { computed, onMounted } from 'vue';
 
-// TODO: defineProps
+// state
+const props = defineProps({
+    review: Object
+})
+const store = useTokenStore();
+const memberStore = useMemberStore();
 
+// actions
 const handleEdit = () => {
     console.log("handleEdit");
 };
-
 const handleDelete = () => {
     console.log("handleDelete");
 };
 
+const isOwner = computed(() => {
+    return memberStore.getMemberEmail === props.review.writerEmail;
+})
 </script>
 
 <template>
     <div class="review-body">
         <div class="review-header">
-            <strong class="review-header__writer">test@example.com</strong>
+            <strong class="review-header__writer">{{ review.writerEmail }}</strong>
             <!-- TODO: v-if writer == member -->
-            <div class="review-header__controls">
+            <div class="review-header__controls" v-if="isOwner">
                 <ActionButton @action="handleEdit">삭제</ActionButton>
                 <ActionButton @action="handleDelete">수정</ActionButton>
             </div>
@@ -34,11 +46,11 @@ const handleDelete = () => {
         </div>
 
         <div class="review-info">
-            <small class="text-muted review-info__date">2024년 11월 2일 작성됨</small>
+            <small class="text-muted review-info__date">{{ formatYYYYMMDDKr(review.createdAt) }} 작성됨</small>
         </div>
 
         <div class="review-content">
-            방대한 내용을 담으면서 쉽게 풀어쓴게 정말 잘 만든 책입니다
+            {{ review.content }}
         </div>
     </div>
 </template>

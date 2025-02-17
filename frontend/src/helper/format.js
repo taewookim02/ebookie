@@ -7,4 +7,5 @@ export const formatYYYYMMDDKr = (dateStr) => {
         month: 'long',
         day: 'numeric'
     }).format(date); // from YYYY-MM-DD => to YYYY년 MM월 DD일
-}
+};
+

@@ -30,9 +30,9 @@ const handleLogout = (e) => {
 }
 
 onMounted(() => {
-    console.log("Nav onMounted()");
-    console.log("router:", router.currentRoute.value.path);
-    console.log(shouldShowBottomNav);
+    // console.log("Nav onMounted()");
+    // console.log("router:", router.currentRoute.value.path);
+    // console.log(shouldShowBottomNav);
 })
 
 </script>

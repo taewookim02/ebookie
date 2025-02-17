@@ -17,7 +17,6 @@ const props = defineProps({
     isActive: Boolean
 });
 
-console.log(props.isActive);
 
 const emit = defineEmits(['like']);
 

@@ -35,9 +35,7 @@ const handleSubmit = (e) => {
         confirmPassword: confirmPassword.value
     })
         .then(res => {
-            console.log(res);
-            // localStorage.setItem("accessToken", res.data.accessToken); // 서버에서 온 토큰 로컬스토리지 저장
-
+            
             // 메모리에 저장
             store.setAccessToken(res.data.accessToken);
 

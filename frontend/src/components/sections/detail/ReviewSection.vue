@@ -3,6 +3,11 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
+
+defineProps({
+    detailDto: Object
+});
+
 const handleAction = () => {
     console.log("handleAction");
     // modal open
@@ -24,8 +29,10 @@ const handleAction = () => {
           
 
         <!-- TODO: v-for each reviews -->
-        <ReviewBody />
-        <ReviewBody />
+         <template v-for="review in detailDto.reviews">
+             <ReviewBody :review="review" />
+         </template>
+        <!-- <ReviewBody /> -->
     </section>
 </template>
 

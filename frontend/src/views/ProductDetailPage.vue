@@ -29,13 +29,13 @@ const scrollToReview = () => {
 customAxios.get(`/api/v1/products/${productId}`)
     .then(res => {
         detailDto.value = res.data;
-        console.log(detailDto); // this has all the correct values
+        // console.log(detailDto); // this has all the correct values
     })
     .catch(err => {
         console.log("err: ", err);
     })
 
-console.log(detailDto.value);
+// console.log(detailDto.value);
 
 
 </script>
@@ -73,7 +73,7 @@ console.log(detailDto.value);
         <!-- 헤더 -->
         <!-- 별점 UI -->
         <!-- 리뷰   -->
-        <ReviewSection ref="reviewSection" />
+        <ReviewSection ref="reviewSection" :detail-dto="detailDto" />
 
         <!-- 관련상품 -->
         <RelatedProductsSection :product-id="productId" />
