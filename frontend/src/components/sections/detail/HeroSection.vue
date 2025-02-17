@@ -1,5 +1,6 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
+import CartButton from '@/components/shared/CartButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
 import SaveButton from '@/components/shared/SaveButton.vue';
 import { PhStar } from '@phosphor-icons/vue';
@@ -148,8 +149,9 @@ const computedStars = computed(() => {
                 <div class="info-bottom__action">
                     <LikeButton @like="handleLikeClick" :is-active="detailDto.isLiked" />
                     <SaveButton @save="handleSaveClick" :is-active="detailDto.isSaved" />
+                    <CartButton @cart="handleCartClick" :is-active="detailDto.isInCart" />
                     <!-- <ActionButton @action="handleSaveClick">찜하기</ActionButton> -->
-                    <ActionButton @action="handleCartClick">장바구니</ActionButton>
+                    <!-- <ActionButton @action="handleCartClick">장바구니</ActionButton> -->
                     <ActionButton @action="handleBuyClick" :is-active="true">구매하기</ActionButton>
                 </div>
             </div>

@@ -74,6 +74,9 @@ const handleLike = async () => {
     }
 }
 
+const handleCart = async () => {
+    console.log("handleCart");
+}
 
 </script>
 
@@ -84,7 +87,7 @@ const handleLike = async () => {
         <!-- 히어로__정보 -->
         <!-- 정보 -->
         <!-- 액션 -->
-        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" />
+        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" @cart="handleCart" />
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->

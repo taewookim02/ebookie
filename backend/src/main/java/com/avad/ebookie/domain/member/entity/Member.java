@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.member.entity;
 
 import com.avad.ebookie.domain.auth.entity.Token;
+import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.review.entity.Review;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
@@ -53,6 +54,10 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<SavedProduct> saved = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Cart> cartList = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

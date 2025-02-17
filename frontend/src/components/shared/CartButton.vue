@@ -1,5 +1,5 @@
 <script setup>
-import { PhBookmarkSimple } from '@phosphor-icons/vue';
+import { PhShoppingBagOpen } from '@phosphor-icons/vue';
 
 const props = defineProps({
     size: {
@@ -18,22 +18,22 @@ const props = defineProps({
 });
 
 
-const emit = defineEmits(['save']);
+const emit = defineEmits(['cart']);
 
-const handleSaveClick = () => {
-    emit('save');
+const handleCartClick = () => {
+    emit('cart');
 };
 </script>
 
 <template>
-    <button class="btn-save" @click="handleSaveClick">
-        <PhBookmarkSimple v-if="!isActive" :size="size" :color="color" :weight="weight"  />
-        <PhBookmarkSimple v-else :size="size" color="#333333" weight="fill"  />
+    <button class="btn-cart" @click="handleCartClick">
+        <PhShoppingBagOpen v-if="!isActive" :size="size" :color="color" :weight="weight"  />
+        <PhShoppingBagOpen v-else :size="size" color="#333333" weight="fill"  />
     </button>
 </template>
 
 <style scoped>
-.btn-save {
+.btn-cart {
     padding: .4rem;
     border-radius: .8rem;
     border: 1px solid #333333;

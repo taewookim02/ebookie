@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.product.entity;
 
+import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.category.entity.Category;
 import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
@@ -75,6 +76,11 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<SavedProduct> saved = new ArrayList<>();
+
+    // 카트 목록
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Cart> cartList = new ArrayList<>();
 
     // 리뷰 평균 평점 구하기
     public double getAverageRating() {
