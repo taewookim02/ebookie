@@ -14,6 +14,8 @@ import { useRoute, useRouter } from 'vue-router';
 
 // 상품id 가져오기
 const route = useRoute();
+const router = useRouter();
+
 console.log(route.params.id);
 // state
 const reviewSection = ref(null);
@@ -33,15 +35,6 @@ const fetchProductDetail = async (id) => {
     }
 }
 
-const handleSave = async () => {
-    try {
-        console.log(route.params.id);
-        // const res = await customAxios.post(`/api/v1/products/save/${id}`)
-    } catch (err) {
-        console.log("handleSave() err:", err);
-    }
-}
-
 // url path variable watch
 watch(
     () => route.params.id,
@@ -53,7 +46,34 @@ watch(
     {immediate: true}
 )
 
+// 찜하기
+const handleSave = async () => {
+    try {
+        const productId = route.params.id;
+        const res = await customAxios.post(`/api/v1/save/${productId}`);
+        console.log(res);
+    } catch (err) {
+        console.log("handleSave() err:", err);
+        const isNotLoggedIn = err.status === 401;
+        if (isNotLoggedIn) {
+            router.push("/login") 
+        }
+    }
+}
 
+const handleLike = async () => {
+    try {
+        const productId = route.params.id;
+        const res = await customAxios.post(`/api/v1/like/${productId}`);
+        console.log(res);
+    } catch (err) {
+        console.log("handleLike() err:", err);
+        const isNotLoggedIn = err.status === 401;
+        if (isNotLoggedIn) {
+            router.push("/login") 
+        }
+    }
+}
 
 
 </script>
@@ -65,7 +85,7 @@ watch(
         <!-- 히어로__정보 -->
         <!-- 정보 -->
         <!-- 액션 -->
-        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" />
+        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" />
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->

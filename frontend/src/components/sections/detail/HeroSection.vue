@@ -21,19 +21,20 @@ const handleReviewClick = () => {
 }
 const handleSaveClick = () => {
     // 찜하기
-    emit("save")
+    emit("save");
 };
-const handleLike = () => {
+const handleLikeClick = () => {
     // 좋아요
-    console.log("handleLike!");
+    emit("like");
 };
 const handleCartClick = () => {
     // 장바구니
-    console.log("handleClick");
+    emit("cart");
 };
 const handleBuyClick = () => {
     // 구매
     console.log("handleClick");
+    emit("buy");
 };
 
 
@@ -149,7 +150,7 @@ const computedStars = computed(() => {
                             }}%</span></span>
                 </div>
                 <div class="info-bottom__action">
-                    <LikeButton @like="handleLike" :is-active="isActive" />
+                    <LikeButton @like="handleLikeClick" :is-active="isActive" />
                     <ActionButton @action="handleSaveClick">찜하기</ActionButton>
                     <ActionButton @action="handleCartClick">장바구니</ActionButton>
                     <ActionButton @action="handleBuyClick" :is-active="true">구매하기</ActionButton>
