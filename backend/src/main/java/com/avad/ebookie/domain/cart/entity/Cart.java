@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.cart.entity;
 
+import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Cart {
+public class Cart extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
