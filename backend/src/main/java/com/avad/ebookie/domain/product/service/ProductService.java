@@ -1,5 +1,7 @@
 package com.avad.ebookie.domain.product.service;
 
+import com.avad.ebookie.domain.cart.entity.Cart;
+import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
@@ -27,6 +29,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final LikedProductRepository likedProductRepository;
     private final SavedProductRepository savedProductRepository;
+    private final CartRepository cartRepository;
     private final ProductMapper productMapper;
 
     public List<ProductDetailResponseDto> testProduct() {
@@ -52,8 +55,10 @@ public class ProductService {
             Member loggedInMember = (Member) authentication.getPrincipal();
             SavedProduct savedProduct = savedProductRepository.findByProductIdAndMemberId(productId, loggedInMember.getId());
             LikedProduct likedProduct = likedProductRepository.findByProductIdAndMemberId(productId, loggedInMember.getId());
+            Cart cartProduct = cartRepository.findByProductIdAndMemberId(productId, loggedInMember.getId());
             detailDto.setIsSaved(savedProduct != null);
             detailDto.setIsLiked(likedProduct != null);
+            detailDto.setIsInCart(cartProduct != null);
         }
         System.out.println("authentication = " + authentication); // AnonymousAuthenticationToken
         System.out.println("authentication.getClass() = " + authentication.getClass());

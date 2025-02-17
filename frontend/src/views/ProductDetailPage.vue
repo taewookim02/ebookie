@@ -75,7 +75,17 @@ const handleLike = async () => {
 }
 
 const handleCart = async () => {
-    console.log("handleCart");
+    try {
+        const productId = route.params.id;
+        await customAxios.post(`/api/v1/cart/${productId}`);
+        detailDto.value.isInCart = !detailDto.value.isInCart;
+    } catch (err) {
+        console.log("handleLike() err:", err);
+        const isNotLoggedIn = err.status === 401;
+        if (isNotLoggedIn) {
+            router.push("/login") 
+        }
+    }
 }
 
 </script>

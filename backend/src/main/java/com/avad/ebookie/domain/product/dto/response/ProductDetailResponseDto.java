@@ -27,6 +27,7 @@ public class ProductDetailResponseDto {
     private Double discountRate;
     private Boolean isLiked;
     private Boolean isSaved;
+    private Boolean isInCart;
     private List<ReviewResponseDto> reviews;
     private List<AuthorResponseDto> authors;
     private List<ProductImageResponseDto> images;
