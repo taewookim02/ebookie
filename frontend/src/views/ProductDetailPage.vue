@@ -2,14 +2,13 @@
 import AuthorDetailsSection from '@/components/sections/detail/AuthorDetailsSection.vue';
 import BookDetailsSection from '@/components/sections/detail/BookDetailsSection.vue';
 import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
-// import DetailNavSection from '@/components/sections/detail/DetailNavSection.vue';
 import HeroSection from '@/components/sections/detail/HeroSection.vue';
 import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
 import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
 import { customAxios } from '@/plugins/axios';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
@@ -21,8 +20,6 @@ const router = useRouter();
 const reviewSection = ref(null);
 const detailDto = ref({});
 const toast = useToast();
-
-// const showToast = () => toast.success("HEYEYE");
 
 // actions
 const scrollToReview = () => {

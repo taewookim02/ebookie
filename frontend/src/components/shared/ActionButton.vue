@@ -25,6 +25,7 @@ const handleClick = () => {
     border-radius: 4px;
     flex-grow: 1;
     max-width: 12.8rem;
+    word-break: keep-all;
 }
 
 .btn-action.active {

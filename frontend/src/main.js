@@ -22,8 +22,8 @@ const toastOptions = {
         [TYPE.INFO]: {
             timeout: 3000,
         },
-
-    }
+    },
+    transition: "Vue-Toastification__fade"
 };
 
 const pinia = createPinia();

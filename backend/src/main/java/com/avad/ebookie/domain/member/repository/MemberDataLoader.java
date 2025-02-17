@@ -47,6 +47,14 @@ public class MemberDataLoader {
                     .build();
             membersToSave.add(member);
         }
+        // TEMP:
+        Member testMember = Member.builder()
+                .email("test@example.com")
+                .password(passwordEncoder.encode("12341234"))
+                .role(Role.ADMIN) // 마지막 유저는 ADMIN
+                .isDeleted(false) // 7번째 유저는 삭제됨
+                .build();
+        membersToSave.add(testMember);
 
         return memberRepository.saveAll(membersToSave);
     }
