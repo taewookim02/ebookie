@@ -9,13 +9,12 @@ import RelatedProductsSection from '@/components/sections/detail/RelatedProducts
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
 import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
 import { customAxios } from '@/plugins/axios';
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 // 상품id 가져오기
-const route = useRouter();
-let productId = route.currentRoute.value.params.id;
-
+const route = useRoute();
+console.log(route.params.id);
 // state
 const reviewSection = ref(null);
 const detailDto = ref({});
@@ -25,17 +24,36 @@ const scrollToReview = () => {
     reviewSection.value.$el.scrollIntoView({ behavior: "smooth" });
 }
 
-
-customAxios.get(`/api/v1/products/${productId}`)
-    .then(res => {
+const fetchProductDetail = async (id) => {
+    try {
+        const res = await customAxios.get(`/api/v1/products/${id}`);
         detailDto.value = res.data;
-        // console.log(detailDto); // this has all the correct values
-    })
-    .catch(err => {
-        console.log("err: ", err);
-    })
+    } catch (err) {
+        console.log("err:", err);
+    }
+}
 
-// console.log(detailDto.value);
+const handleSave = async () => {
+    try {
+        console.log(route.params.id);
+        // const res = await customAxios.post(`/api/v1/products/save/${id}`)
+    } catch (err) {
+        console.log("handleSave() err:", err);
+    }
+}
+
+// url path variable watch
+watch(
+    () => route.params.id,
+    (newId) => {
+        if (newId) {
+            fetchProductDetail(newId);
+        }
+    },
+    {immediate: true}
+)
+
+
 
 
 </script>
@@ -47,11 +65,11 @@ customAxios.get(`/api/v1/products/${productId}`)
         <!-- 히어로__정보 -->
         <!-- 정보 -->
         <!-- 액션 -->
-        <HeroSection :detail-dto="detailDto" :product-id="productId" @scroll-to-review="scrollToReview" />
+        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" />
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->
-        <RelatedProductsSection :product-id="productId" />
+        <RelatedProductsSection :detail-dto="detailDto"  />
 
         <!-- _상세 네비게이션 -->
         <!-- <DetailNavSection /> -->
@@ -76,7 +94,7 @@ customAxios.get(`/api/v1/products/${productId}`)
         <ReviewSection ref="reviewSection" :detail-dto="detailDto" />
 
         <!-- 관련상품 -->
-        <RelatedProductsSection :product-id="productId" />
+        <RelatedProductsSection :detail-dto="detailDto" />
 
         <!-- 배송/반품 안내 -->
         <DeliveryAndRefundSection />

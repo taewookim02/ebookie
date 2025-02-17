@@ -7,7 +7,6 @@ import { VueSpinner } from "vue3-spinners";
 
 // state
 const props = defineProps({
-    productId: String,
     detailDto: Object
 });
 const isActive = ref(true);
@@ -16,13 +15,13 @@ const SERVER_URL = "http://localhost:8080";
 
 
 // actions
-const emit = defineEmits(['scrollToReview']);
+const emit = defineEmits(["scrollToReview", "save", "like", "cart", "buy"]);
 const handleReviewClick = () => {
-    emit('scrollToReview');
+    emit("scrollToReview");
 }
 const handleSaveClick = () => {
     // 찜하기
-    console.log("handleClick");
+    emit("save")
 };
 const handleLike = () => {
     // 좋아요

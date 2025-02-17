@@ -1,11 +1,12 @@
 package com.avad.ebookie.domain.product.entity;
 
 import com.avad.ebookie.domain.category.entity.Category;
-import com.avad.ebookie.domain.common.entity.BaseEntity;
+import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
 import com.avad.ebookie.domain.product_image.entity.ProductImage;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.review.entity.Review;
+import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product extends BaseEntity {
+public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,6 +70,11 @@ public class Product extends BaseEntity {
     @JsonManagedReference
     private List<ProductImage> images = new ArrayList<>();
 
+
+    // 찜하기 목록
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SavedProduct> saved = new ArrayList<>();
 
     // 리뷰 평균 평점 구하기
     public double getAverageRating() {

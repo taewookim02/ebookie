@@ -1,37 +1,31 @@
-package com.avad.ebookie.domain.review.entity;
+package com.avad.ebookie.domain.saved_product.entity;
 
 import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Review extends BaseTimeEntity { // baseEntity: createdAt, updatedAt
+public class SavedProduct extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: check if min, max works with double
-    @Min(1)
-    @Max(10)
-    private Double rating; // double
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @JsonBackReference
+    private Member member;
 
-    @Column(length = 50)
-    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Member writer;
 }

@@ -1,18 +1,22 @@
 <script setup>
+import { onMounted } from 'vue';
 import ProductSliderList from '../ProductSliderList.vue';
 
 
 // state
 const props = defineProps({
-    productId: String
+    productId: String,
+    detailDto: Object
 });
+
+console.log(props.detailDto);
 
 </script>
 
+
 <template>
     <section class="related">
-        <!-- TODO 서버에서 같은 카테고리 상품 불러오기 -->
-        <ProductSliderList sliderTitle="관련 eBook 추천" />
+        <ProductSliderList :products="props.detailDto.relatedProducts" sliderTitle="관련 eBook 추천" />
     </section>
 </template>
 

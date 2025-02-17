@@ -80,6 +80,7 @@ public class ProductMapper {
         List<ProductRelatedResponseDto> relatedDtos = relatedProductsByCategory
                 .stream()
                 .map(product -> {
+                    // 저자 이름만 구하기
                     List<String> authorNames = new ArrayList<>();
                     product.getAuthors().forEach(productAuthor -> {
                         Author author = productAuthor.getAuthor();
@@ -87,6 +88,7 @@ public class ProductMapper {
                         authorNames.add(name);
                     });
 
+                    // 썸네일 구하기
                     ProductImage productImage = product.getImages().get(0);
                     ProductImageResponseDto thumbnail = productImageMapper.toDto(productImage);
 
@@ -98,7 +100,7 @@ public class ProductMapper {
                             .publisherName(product.getPublisher().getName())
                             .price(product.getPrice())
                             .reviewCount(product.getReviews().size())
-                            .reviewRating(product.getAverageRating())
+                            .reviewRating(product.getAverageRating()) // Product에 있는 게터 사용
                             .thumbnail(thumbnail)
                             .build();
                 })

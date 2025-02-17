@@ -1,6 +1,6 @@
 package com.avad.ebookie.domain.product_image.entity;
 
-import com.avad.ebookie.domain.common.entity.BaseEntity;
+import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ProductImage extends BaseEntity {
+public class ProductImage extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

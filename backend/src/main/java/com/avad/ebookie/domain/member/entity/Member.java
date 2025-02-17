@@ -1,8 +1,9 @@
 package com.avad.ebookie.domain.member.entity;
 
 import com.avad.ebookie.domain.auth.entity.Token;
-import com.avad.ebookie.domain.common.entity.BaseEntity;
+import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.review.entity.Review;
+import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member extends BaseEntity implements UserDetails {
+public class Member extends BaseTimeEntity implements UserDetails {
     /**
      * BaseEntity => createdAt, updatedAt
      * UserDetails => 스프링 시큐리티
@@ -42,11 +44,15 @@ public class Member extends BaseEntity implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Token> tokens;
+    private List<Token> tokens = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SavedProduct> saved = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
