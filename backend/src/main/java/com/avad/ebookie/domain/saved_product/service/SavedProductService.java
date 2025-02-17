@@ -26,6 +26,7 @@ public class SavedProductService {
         // 찜 이력이 있는지 확인
         SavedProduct savedProduct = savedProductRepository.findByProductIdAndMemberId(productId, loggedInMember.getId());
 
+        // 저장할 상품
         Product product = productRepository.findById(productId).orElse(null);
 
         // 찜 이력이 있다면 저장
@@ -40,10 +41,6 @@ public class SavedProductService {
 
     }
 
-    private void removeSave(Product product, Member loggedInMember) {
-        savedProductRepository.deleteByProductIdAndMemberId(product.getId(), loggedInMember.getId());
-    }
-
     private void addSave(Product product, Member member) {
         SavedProduct savedProduct = SavedProduct.builder()
                 .product(product)
@@ -51,4 +48,10 @@ public class SavedProductService {
                 .build();
         savedProductRepository.save(savedProduct);
     }
+
+    private void removeSave(Product product, Member loggedInMember) {
+        savedProductRepository.deleteByProductIdAndMemberId(product.getId(), loggedInMember.getId());
+    }
+
+
 }

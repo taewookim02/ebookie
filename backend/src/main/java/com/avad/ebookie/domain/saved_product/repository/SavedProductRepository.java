@@ -4,7 +4,7 @@ import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SavedProductRepository extends JpaRepository<SavedProduct, Long> {
-    SavedProduct findByProductIdAndMemberId(Long productId, Long id);
+    SavedProduct findByProductIdAndMemberId(Long productId, Long memberId);
 
-    void deleteByProductIdAndMemberId(Long id, Long id1);
+    void deleteByProductIdAndMemberId(Long productId, Long memberId);
 }

@@ -1,4 +1,4 @@
-package com.avad.ebookie.domain.saved_product.entity;
+package com.avad.ebookie.domain.liked_product.entity;
 
 import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.member.entity.Member;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class SavedProduct extends BaseTimeEntity {
+public class LikedProduct extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

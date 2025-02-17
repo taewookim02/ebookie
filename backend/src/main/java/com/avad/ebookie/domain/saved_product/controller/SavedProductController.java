@@ -16,9 +16,9 @@ public class SavedProductController {
     private final SavedProductService savedProductService;
 
     @PostMapping("/save/{productId}")
-    public ResponseEntity<?> saveProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<?> toggleSave(@PathVariable("productId") Long productId) {
         String result = savedProductService.toggleSave(productId);
-        
+
         // TODO: response dto
 
         return ResponseEntity.ok(result);
