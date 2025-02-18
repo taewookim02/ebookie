@@ -28,8 +28,6 @@ public class LikedProductController {
 
     @GetMapping("/liked")
     public ResponseEntity<List<LikedProductResponseDto>> getLikedProducts() {
-        System.out.println("LikedProductController.getLikedProducts");
-
         List<LikedProductResponseDto> likedProductResponseDtos = likedProductService.getLikedProducts();
         return ResponseEntity.ok(likedProductResponseDtos);
     }

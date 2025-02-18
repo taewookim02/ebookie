@@ -1,7 +1,9 @@
 package com.avad.ebookie.domain.cart.service;
 
 import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
+import com.avad.ebookie.domain.cart.dto.response.CartResponseDto;
 import com.avad.ebookie.domain.cart.entity.Cart;
+import com.avad.ebookie.domain.cart.mapper.CartMapper;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
@@ -12,11 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final CartMapper cartMapper;
 
     @Transactional
     public String toggleCart(Long productId) {
@@ -73,5 +78,14 @@ public class CartService {
                     .build();
             cartRepository.save(newCart);
         }
+    }
+
+    public List<CartResponseDto> getCartProducts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        List<Cart> cartList = cartRepository.findAllByMemberOrderByIdDesc(loggedInMember);
+
+        return cartMapper.toDtoList(cartList);
     }
 }
