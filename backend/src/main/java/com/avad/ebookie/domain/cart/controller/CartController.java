@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.cart.controller;
 
+import com.avad.ebookie.domain.cart.dto.request.BulkDeleteCartRequestDto;
 import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
 import com.avad.ebookie.domain.cart.dto.response.CartResponseDto;
 import com.avad.ebookie.domain.cart.service.CartService;
@@ -32,5 +33,17 @@ public class CartController {
     public ResponseEntity<List<CartResponseDto>> getCartProducts() {
         List<CartResponseDto> cartResponseDtos = cartService.getCartProducts();
         return ResponseEntity.ok(cartResponseDtos);
+    }
+
+    @DeleteMapping("/cart/{productId}")
+    public ResponseEntity<?> deleteCart(@PathVariable("productId") Long productId) {
+        cartService.deleteCart(productId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/cart/bulk")
+    public ResponseEntity<?> bulkDeleteCart(@RequestBody BulkDeleteCartRequestDto bulkDeleteCartRequestDto) {
+        cartService.bulkDeleteCart(bulkDeleteCartRequestDto);
+        return ResponseEntity.noContent().build();
     }
 }

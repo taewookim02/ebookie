@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.cart.service;
 
+import com.avad.ebookie.domain.cart.dto.request.BulkDeleteCartRequestDto;
 import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
 import com.avad.ebookie.domain.cart.dto.response.CartResponseDto;
 import com.avad.ebookie.domain.cart.entity.Cart;
@@ -65,6 +66,7 @@ public class CartService {
         // 이미 존재하는지 확인
         Cart existingCart = cartRepository.findByProductIdAndMemberId(cartAddRequestDto.getProductId(), loggedInMember.getId());
 
+        // 존재 한다면 수량 + 1
         if (existingCart != null) {
             existingCart.addItemQuantityByOne();
             cartRepository.save(existingCart);
@@ -80,6 +82,7 @@ public class CartService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CartResponseDto> getCartProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member loggedInMember = (Member) authentication.getPrincipal();
@@ -87,5 +90,19 @@ public class CartService {
         List<Cart> cartList = cartRepository.findAllByMemberOrderByIdDesc(loggedInMember);
 
         return cartMapper.toDtoList(cartList);
+    }
+
+    @Transactional
+    public void deleteCart(Long productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        cartRepository.deleteByProductIdAndMemberId(productId, loggedInMember.getId());
+    }
+
+    @Transactional
+    public void bulkDeleteCart(BulkDeleteCartRequestDto bulkDeleteCartRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        cartRepository.deleteAllByMemberAndProductIdIn(loggedInMember, bulkDeleteCartRequestDto.getProductIds());
     }
 }

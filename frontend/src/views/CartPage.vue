@@ -23,18 +23,6 @@ const fetchcartProducts = async () => {
 }
 fetchcartProducts();
 
-const handleCartClick = async (productId) => {
-    try {
-        // add to cart
-        const res = await customAxios.post(`/api/v1/cart`, { productId });
-        toast.success("장바구니 추가 완료!");
-    } catch (err) {
-        console.log("handleCartClick() err:", err);
-        toast.error("장바구니 추가 중 에러 발생!")
-    }
-
-};
-
 const handleDeleteClick = async (productId) => {
     try {
         const res = await customAxios.delete(`/api/v1/cart/${productId}`);
@@ -47,6 +35,10 @@ const handleDeleteClick = async (productId) => {
         console.log("handleDeleteClick() err:", err);
         toast.error("삭제 중 에러 발생!")
     }
+}
+
+const handlePurchaseClick = () => {
+    console.log("구매하기");
 }
 
 const toggleCheckAll = () => {
@@ -137,9 +129,8 @@ const handleCheckedDelete = async () => {
                             <div class="text-muted"><small>{{ dto.authorNames }}</small></div>
                         </td>
                         <td class="td-action">
-                            <ActionButton class="w-100 mb-2" @action="handleCartClick(dto.productId)">장바구니 담기
-                            </ActionButton>
                             <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
+                            <ActionButton class="w-100" @action="handlePurchaseClick(dto.productId)">구매하기</ActionButton>
                         </td>
                     </tr>
                 </template>
