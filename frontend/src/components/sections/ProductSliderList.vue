@@ -25,7 +25,7 @@ const initSwiper = () => {
         slidesPerView: 6,
         slidesPerGroup: 6,
         speed: 500,
-        loop: true,
+        loop: false,
         spaceBetween: 10,
         pagination: {
             el: paginationRef.value,

@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll() // 로그인, 로그아웃, 토큰 관련
                         .requestMatchers("/api/v1/image").permitAll()   //
+                        .requestMatchers("/api/v1/categories").permitAll()
                         .requestMatchers("/api/v1/products/**").permitAll() // TODO: limit methods POST, PATCH, PUT, DELETE
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()

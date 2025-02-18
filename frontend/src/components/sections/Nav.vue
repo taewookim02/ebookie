@@ -1,5 +1,3 @@
-
-
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -13,35 +11,51 @@ import { useMemberStore } from '@/store/memberStore';
 // state
 const tokenStore = useTokenStore();
 const memberStore = useMemberStore();
+const categoriesDto = ref([]);
+
+
 const shouldShowBottomNav = computed(() => {
-    return !["/login", "/register"].includes(router.currentRoute.value.path);
+    const currentURLPath = router.currentRoute.value.path;
+    return !["/login", "/register"].includes(currentURLPath);
+})
+const shouldShowMemberNav = computed(() => {
+    const currentURLPath = router.currentRoute.value.path;
+    return ["/member/edit", "/liked", "/saved", "/cart"].includes(currentURLPath);
 })
 // actions
 const handleLogout = (e) => {
     customAxios
-    .get("/api/v1/auth/logout", {
-        withCredentials: true
-    }).then(res => {
-        console.log(res);
-    }).catch(err => {
-        console.log(err);
-    })
+        .get("/api/v1/auth/logout", {
+            withCredentials: true
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        })
     tokenStore.setAccessToken("");
     memberStore.setMember(null);
     alert("로그아웃 성공!");
     router.push("/");
 }
 
+const fetchCategories = async () => {
+    try {
+        const res = await customAxios.get("/api/v1/categories");
+        categoriesDto.value = res.data;
+        console.log(res);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+fetchCategories();
 onMounted(() => {
-    // console.log("Nav onMounted()");
-    // console.log("router:", router.currentRoute.value.path);
-    // console.log(shouldShowBottomNav);
 })
 
 </script>
 
 <template>
-  <nav class="navbar mt-5">
+    <nav class="navbar mt-5">
         <!-- 탑 네비게이션 START -->
         <div class="d-flex align-items-center w-100 justify-content-between">
             <RouterLink to="/" class="d-flex">
@@ -67,23 +81,32 @@ onMounted(() => {
         <!-- 탑 네비게이션 END -->
 
         <!-- 바텀 네비게이션 START -->
-        <template v-if="shouldShowBottomNav"> 
-            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between">
-                <a href="#" class="flex-grow-1 p-3 link-dark text-center dropdown-toggle" role="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-                aria-expanded="false" aria-label="Toggle navigation">카테고리</a>
+        <template v-if="shouldShowBottomNav && !shouldShowMemberNav">
+            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between mt-4">
+                <a href="#" class="flex-grow-1 p-3 link-dark text-center dropdown-toggle" role="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
+                    aria-controls="navbarToggleExternalContent" aria-expanded="false"
+                    aria-label="Toggle navigation">카테고리</a>
                 <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
                 <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
                 <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">이벤트</RouterLink>
             </div>
             <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">
-                <div class="p-4">
-                    <h5 class="text-body-emphasis h4">Collapsed content</h5>
-                    <span class="text-body-secondary">Toggleable via the navbar brand.</span>
+                <div class="p-4 d-flex gap-2">
+                    <RouterLink class="link-dark" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto">
+                        {{ dto.name }}
+                    </RouterLink>
                 </div>
             </div>
         </template>
         <!-- 바텀 네비게이션 END -->
+
+        <template v-if="shouldShowMemberNav">
+            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between mt-4">
+                <RouterLink to="/liked" class="flex-grow-1 link-dark p-3 text-center">좋아요 목록</RouterLink>
+                <RouterLink to="/saved" class="flex-grow-1 link-dark p-3 text-center">찜 목록</RouterLink>
+            </div>
+        </template>
 
     </nav>
 
@@ -91,29 +114,26 @@ onMounted(() => {
 <style scoped>
 /* NAV */
 .nav {
-  padding: 2.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    padding: 2.4rem;
+    /* display: flex; */
+    align-items: center;
+    justify-content: space-between;
 }
 
 .nav__logo {
-  max-height: 3.2rem;
-  width: auto;
-  display: block;
-  cursor: pointer;
+    max-height: 3.2rem;
+    width: auto;
+    display: block;
+    cursor: pointer;
 }
 
 .nav__links {
-  display: flex;
-  gap: 2.4rem;
+    display: flex;
+    gap: 2.4rem;
 }
 
-.navbar {
-        gap: 24px;
-    }
-    
-    .navbar__bottom>a:hover {
-        background-color: #ddd;
-    }
+
+.navbar__bottom>a:hover {
+    background-color: #ddd;
+}
 </style>
