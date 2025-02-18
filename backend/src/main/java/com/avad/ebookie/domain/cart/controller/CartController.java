@@ -1,12 +1,10 @@
 package com.avad.ebookie.domain.cart.controller;
 
+import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
 import com.avad.ebookie.domain.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,4 +18,11 @@ public class CartController {
 
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/cart")
+    public ResponseEntity<?> addToCart(@RequestBody CartAddRequestDto cartAddRequestDto) {
+        cartService.addToCart(cartAddRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.cart.service;
 
+import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.member.entity.Member;
@@ -49,5 +50,28 @@ public class CartService {
                 .quantity(1)
                 .build();
         cartRepository.save(build);
+    }
+
+    public void addToCart(CartAddRequestDto cartAddRequestDto) {
+        System.out.println("cartAddRequestDto = " + cartAddRequestDto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        // 이미 존재하는지 확인
+        Cart existingCart = cartRepository.findByProductIdAndMemberId(cartAddRequestDto.getProductId(), loggedInMember.getId());
+
+        if (existingCart != null) {
+            existingCart.addItemQuantityByOne();
+            cartRepository.save(existingCart);
+        } else {
+            Product product = productRepository.findById(cartAddRequestDto.getProductId())
+                    .orElseThrow(() -> new RuntimeException("addToCart() product not found"));
+            Cart newCart = Cart.builder()
+                    .product(product)
+                    .member(loggedInMember)
+                    .quantity(1)
+                    .build();
+            cartRepository.save(newCart);
+        }
     }
 }

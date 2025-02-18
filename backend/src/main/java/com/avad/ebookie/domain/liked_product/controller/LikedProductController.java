@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.liked_product.controller;
 
+import com.avad.ebookie.domain.liked_product.dto.request.BulkDeleteLikeRequestDto;
 import com.avad.ebookie.domain.liked_product.dto.response.LikedProductResponseDto;
 import com.avad.ebookie.domain.liked_product.service.LikedProductService;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,14 @@ public class LikedProductController {
     }
 
     @DeleteMapping("/liked/{productId}")
-    public ResponseEntity<?> deleteLike(@PathVariable("productId") Long productId) {
+    public ResponseEntity<?> deleteLikes(@PathVariable("productId") Long productId) {
         likedProductService.deleteLike(productId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/liked/bulk")
+    public ResponseEntity<?> bulkDeleteLikes(@RequestBody BulkDeleteLikeRequestDto bulkDeleteLikeRequestDto) {
+        likedProductService.bulkDeleteLikes(bulkDeleteLikeRequestDto);
         return ResponseEntity.noContent().build();
     }
 

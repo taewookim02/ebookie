@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.liked_product.service;
 
 
+import com.avad.ebookie.domain.liked_product.dto.request.BulkDeleteLikeRequestDto;
 import com.avad.ebookie.domain.liked_product.dto.response.LikedProductResponseDto;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.liked_product.mapper.LikedProductMapper;
@@ -77,5 +78,12 @@ public class LikedProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member loggedInMember = (Member) authentication.getPrincipal();
         likedProductRepository.deleteByProductIdAndMemberId(productId, loggedInMember.getId());
+    }
+
+    @Transactional
+    public void bulkDeleteLikes(BulkDeleteLikeRequestDto bulkDeleteLikeRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        likedProductRepository.deleteAllByMemberAndProductIdIn(loggedInMember, bulkDeleteLikeRequestDto.getProductIds());
     }
 }

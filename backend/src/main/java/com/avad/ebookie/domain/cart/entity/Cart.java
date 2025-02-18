@@ -8,9 +8,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,4 +33,8 @@ public class Cart extends BaseTimeEntity {
 
     @Min(1)
     private Integer quantity;
+
+    public void addItemQuantityByOne() {
+        this.quantity += 1;
+    }
 }
