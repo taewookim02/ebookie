@@ -68,8 +68,10 @@ public class CartService {
 
         // 존재 한다면 수량 + 1
         if (existingCart != null) {
-            existingCart.addItemQuantityByOne();
-            cartRepository.save(existingCart);
+            // eBook은 수량이 1로 고정이기에 수량 + 1을 하지 않음
+            return;
+//            existingCart.addItemQuantityByOne();
+//            cartRepository.save(existingCart);
         } else {
             Product product = productRepository.findById(cartAddRequestDto.getProductId())
                     .orElseThrow(() -> new RuntimeException("addToCart() product not found"));

@@ -37,8 +37,9 @@ const handleDeleteClick = async (productId) => {
     }
 }
 
-const handlePurchaseClick = () => {
-    console.log("구매하기");
+const handleOrderClick = (productId) => {
+    console.log("구매하기", productId);
+    router
 }
 
 const toggleCheckAll = () => {
@@ -88,36 +89,55 @@ const handleCheckedDelete = async () => {
     }
 };
 
+const handleCheckedOrder = () => {
+    console.log("선택 주문", checkedItems.value);
+}
+
 </script>
 
 
 <template>
     <h1>장바구니</h1>
     <section class="cart">
+
+        <tr>
+            <th>
+                <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
+            </th>
+            <th colspan="2">
+                <label for="all">전체선택</label>
+                <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0"
+                    class="btn-select">선택삭제</ActionButton>
+                <ActionButton @action="handleCheckedOrder" :disabled="checkedItems.size === 0"
+                    class="btn-select">선택주문</ActionButton>
+            </th>
+            <th></th>
+        </tr>
         <table class="table">
             <colgroup>
-                <col width="1%" />
-                <col width="20%" />
-                <col width="*" />
+                <col width="5%" />
+                <col width="10%" />
+                <col width="50%" />
+                <col width="5%" />
+                <col width="10%" />
                 <col width="20%" />
             </colgroup>
             <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
-                    </th>
-                    <th colspan="2">
-                        <label for="all">전체선택</label>
-                        <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select-delete">선택삭제</ActionButton>
-                    </th>
+                <tr v-if="cartDto && cartDto.length > 0" class="text-center">
                     <th></th>
+                    <th colspan="2">상품정보</th>
+                    <th>수량</th>
+                    <th>상품금액</th>
+                    <th>배송정보</th>
+                    <th>주문</th>
                 </tr>
             </thead>
             <tbody>
                 <template v-if="cartDto && cartDto.length > 0">
                     <tr v-for="dto in cartDto">
                         <td>
-                            <input type="checkbox" :checked="checkedItems.has(dto.productId)" @change="toggleCheck(dto.productId)">
+                            <input type="checkbox" :checked="checkedItems.has(dto.productId)"
+                                @change="toggleCheck(dto.productId)">
                         </td>
                         <td>
                             <RouterLink :to="`/products/${dto.productId}`">
@@ -126,11 +146,23 @@ const handleCheckedDelete = async () => {
                         </td>
                         <td>
                             <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
-                            <div class="text-muted"><small>{{ dto.authorNames }}</small></div>
+                            <div class="text-muted prices">
+                                <small class="text-cross">12,900원</small>
+                                <small>9,000원 (0% 할인)</small>
+                            </div>
                         </td>
+                        <td>
+                            <!-- TODO: quantity -->
+                            1
+                        </td>
+                        <td>
+                            <!-- TODO: price * discountRate -->
+                            12,600원
+                        </td>
+                        <td>구매 후 바로 다운로드</td>
                         <td class="td-action">
                             <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
-                            <ActionButton class="w-100" @action="handlePurchaseClick(dto.productId)">구매하기</ActionButton>
+                            <ActionButton class="w-100" @action="handleOrderClick(dto.productId)">주문하기</ActionButton>
                         </td>
                     </tr>
                 </template>
@@ -140,6 +172,11 @@ const handleCheckedDelete = async () => {
                     </tr>
                 </template>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>hello</td>
+                </tr>
+            </tfoot>
         </table>
     </section>
 </template>
@@ -165,7 +202,7 @@ const handleCheckedDelete = async () => {
     padding: 1.6rem;
 }
 
-.btn-select-delete {
+.btn-select {
     margin-left: 1.6rem;
 }
 </style>

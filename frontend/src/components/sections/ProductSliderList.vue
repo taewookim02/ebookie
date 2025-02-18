@@ -17,7 +17,7 @@ register();
 const initSwiper = () => {
     const swiperContainer = swiperRef.value;
     if (!swiperContainer) {
-        console.error("Swiper container is not initialized");
+        console.log("Swiper 컨테이너 부착 전");
         return;
     }
     

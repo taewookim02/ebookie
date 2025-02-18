@@ -23,7 +23,8 @@ const toastOptions = {
             timeout: 3000,
         },
     },
-    transition: "Vue-Toastification__fade"
+    transition: "Vue-Toastification__fade",
+    position: "bottom-right",
 };
 
 const pinia = createPinia();
