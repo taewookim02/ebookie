@@ -1,15 +1,24 @@
 <script setup>
-// import HeroSection from '@/components/sections/HeroSection.vue';
-// import ProductList from '@/components/sections/ProductList.vue';
-// import ExampleSection from '@/components/sections/ExampleSection.vue';
-// import CtaSection from '@/components/sections/CtaSection.vue';
 import ProductSliderList from '@/components/sections/ProductSliderList.vue';
 import HeroSection2 from '@/components/sections/HeroSection2.vue';
 import TimedBestSeller from '@/components/sections/TimedBestSeller.vue';
+import { customAxios } from '@/plugins/axios';
+import { ref } from 'vue';
 
-// TODO: dtoList for each ProductSliderList
+const categoryProductsDto = ref([]);
 
-// TODO: categoryList for ProductSliderList
+const fetchHomeDto = async () => {
+    try {
+        const res = await customAxios.get(`/api/v1/products/home`);
+        categoryProductsDto.value = res.data.categoryProducts;
+        console.log(categoryProductsDto.value);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+fetchHomeDto();
+
 
 </script>
 
@@ -23,13 +32,15 @@ import TimedBestSeller from '@/components/sections/TimedBestSeller.vue';
         -->
     <HeroSection2 />
     <!-- 자격증 List<ProductRelatedResponseDto> -->
-        <ProductSliderList slider-title="자격증 추천도서" />
+    <template v-for="dto in categoryProductsDto">
+        <ProductSliderList :slider-title="`${dto.name} 관련도서`" :products="dto.products"  />
+    </template>
     <!-- 데이터 List<ProductRelatedResponseDto> -->
-    <ProductSliderList slider-title="데이터 관련도서" />
+    <!-- <ProductSliderList slider-title="데이터 관련도서" />
     <ProductSliderList slider-title="백엔드 관련도서" />
     <ProductSliderList slider-title="프론트엔드 관련도서" />
     <ProductSliderList slider-title="게임개발 관련도서" />
-    <ProductSliderList slider-title="AI 관련도서" />
+    <ProductSliderList slider-title="AI 관련도서" /> -->
     <TimedBestSeller />
     <!-- <ExampleSection />
   <CtaSection /> -->

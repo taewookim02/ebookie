@@ -14,9 +14,12 @@ const swiperRef = ref(null);
 const paginationRef = ref(null);
 
 register();
-
-onUpdated(() => {
+const initSwiper = () => {
     const swiperContainer = swiperRef.value;
+    if (!swiperContainer) {
+        console.error("Swiper container is not initialized");
+        return;
+    }
     
     const params = {
         slidesPerView: 6,
@@ -54,6 +57,15 @@ onUpdated(() => {
     Object.assign(swiperContainer, params);
     swiperContainer.initialize();
     console.log(props.products);
+}
+
+onMounted(() => {
+    console.log("mounted()");
+    initSwiper();
+})
+onUpdated(() => {
+    console.log("updated()");
+    initSwiper();
 });
 
 </script>

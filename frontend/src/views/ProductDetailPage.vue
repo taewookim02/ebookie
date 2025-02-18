@@ -26,7 +26,7 @@ const scrollToReview = () => {
     reviewSection.value.$el.scrollIntoView({ behavior: "smooth" });
 }
 
-const fetchProductDetail = async (id) => {
+const fetchProductDetailDto = async (id) => {
     try {
         const res = await customAxios.get(`/api/v1/products/${id}`);
         detailDto.value = res.data;
@@ -40,7 +40,7 @@ watch(
     () => route.params.id,
     (newId) => {
         if (newId) {
-            fetchProductDetail(newId);
+            fetchProductDetailDto(newId);
         }
     },
     {immediate: true}
