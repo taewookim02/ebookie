@@ -18,6 +18,10 @@ const routes = [
         path: "/liked", component: () => import("@/views/LikedPage.vue"),
         meta: { requiresAuth: true }
     },
+    {
+        path: "/saved", component: () => import("@/views/SavedPage.vue"),
+        meta: { requiresAuth: true }
+    },
     { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },
     { path: '/testing', component: () => import('@/views/TestingPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },

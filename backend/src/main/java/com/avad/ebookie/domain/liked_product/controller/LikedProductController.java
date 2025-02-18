@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class LikedProductController {
 
@@ -27,7 +27,7 @@ public class LikedProductController {
 
 
     @GetMapping("/liked")
-    public ResponseEntity<?> getLikedProducts() {
+    public ResponseEntity<List<LikedProductResponseDto>> getLikedProducts() {
         System.out.println("LikedProductController.getLikedProducts");
 
         List<LikedProductResponseDto> likedProductResponseDtos = likedProductService.getLikedProducts();

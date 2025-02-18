@@ -50,7 +50,7 @@ watch(
 const handleSave = async () => {
     try {
         const productId = route.params.id;
-        await customAxios.post(`/api/v1/save/${productId}`);
+        await customAxios.post(`/api/v1/saved/${productId}`);
         detailDto.value.isSaved = !detailDto.value.isSaved;
         if (detailDto.value.isSaved) {
             toast.success("찜 목록에 저장 완료!");

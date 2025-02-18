@@ -56,12 +56,11 @@ onMounted(() => {
 // 기본 레이아웃
 <template>
     <div class="template-container container">
-        <Nav v-if="!route.meta.hideNavFooter" />
-        <main class="main" v-if="!route.meta.noMainWrapper">
+        <Nav />
+        <main class="main" >
             <router-view />
         </main>
-        <router-view v-else />
-        <Footer v-if="!route.meta.hideNavFooter" />
+        <Footer />
     </div>
 </template>
 

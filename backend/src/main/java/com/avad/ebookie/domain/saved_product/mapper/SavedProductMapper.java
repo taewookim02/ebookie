@@ -1,10 +1,10 @@
-package com.avad.ebookie.domain.liked_product.mapper;
+package com.avad.ebookie.domain.saved_product.mapper;
 
 import com.avad.ebookie.domain.author.entity.Author;
-import com.avad.ebookie.domain.liked_product.dto.response.LikedProductResponseDto;
-import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.avad.ebookie.domain.saved_product.dto.response.SavedProductResponseDto;
+import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,16 +12,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class LikedProductMapper {
+public class SavedProductMapper {
 
-    public List<LikedProductResponseDto> toDtoList(List<LikedProduct> likedProducts) {
-        return likedProducts.stream()
-                .map(likedProduct -> toDto(likedProduct))
+    public List<SavedProductResponseDto> toDtoList(List<SavedProduct> savedProducts) {
+        return savedProducts.stream()
+                .map(savedProduct -> toDto(savedProduct))
                 .collect(Collectors.toList());
     }
 
-    public LikedProductResponseDto toDto(LikedProduct likedProduct) {
-        Product product = likedProduct.getProduct();
+    public SavedProductResponseDto toDto(SavedProduct savedProduct) {
+        Product product = savedProduct.getProduct();
 
         // 작가 이름 구하기
         List<ProductAuthor> productAuthors = product.getAuthors();
@@ -35,10 +35,9 @@ public class LikedProductMapper {
         // 상품 썸네일 이미지 구하기
         String fileName = product.getImages().get(0).getFileName();
 
-
-        // 좋아요 상품 응답 dto
-        return LikedProductResponseDto.builder()
-                .id(likedProduct.getId())
+        // 찜 상품 응답 dto
+        return SavedProductResponseDto.builder()
+                .id(savedProduct.getId())
                 .productId(product.getId())
                 .name(product.getName())
                 .authorNames(String.join(", ", authorNames))

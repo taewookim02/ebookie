@@ -1,12 +1,13 @@
 package com.avad.ebookie.domain.saved_product.controller;
 
+import com.avad.ebookie.domain.liked_product.dto.response.LikedProductResponseDto;
+import com.avad.ebookie.domain.saved_product.dto.response.SavedProductResponseDto;
 import com.avad.ebookie.domain.saved_product.service.SavedProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -15,12 +16,19 @@ public class SavedProductController {
 
     private final SavedProductService savedProductService;
 
-    @PostMapping("/save/{productId}")
+    @PostMapping("/saved/{productId}")
     public ResponseEntity<?> toggleSave(@PathVariable("productId") Long productId) {
         String result = savedProductService.toggleSave(productId);
 
         // TODO: response dto
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/saved")
+    public ResponseEntity<List<SavedProductResponseDto>> getSavedProducts() {
+        System.out.println("SavedProductController.getSavedProducts");
+        List<SavedProductResponseDto> savedProductResponseDtos = savedProductService.getSavedProducts();
+        return ResponseEntity.ok(savedProductResponseDtos);
     }
 }
