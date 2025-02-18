@@ -60,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
+                // 시큐리티 컨텍스트에 로그인 정보 저장
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

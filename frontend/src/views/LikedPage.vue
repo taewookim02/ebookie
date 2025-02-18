@@ -25,8 +25,15 @@ const handleCartClick = (likedId, productId) => {
     // remove from likedd
 };
 
-const handleDeleteClick = (likedId) => {
-    console.log("handleDeleteClick", likedId);
+const handleDeleteClick = async (productId) => {
+    try {
+        const res = await customAxios.delete(`/api/v1/liked/${productId}`);
+        // productId 같은 것 없애기
+        likedDto.value = likedDto.value.filter(dto => dto.productId !== productId);
+    } catch (err) {
+        console.log("handleDeleteClick() err:", err);
+    }
+    console.log("handleDeleteClick", productId);
 }
 
 </script>
@@ -69,7 +76,7 @@ const handleDeleteClick = (likedId) => {
                         </td>
                         <td class="td-action">
                             <ActionButton class="w-100 mb-2" @action="handleCartClick(dto.id, dto.productId)">장바구니 담기</ActionButton>
-                            <ActionButton class="w-100" @action="handleDeleteClick(dto.id)">삭제</ActionButton>
+                            <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
                         </td>
                     </tr>
                 </template>

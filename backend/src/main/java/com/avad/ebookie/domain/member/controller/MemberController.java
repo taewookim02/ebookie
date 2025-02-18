@@ -24,6 +24,7 @@ public class MemberController {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+
     @GetMapping("/info")
     public ResponseEntity<MemberInfoResponseDto> info() {
         MemberInfoResponseDto memberInfoResponseDto = memberService.info();

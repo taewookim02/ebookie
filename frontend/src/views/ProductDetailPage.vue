@@ -69,7 +69,7 @@ const handleSave = async () => {
 const handleLike = async () => {
     try {
         const productId = route.params.id;
-        await customAxios.post(`/api/v1/like/${productId}`);
+        await customAxios.post(`/api/v1/liked/${productId}`);
         detailDto.value.isLiked = !detailDto.value.isLiked;
         if (detailDto.value.isLiked) {
             toast.success("좋아요 목록에 저장 완료!");

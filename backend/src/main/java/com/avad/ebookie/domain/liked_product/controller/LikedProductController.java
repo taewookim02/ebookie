@@ -15,21 +15,28 @@ public class LikedProductController {
 
     private final LikedProductService likedProductService;
 
-    @PostMapping("/like/{productId}")
+    @PostMapping("/liked/{productId}")
     public ResponseEntity<?> toggleLike(@PathVariable("productId") Long productId) {
+        // 좋아요 토글 (없으면 생성, 있으면 삭제)
         String result = likedProductService.toggleLike(productId);
 
         // TODO: response dto?
         return ResponseEntity.ok(result);
     }
 
-    // TODO: liked?
+
     @GetMapping("/liked")
     public ResponseEntity<?> getLikedProducts() {
         System.out.println("LikedProductController.getLikedProducts");
 
         List<LikedProductResponseDto> likedProductResponseDtos = likedProductService.getLikedProducts();
         return ResponseEntity.ok(likedProductResponseDtos);
+    }
+
+    @DeleteMapping("/liked/{productId}")
+    public ResponseEntity<?> deleteLike(@PathVariable("productId") Long productId) {
+        likedProductService.deleteLike(productId);
+        return ResponseEntity.noContent().build();
     }
 
 

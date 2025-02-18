@@ -65,11 +65,17 @@ public class LikedProductService {
 
         List<LikedProduct> likedProducts = likedProductRepository.findAllByMemberIdOrderByIdDesc(loggedInMember.getId());
 
-        // TODO: 맵핑
         List<LikedProductResponseDto> likedProductResponseDtos = likedProductMapper.toDtoList(likedProducts);
 
         return likedProductResponseDtos;
 
 
+    }
+
+    @Transactional
+    public void deleteLike(Long productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        likedProductRepository.deleteByProductIdAndMemberId(productId, loggedInMember.getId());
     }
 }
