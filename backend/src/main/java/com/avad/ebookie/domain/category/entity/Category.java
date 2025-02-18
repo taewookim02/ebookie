@@ -1,16 +1,14 @@
 package com.avad.ebookie.domain.category.entity;
 
 import com.avad.ebookie.domain.product.entity.Product;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +18,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 32)
+    @Column(length = 32, unique = true)
     private String name;
 
     @OneToMany(
@@ -29,7 +27,7 @@ public class Category {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-//    @JsonManagedReference
+    @JsonManagedReference
     private List<Product> products = new ArrayList<>();
 }
 

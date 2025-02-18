@@ -1,6 +1,7 @@
 package com.avad.ebookie.domain.product.controller;
 
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,13 @@ public class ProductController {
 //        ).collect(Collectors.toList());
         List<ProductDetailResponseDto> responses = productService.testProduct();
         return ResponseEntity.ok(responses);
+    }
+
+    // 홈페이지
+    @GetMapping("/products/home")
+    public ResponseEntity<ProductHomeResponseDto> home() {
+        ProductHomeResponseDto productHomeResponseDto = productService.home();
+        return ResponseEntity.ok(productHomeResponseDto);
     }
 
     // 상품 상세

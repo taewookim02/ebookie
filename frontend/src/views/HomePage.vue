@@ -15,9 +15,16 @@ import TimedBestSeller from '@/components/sections/TimedBestSeller.vue';
 
 <template>
     <!-- <HeroSection /> -->
-    <!-- <ProductList /> -->
+    <!-- 이번달 top5 List<ResponseDto>
+            - 상품ID
+            - 제목
+            - 썸네일
+            - 저자
+        -->
     <HeroSection2 />
-    <ProductSliderList slider-title="자격증 추천도서" />
+    <!-- 자격증 List<ProductRelatedResponseDto> -->
+        <ProductSliderList slider-title="자격증 추천도서" />
+    <!-- 데이터 List<ProductRelatedResponseDto> -->
     <ProductSliderList slider-title="데이터 관련도서" />
     <ProductSliderList slider-title="백엔드 관련도서" />
     <ProductSliderList slider-title="프론트엔드 관련도서" />

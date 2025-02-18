@@ -11,6 +11,7 @@ import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +43,9 @@ public class Product extends BaseTimeEntity {
 
     private LocalDate publishedDate;
 
+    @Min(0)
+    private Long sold = 0L;
+
     // 출판사
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -54,6 +58,7 @@ public class Product extends BaseTimeEntity {
     // 카테고리
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference
     private Category category;
 
     // 저자

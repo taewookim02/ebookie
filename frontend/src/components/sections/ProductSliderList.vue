@@ -7,7 +7,7 @@ import LoadingSpinner from "../shared/LoadingSpinner.vue";
 
 const props = defineProps({
     sliderTitle: String,
-    products: Array
+    products: Array // ProductRelatedResponseDto
 });
 
 const swiperRef = ref(null);

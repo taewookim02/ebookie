@@ -37,6 +37,8 @@ onMounted(() => {
   Object.assign(swiperContainer, params);
   swiperContainer.initialize();
 });
+
+
 </script>
 
 <template>
