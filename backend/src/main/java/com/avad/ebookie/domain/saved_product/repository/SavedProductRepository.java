@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.saved_product.repository;
 
+import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,5 @@ public interface SavedProductRepository extends JpaRepository<SavedProduct, Long
 
     List<SavedProduct> findAllByMemberIdOrderByIdDesc(Long id);
 
+    void deleteAllByMemberAndProductIdIn(Member loggedInMember, List<Long> productIds);
 }

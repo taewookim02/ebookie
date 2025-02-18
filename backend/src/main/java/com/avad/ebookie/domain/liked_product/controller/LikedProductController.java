@@ -35,7 +35,7 @@ public class LikedProductController {
     }
 
     @DeleteMapping("/liked/{productId}")
-    public ResponseEntity<?> deleteLikes(@PathVariable("productId") Long productId) {
+    public ResponseEntity<?> deleteLike(@PathVariable("productId") Long productId) {
         likedProductService.deleteLike(productId);
         return ResponseEntity.noContent().build();
     }

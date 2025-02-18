@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.saved_product.service;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
+import com.avad.ebookie.domain.saved_product.dto.request.BulkDeleteSavedRequestDto;
 import com.avad.ebookie.domain.saved_product.dto.response.SavedProductResponseDto;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.avad.ebookie.domain.saved_product.mapper.SavedProductMapper;
@@ -67,5 +68,19 @@ public class SavedProductService {
         List<SavedProduct> savedProducts = savedProductRepository.findAllByMemberIdOrderByIdDesc(loggedInMember.getId());
 
         return savedProductMapper.toDtoList(savedProducts);
+    }
+
+    @Transactional
+    public void deleteSaved(Long productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        savedProductRepository.deleteByProductIdAndMemberId(productId, loggedInMember.getId());
+    }
+
+    @Transactional
+    public void bulkDeleteSaved(BulkDeleteSavedRequestDto bulkDeleteSavedRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+        savedProductRepository.deleteAllByMemberAndProductIdIn(loggedInMember, bulkDeleteSavedRequestDto.getProductIds());
     }
 }
