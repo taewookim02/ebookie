@@ -18,7 +18,7 @@ fetchLikedProducts();
 </script>
 
 
-<template>
+<template>u
     <h1>좋아요한 상품</h1>
     <section class="liked">
         <table class="table">

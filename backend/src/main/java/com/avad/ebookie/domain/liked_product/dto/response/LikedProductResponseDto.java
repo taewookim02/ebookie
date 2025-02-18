@@ -7,6 +7,7 @@ import lombok.Getter;
 @Builder
 public class LikedProductResponseDto {
     private Long id;
+    private Long productId;
     private String name;
     private String authorNames;
     private String thumbnail;

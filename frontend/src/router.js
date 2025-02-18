@@ -15,7 +15,7 @@ const routes = [
         meta: { requiresAuth: true, hideAuthLinks: true }
     },
     {
-        path: "/member/liked", component: () => import("@/views/LikedPage.vue"),
+        path: "/liked", component: () => import("@/views/LikedPage.vue"),
         meta: { requiresAuth: true }
     },
     { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },

@@ -58,6 +58,7 @@ public class LikedProductService {
         likedProductRepository.save(build);
     }
 
+    @Transactional(readOnly = true)
     public List<LikedProductResponseDto> getLikedProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member loggedInMember = (Member) authentication.getPrincipal();
@@ -65,9 +66,9 @@ public class LikedProductService {
         List<LikedProduct> likedProducts = likedProductRepository.findAllByMemberIdOrderByIdDesc(loggedInMember.getId());
 
         // TODO: 맵핑
-        List<LikedProductResponseDto> likedProductResponseDtos = 
+        List<LikedProductResponseDto> likedProductResponseDtos = likedProductMapper.toDtoList(likedProducts);
 
-        return null;
+        return likedProductResponseDtos;
 
 
     }

@@ -29,7 +29,7 @@ public class LikedProductController {
         System.out.println("LikedProductController.getLikedProducts");
 
         List<LikedProductResponseDto> likedProductResponseDtos = likedProductService.getLikedProducts();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(likedProductResponseDtos);
     }
 
 
