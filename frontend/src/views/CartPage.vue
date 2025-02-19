@@ -38,10 +38,7 @@ const handleDeleteClick = async (productId) => {
     }
 }
 
-const handleOrderClick = (productId) => {
-    console.log("구매하기", productId);
-    router.push(`/orders?new=${productId}`)
-}
+
 
 const toggleCheckAll = () => {
     if (allChecked.value) {
@@ -92,23 +89,37 @@ const handleCheckedDelete = async () => {
 
 
 const handleCheckedOrders = async () => {
+    try {
+        // create order entity with the ids
+        const productIds = Array.from(checkedItems.value);
+        const res = await customAxios.post(`/api/v1/orders`, { productIds });
+        
+        // get back the order id
+        const orderId = res.data.orderId;
 
-    // TODO: delete from cart?
-    // create order entity with the ids
-    const productIds = Array.from(checkedItems.value);
-    const res = await customAxios.post(`/api/v1/orders`, { productIds });
+        toast.success("주문 생성 성공!");
     
+        // router push to orders?orderId=${orderId}
+        router.push(`/orders/${orderId}`);
+    } catch (error) {
+        toast.error("주문 생성 실패!");
+    }
+}
 
-    // get back the order id
+const handleOrderClick = async (productId) => {
+    console.log("구매하기", productId);
+    try {
+        const res = await customAxios.post(`api/v1/orders`, {productIds: [productId]});
 
-    // router push to orders?orderId=${orderId}
+        const orderId = res.data.orderId;
 
-    // router.push({
-    //     path: "/orders",
-    //     query: {
-    //         products: [...checkedItems.value].join(",")
-    //     }
-    // });
+        toast.success("주문 생성 성공!");
+
+        router.push(`/orders/${orderId}`);
+    } catch (error) {
+        toast.error("주문 생성 실패!");
+    }
+    // router.push(`/orders?new=${productId}`)
 }
 </script>
 

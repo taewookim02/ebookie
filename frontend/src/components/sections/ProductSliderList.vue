@@ -56,15 +56,12 @@ const initSwiper = () => {
     };
     Object.assign(swiperContainer, params);
     swiperContainer.initialize();
-    console.log(props.products);
 }
 
 onMounted(() => {
-    console.log("mounted()");
     initSwiper();
 })
 onUpdated(() => {
-    console.log("updated()");
     initSwiper();
 });
 

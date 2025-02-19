@@ -26,6 +26,10 @@ const routes = [
         path: "/cart", component: () => import("@/views/CartPage.vue"),
         meta: { requiresAuth: true }
     },
+    {
+        path: "/orders/:id", component: () => import("@/views/OrderPage.vue"),
+        meta: { requiresAuth: true }
+    },
     { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },
     { path: '/testing', component: () => import('@/views/TestingPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },

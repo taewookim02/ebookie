@@ -11,7 +11,7 @@ const fetchHomeDto = async () => {
     try {
         const res = await customAxios.get(`/api/v1/products/home`);
         categoryProductsDto.value = res.data.categoryProducts;
-        console.log(categoryProductsDto.value);
+        // console.log(categoryProductsDto.value);
     } catch (err) {
         console.log(err);
     }

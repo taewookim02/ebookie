@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class CartMapper {
     public List<CartResponseDto> toDtoList(List<Cart> cartList) {
+
         return cartList.stream()
                 .map(cart -> toDto(cart))
                 .collect(Collectors.toList());
@@ -40,6 +41,8 @@ public class CartMapper {
                 .name(product.getName())
                 .authorNames(String.join(", ", authorNames))
                 .thumbnail(fileName)
+                .originalPrice(product.getPrice())
+                .discountRatePercentage(product.getDiscountRate())
                 .build();
     }
 }

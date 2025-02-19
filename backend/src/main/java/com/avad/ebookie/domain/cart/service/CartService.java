@@ -58,6 +58,7 @@ public class CartService {
         cartRepository.save(build);
     }
 
+    @Transactional
     public void addToCart(CartAddRequestDto cartAddRequestDto) {
         System.out.println("cartAddRequestDto = " + cartAddRequestDto);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
