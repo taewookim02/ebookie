@@ -16,6 +16,8 @@ import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.publisher.repository.PublisherDataLoader;
 import com.avad.ebookie.domain.review.entity.Review;
 import com.avad.ebookie.domain.review.repository.ReviewDataLoader;
+import com.avad.ebookie.domain.status.entity.Status;
+import com.avad.ebookie.domain.status.repository.StatusDataLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -38,6 +40,7 @@ public class DummyDataLoader {
     private final MemberDataLoader memberDataLoader;
     private final ReviewDataLoader reviewDataLoader;
     private final ProductImageDataLoader productImageDataLoader;
+    private final StatusDataLoader statusDataLoader;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
@@ -45,6 +48,9 @@ public class DummyDataLoader {
         System.out.println("DummyDataLoader.init");
         // 회원 더미데이터 생성 후 DB 저장
         List<Member> members = memberDataLoader.genereateMemberData();
+
+        // 상태 더미데이터 생성 후 DB 저장
+        List<Status> statuses = statusDataLoader.generateStatusData();
 
         // 카테고리 더미데이터 생성 후 DB 저장
         List<Category> categories = categoryDataLoader.generateCategoryData();

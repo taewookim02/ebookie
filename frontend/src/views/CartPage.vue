@@ -3,6 +3,7 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
 // state
@@ -10,7 +11,7 @@ const cartDto = ref([]);
 const toast = useToast();
 const checkedItems = ref(new Set());
 const allChecked = ref(false);
-
+const router = useRouter();
 
 // actions
 const fetchcartProducts = async () => {
@@ -39,7 +40,7 @@ const handleDeleteClick = async (productId) => {
 
 const handleOrderClick = (productId) => {
     console.log("구매하기", productId);
-    router
+    router.push(`/orders?new=${productId}`)
 }
 
 const toggleCheckAll = () => {
@@ -89,10 +90,26 @@ const handleCheckedDelete = async () => {
     }
 };
 
-const handleCheckedOrder = () => {
-    console.log("선택 주문", checkedItems.value);
-}
 
+const handleCheckedOrders = async () => {
+
+    // TODO: delete from cart?
+    // create order entity with the ids
+    const productIds = Array.from(checkedItems.value);
+    const res = await customAxios.post(`/api/v1/orders`, { productIds });
+    
+
+    // get back the order id
+
+    // router push to orders?orderId=${orderId}
+
+    // router.push({
+    //     path: "/orders",
+    //     query: {
+    //         products: [...checkedItems.value].join(",")
+    //     }
+    // });
+}
 </script>
 
 
@@ -100,19 +117,18 @@ const handleCheckedOrder = () => {
     <h1>장바구니</h1>
     <section class="cart">
 
-        <tr>
-            <th>
+        <div>
+            <div>
                 <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
-            </th>
-            <th colspan="2">
+            </div>
+            <div colspan="2">
                 <label for="all">전체선택</label>
                 <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0"
                     class="btn-select">선택삭제</ActionButton>
-                <ActionButton @action="handleCheckedOrder" :disabled="checkedItems.size === 0"
+                <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0"
                     class="btn-select">선택주문</ActionButton>
-            </th>
-            <th></th>
-        </tr>
+            </div>
+        </div>
         <table class="table">
             <colgroup>
                 <col width="5%" />
@@ -148,7 +164,7 @@ const handleCheckedOrder = () => {
                             <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
                             <div class="text-muted prices">
                                 <small class="text-cross">12,900원</small>
-                                <small>9,000원 (0% 할인)</small>
+                                <span>9,000원</span>
                             </div>
                         </td>
                         <td>
@@ -157,7 +173,7 @@ const handleCheckedOrder = () => {
                         </td>
                         <td>
                             <!-- TODO: price * discountRate -->
-                            12,600원
+                            9,000원
                         </td>
                         <td>구매 후 바로 다운로드</td>
                         <td class="td-action">
@@ -168,7 +184,7 @@ const handleCheckedOrder = () => {
                 </template>
                 <template v-else>
                     <tr>
-                        <td colspan="4" class="td-empty text-muted"><small>장바구니가 비었습니다.</small></td>
+                        <td colspan="6" class="td-empty text-muted"><small>장바구니가 비었습니다.</small></td>
                     </tr>
                 </template>
             </tbody>
