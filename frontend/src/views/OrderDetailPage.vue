@@ -1,26 +1,31 @@
 <script setup>
+import PortOne from '@portone/browser-sdk/v2';
 import OrderPricesSection from '@/components/sections/order/OrderPricesSection.vue';
 import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatDiscountAmount, formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import OrderPaymentSection from '@/components/sections/order/OrderPaymentSection.vue';
+import { useToast } from 'vue-toastification';
 const route = useRoute();
+const toast = useToast();
 
 // get orderid and fetch
 const orderId = route.params.id;
 const dtoList = ref([]);
 const pgMethod = ref("toss");
-
+const paymentStatus = ref({ status: "PENDING" });
 // initial fetch
 const fetchOrderDetail = async (orderId) => {
-    const res = await customAxios.get(`/api/v1/orders/${orderId}`);
-    dtoList.value = res.data.orderDetailDtos;
-    console.log(dtoList);
+    try {
+        const res = await customAxios.get(`/api/v1/orders/${orderId}`);
+        dtoList.value = res.data.orderDetailDtos;
+    } catch (error) {
+        toast.error("로드 실패!");
+    }
 }
-fetchOrderDetail(orderId);
 
 
 // computed
@@ -41,10 +46,35 @@ const totalFinalPrice = computed(() => {
 })
 
 // actions
-const handlePayment = () => {
+const handlePayment = async () => {
     console.log("pgMethod:", pgMethod.value);
     console.log("totalFinalPrice:", totalFinalPrice.value);
+    // 서버에 결제 테이블 insert
+
+    // 서버에서 paymentId get
+
+
+    paymentStatus.value = ({ status: "PENDING" }); 
+    const paymentId = "ASDFASDFADS";
+    const payment = await PortOne.requestPayment({
+        storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
+        channelKey: "channel-key-bdb9666b-9eba-4cc3-bc3e-cca13a1ff2f9",
+        paymentId,
+        orderName: "orderName TEST",
+        totalAmount: totalFinalPrice.value,
+        currency: "KRW",
+        payMethod: "EASY_PAY",
+        customData: {
+            item: 123
+        },
+    });
 }
+
+// lifecycle hooks
+onMounted(() => {
+    fetchOrderDetail(orderId);
+
+})
 </script>
 
 <template>
@@ -100,7 +130,7 @@ const handlePayment = () => {
         <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
             :total-final-price="totalFinalPrice" />
 
-        <OrderPaymentSection :total-final-price="totalFinalPrice" v-model:pg-method="pgMethod"  />
+        <OrderPaymentSection :total-final-price="totalFinalPrice" v-model:pg-method="pgMethod" />
 
         <div class="payment__action">
             <ActionButton class="w-100 payment__action--button" @action="handlePayment">결제하기</ActionButton>
