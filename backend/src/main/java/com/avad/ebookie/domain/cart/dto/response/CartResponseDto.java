@@ -11,6 +11,7 @@ public class CartResponseDto {
     private String name;
     private String authorNames;
     private String thumbnail;
+    private Integer quantity;
 
     private Double originalPrice;
     private Double discountRatePercentage;

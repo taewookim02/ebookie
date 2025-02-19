@@ -1,8 +1,10 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
+import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { ref } from 'vue';
+import { PhEquals, PhMinus, PhMinusCircle } from '@phosphor-icons/vue';
+import { computed, onMounted, onUpdated, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
@@ -13,6 +15,28 @@ const checkedItems = ref(new Set());
 const allChecked = ref(false);
 const router = useRouter();
 
+// computed
+const totalOriginalPrice = computed(() => {
+    return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => sum + item.originalPrice, 0);
+});
+
+const totalFinalPrice = computed(() => {
+    return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => {
+        const discountedPrice = item.originalPrice - (item.originalPrice * item.discountRatePercentage / 100)
+        return sum + discountedPrice
+    }, 0);
+});
+
+const totalDiscountAmount = computed(() => {
+    return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => {
+        const discountAmount = item.originalPrice * item.discountRatePercentage / 100;
+        return sum + discountAmount;
+    }, 0);
+})
+
+
+const val = formatSellingPrice(2000.0, 20.1);
+console.log(val);
 // actions
 const fetchcartProducts = async () => {
     try {
@@ -93,12 +117,12 @@ const handleCheckedOrders = async () => {
         // create order entity with the ids
         const productIds = Array.from(checkedItems.value);
         const res = await customAxios.post(`/api/v1/orders`, { productIds });
-        
+
         // get back the order id
         const orderId = res.data.orderId;
 
         toast.success("주문 생성 성공!");
-    
+
         // router push to orders?orderId=${orderId}
         router.push(`/orders/${orderId}`);
     } catch (error) {
@@ -109,7 +133,7 @@ const handleCheckedOrders = async () => {
 const handleOrderClick = async (productId) => {
     console.log("구매하기", productId);
     try {
-        const res = await customAxios.post(`api/v1/orders`, {productIds: [productId]});
+        const res = await customAxios.post(`api/v1/orders`, { productIds: [productId] });
 
         const orderId = res.data.orderId;
 
@@ -125,22 +149,21 @@ const handleOrderClick = async (productId) => {
 
 
 <template>
-    <h1>장바구니</h1>
     <section class="cart">
-
-        <div>
+        <h1 class="mb-4">장바구니</h1>
+        <div class="cart__control">
             <div>
                 <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
             </div>
             <div colspan="2">
                 <label for="all">전체선택</label>
-                <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0"
-                    class="btn-select">선택삭제</ActionButton>
-                <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0"
-                    class="btn-select">선택주문</ActionButton>
+                <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select">선택삭제
+                </ActionButton>
+                <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0" class="btn-select">선택주문
+                </ActionButton>
             </div>
         </div>
-        <table class="table">
+        <table class="table cart__table">
             <colgroup>
                 <col width="5%" />
                 <col width="10%" />
@@ -162,7 +185,7 @@ const handleOrderClick = async (productId) => {
             <tbody>
                 <template v-if="cartDto && cartDto.length > 0">
                     <tr v-for="dto in cartDto">
-                        <td>
+                        <td class="text-center">
                             <input type="checkbox" :checked="checkedItems.has(dto.productId)"
                                 @change="toggleCheck(dto.productId)">
                         </td>
@@ -174,8 +197,8 @@ const handleOrderClick = async (productId) => {
                         <td>
                             <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
                             <div class="text-muted prices">
-                                <small class="text-cross">12,900원</small>
-                                <span>9,000원</span>
+                                <small class="text-cross mr-2">{{ dto.originalPrice.toLocaleString() }}</small>
+                                <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원</span>
                             </div>
                         </td>
                         <td>
@@ -183,8 +206,7 @@ const handleOrderClick = async (productId) => {
                             1
                         </td>
                         <td>
-                            <!-- TODO: price * discountRate -->
-                            9,000원
+                            {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
                         </td>
                         <td>구매 후 바로 다운로드</td>
                         <td class="td-action">
@@ -201,16 +223,90 @@ const handleOrderClick = async (productId) => {
             </tbody>
             <tfoot>
                 <tr>
-                    <td>hello</td>
+                    <td colspan="7" class="text-end">합계: {{ totalFinalPrice.toLocaleString() }}원</td>
                 </tr>
             </tfoot>
         </table>
     </section>
+    <section class="cart__numbers">
+        <table class="table table-borderless cart__numbers--table text-center">
+            <colgroup>
+                <col width="30%" />
+                <col width="5%" />
+                <col width="30%" />
+                <col width="5%" />
+                <col width="30%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>총 상품금액</th>
+                    <th></th>
+                    <th>총 할인금액</th>
+                    <th></th>
+                    <th>최종 결제금액</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="price-emphasis">{{ totalOriginalPrice.toLocaleString() }}</span>원</td>
+                    <td class="icon-cell">
+                        <div class="price-icon">
+                            <PhMinus :size="32" color="#71c1cc" weight="fill" />
+                        </div>
+                    </td>
+                    <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
+                    <td class="icon-cell">
+                        <div class="price-icon">
+                            <PhEquals :size="32" color="#71c1cc" weight="fill" />
+                        </div>
+                    </td>
+                    <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+    </section>
 </template>
 
+
+
 <style scoped>
+.cart__numbers--table {
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    & td,
+    & th {
+        padding: 0;
+        vertical-align: middle;
+    }
+}
+
+.icon-cell {
+    padding: 0 !important;
+    width: 5%;
+}
+
+.price-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.price-icon__parent {
+    vertical-align: middle;
+}
+
 .cart td {
     vertical-align: middle;
+}
+
+.cart__control {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
 }
 
 .img-product {
@@ -231,5 +327,20 @@ const handleOrderClick = async (productId) => {
 
 .btn-select {
     margin-left: 1.6rem;
+}
+
+.text-cross {
+    text-decoration: line-through;
+}
+
+.prices {
+    display: flex;
+    align-items: end;
+    gap: .8rem;
+}
+
+.price-emphasis {
+    font-size: 3rem;
+    font-weight: 600;
 }
 </style>

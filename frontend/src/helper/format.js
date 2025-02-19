@@ -9,3 +9,7 @@ export const formatYYYYMMDDKr = (dateStr) => {
     }).format(date); // from YYYY-MM-DD => to YYYY년 MM월 DD일
 };
 
+export const formatSellingPrice = (originalPrice, discountPercentage) => {
+    return (originalPrice - (originalPrice * discountPercentage / 100)).toLocaleString();
+};
+

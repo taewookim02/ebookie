@@ -41,6 +41,7 @@ public class CartMapper {
                 .name(product.getName())
                 .authorNames(String.join(", ", authorNames))
                 .thumbnail(fileName)
+                .quantity(entity.getQuantity())
                 .originalPrice(product.getPrice())
                 .discountRatePercentage(product.getDiscountRate())
                 .build();
