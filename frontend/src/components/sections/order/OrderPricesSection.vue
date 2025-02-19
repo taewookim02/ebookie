@@ -23,9 +23,9 @@ const props = defineProps({
                 <tr>
                     <th>총 상품금액</th>
                     <th></th>
-                    <th class="text-primary">총 할인금액</th>
+                    <th>총 할인금액</th>
                     <th></th>
-                    <th class="text-danger">최종 결제금액</th>
+                    <th>최종 결제금액</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,13 +36,13 @@ const props = defineProps({
                             <PhMinus :size="32" color="#71c1cc" weight="fill" />
                         </div>
                     </td>
-                    <td class="text-primary"><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
+                    <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
                     <td class="icon-cell">
                         <div class="price-icon">
                             <PhEquals :size="32" color="#71c1cc" weight="fill" />
                         </div>
                     </td>
-                    <td class="text-danger"><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
+                    <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
                 </tr>
             </tbody>
         </table>

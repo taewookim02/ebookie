@@ -13,3 +13,6 @@ export const formatSellingPrice = (originalPrice, discountPercentage) => {
     return (originalPrice - (originalPrice * discountPercentage / 100)).toLocaleString();
 };
 
+export const formatDiscountAmount = (originalPrice, discountPercentage) => {
+    return (originalPrice * discountPercentage / 100).toLocaleString();
+}

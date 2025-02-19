@@ -22,6 +22,13 @@ const totalOriginalPrice = computed(() => {
     return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => sum + item.originalPrice, 0);
 });
 
+const totalDiscountAmount = computed(() => {
+    return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => {
+        const discountAmount = item.originalPrice * item.discountRatePercentage / 100;
+        return sum + discountAmount;
+    }, 0);
+})
+
 const totalFinalPrice = computed(() => {
     return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => {
         const discountedPrice = item.originalPrice - (item.originalPrice * item.discountRatePercentage / 100)
@@ -29,12 +36,6 @@ const totalFinalPrice = computed(() => {
     }, 0);
 });
 
-const totalDiscountAmount = computed(() => {
-    return cartDto.value.filter(item => checkedItems.value.has(item.productId)).reduce((sum, item) => {
-        const discountAmount = item.originalPrice * item.discountRatePercentage / 100;
-        return sum + discountAmount;
-    }, 0);
-})
 
 // actions
 const fetchcartProducts = async () => {
@@ -165,6 +166,7 @@ const handleOrderClick = async (productId) => {
                     </ActionButton>
                 </div>
             </div>
+
             <table class="table cart__table">
                 <colgroup>
                     <col width="5%" />
@@ -232,6 +234,7 @@ const handleOrderClick = async (productId) => {
                     </tr>
                 </tfoot>
             </table>
+
         </section>
 
 
@@ -261,15 +264,18 @@ const handleOrderClick = async (productId) => {
 }
 
 
-.cart td {
-    vertical-align: middle;
-}
-
 .cart__control {
     display: flex;
     align-items: center;
     gap: .8rem;
 }
+
+/* TABLE */
+
+.cart td {
+    vertical-align: middle;
+}
+
 
 .img-product {
     width: 10.4rem;

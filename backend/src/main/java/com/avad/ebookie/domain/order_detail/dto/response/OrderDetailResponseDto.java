@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class OrderDetailResponseDto {
     private Long productId;
-    private String productName;
+    private String name;
     private Integer quantity;
     private Double originalPrice;
     private Double discountRatePercentage;

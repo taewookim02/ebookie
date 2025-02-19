@@ -22,7 +22,7 @@ public class OrderDetailMapper {
         String thumbnailFileName = product.getImages().get(0).getFileName();
         return OrderDetailResponseDto.builder()
                 .productId(product.getId())
-                .productName(product.getName())
+                .name(product.getName())
                 .quantity(entity.getQuantity())
                 .originalPrice(product.getPrice())
                 .discountRatePercentage(product.getDiscountRate())
