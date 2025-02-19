@@ -15,7 +15,7 @@ fetchOrderDetail(orderId);
 </script>
 
 <template>
-    
+    asdf
 </template>
 
 <style scoped>

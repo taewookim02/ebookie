@@ -7,7 +7,9 @@ import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.mapper.OrderMapper;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
+import com.avad.ebookie.domain.order_detail.dto.response.OrderDetailResponseDto;
 import com.avad.ebookie.domain.order_detail.entity.OrderDetail;
+import com.avad.ebookie.domain.order_detail.mapper.OrderDetailMapper;
 import com.avad.ebookie.domain.order_detail.repository.OrderDetailRepository;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -31,6 +33,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final StatusRepository statusRepository;
     private final OrderMapper orderMapper;
+    private final OrderDetailMapper orderDetailMapper;
 
 
     @Transactional
@@ -68,6 +71,7 @@ public class OrderService {
         return orderMapper.toDto(savedOrder);
     }
 
+    @Transactional(readOnly = true)
     public OrderPageDetailResponseDto getOrderDetails(Long orderId) {
         // get member
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -83,9 +87,12 @@ public class OrderService {
         }
 
         // get all orderdetails
-//        List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderId(orderId);
         List<OrderDetail> orderDetails = order.getOrderDetails();
-        System.out.println("orderDetails = " + orderDetails);
-        return null;
+        List<OrderDetailResponseDto> orderDetailDtos = orderDetailMapper.toDtoList(orderDetails);
+
+
+        return OrderPageDetailResponseDto.builder()
+                .orderDetailDtos(orderDetailDtos)
+                .build();
     }
 }

@@ -1,12 +1,12 @@
 <script setup>
 import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
-import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
+import OrderPricesSection from '@/components/sections/order/OrderPricesSection.vue';
 import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { PhEquals, PhMinus, PhMinusCircle } from '@phosphor-icons/vue';
-import { computed, onMounted, onUpdated, ref } from 'vue';
+import { PhEquals, PhMinus } from '@phosphor-icons/vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
@@ -157,9 +157,11 @@ const handleOrderClick = async (productId) => {
                 </div>
                 <div colspan="2">
                     <label for="all">전체선택</label>
-                    <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select">선택삭제
+                    <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select">
+                        선택삭제
                     </ActionButton>
-                    <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0" class="btn-select">선택주문
+                    <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0" class="btn-select">
+                        선택주문
                     </ActionButton>
                 </div>
             </div>
@@ -195,23 +197,26 @@ const handleOrderClick = async (productId) => {
                                 </RouterLink>
                             </td>
                             <td>
-                                <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
+                                <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}
+                                </RouterLink>
                                 <div class="text-muted prices">
                                     <small class="text-cross mr-2">{{ dto.originalPrice.toLocaleString() }}</small>
-                                    <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원</span>
+                                    <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage)
+                                        }}원</span>
                                 </div>
                             </td>
                             <td>
                                 <!-- TODO: quantity -->
                                 1
                             </td>
-                            <td>
+                            <td class="fw-bold">
                                 {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
                             </td>
                             <td>구매 후 바로 다운로드</td>
                             <td class="td-action">
                                 <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
-                                <ActionButton class="w-100" @action="handleOrderClick(dto.productId)">주문하기</ActionButton>
+                                <ActionButton class="w-100" @action="handleOrderClick(dto.productId)">주문하기
+                                </ActionButton>
                             </td>
                         </tr>
                     </template>
@@ -223,54 +228,25 @@ const handleOrderClick = async (productId) => {
                 </tbody>
                 <tfoot v-if="cartDto && cartDto.length > 0">
                     <tr>
-                        <td colspan="7" class="text-end">합계: {{ totalFinalPrice.toLocaleString() }}원</td>
+                        <td colspan="7" class="text-end fw-bold">합계: {{ totalFinalPrice.toLocaleString() }}원</td>
                     </tr>
                 </tfoot>
             </table>
         </section>
-        <section class="cart__numbers" v-if="cartDto && cartDto.length > 0">
-            <table class="table table-borderless cart__numbers--table text-center">
-                <colgroup>
-                    <col width="30%" />
-                    <col width="5%" />
-                    <col width="30%" />
-                    <col width="5%" />
-                    <col width="30%" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>총 상품금액</th>
-                        <th></th>
-                        <th>총 할인금액</th>
-                        <th></th>
-                        <th>최종 결제금액</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="price-emphasis">{{ totalOriginalPrice.toLocaleString() }}</span>원</td>
-                        <td class="icon-cell">
-                            <div class="price-icon">
-                                <PhMinus :size="32" color="#71c1cc" weight="fill" />
-                            </div>
-                        </td>
-                        <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
-                        <td class="icon-cell">
-                            <div class="price-icon">
-                                <PhEquals :size="32" color="#71c1cc" weight="fill" />
-                            </div>
-                        </td>
-                        <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+
+
+        <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
+            :total-final-price="totalFinalPrice" />
+
+
         <section class="orders__action">
             <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0">주문하기</ActionButton>
             <RouterLink to="/">
                 <ActionButton>쇼핑 계속하기</ActionButton>
             </RouterLink>
         </section>
+
+
         <DeliveryAndRefundSection />
     </div>
 </template>
@@ -284,32 +260,6 @@ const handleOrderClick = async (productId) => {
     gap: 3.2rem;
 }
 
-.cart__numbers--table {
-    margin: 0;
-    border-collapse: separate;
-    border-spacing: 0;
-
-    & td,
-    & th {
-        padding: 0;
-        vertical-align: middle;
-    }
-}
-
-.icon-cell {
-    padding: 0 !important;
-    width: 5%;
-}
-
-.price-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.price-icon__parent {
-    vertical-align: middle;
-}
 
 .cart td {
     vertical-align: middle;
@@ -334,7 +284,7 @@ const handleOrderClick = async (productId) => {
 
 .td-empty {
     text-align: center;
-    padding: 1.6rem;
+    padding: 6.4rem;
 }
 
 .btn-select {
@@ -349,11 +299,6 @@ const handleOrderClick = async (productId) => {
     display: flex;
     align-items: end;
     gap: .8rem;
-}
-
-.price-emphasis {
-    font-size: 3rem;
-    font-weight: 600;
 }
 
 .orders__action {
