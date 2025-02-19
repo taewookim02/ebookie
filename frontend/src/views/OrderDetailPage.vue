@@ -6,17 +6,15 @@ import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import IconToss from "@/assets/images/icons/icon_toss.gif";
-import IconKakao from "@/assets/images/icons/icon_kakaopay.gif";
-import IconPayco from "@/assets/images/icons/icon_payco.gif";
+import OrderPaymentSection from '@/components/sections/order/OrderPaymentSection.vue';
 const route = useRoute();
 
 // get orderid and fetch
 const orderId = route.params.id;
 const dtoList = ref([]);
-const pgMethod = ref("");
+const pgMethod = ref("toss");
 
-
+// initial fetch
 const fetchOrderDetail = async (orderId) => {
     const res = await customAxios.get(`/api/v1/orders/${orderId}`);
     dtoList.value = res.data.orderDetailDtos;
@@ -24,19 +22,17 @@ const fetchOrderDetail = async (orderId) => {
 }
 fetchOrderDetail(orderId);
 
-// computed
 
+// computed
 const totalOriginalPrice = computed(() => {
     return dtoList.value.reduce((sum, dto) => sum + dto.originalPrice, 0);
 });
-
 const totalDiscountAmount = computed(() => {
     return dtoList.value.reduce((sum, dto) => {
         const discountAmount = dto.originalPrice * dto.discountRatePercentage / 100;
         return sum + discountAmount
     }, 0);
 })
-
 const totalFinalPrice = computed(() => {
     return dtoList.value.reduce((sum, dto) => {
         const discountedPrice = dto.originalPrice - (dto.originalPrice * dto.discountRatePercentage / 100);
@@ -44,6 +40,11 @@ const totalFinalPrice = computed(() => {
     }, 0);
 })
 
+// actions
+const handlePayment = () => {
+    console.log("pgMethod:", pgMethod.value);
+    console.log("totalFinalPrice:", totalFinalPrice.value);
+}
 </script>
 
 <template>
@@ -99,36 +100,11 @@ const totalFinalPrice = computed(() => {
         <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
             :total-final-price="totalFinalPrice" />
 
-        <section class="order__payment">
-            <h3>결제방법</h3>
+        <OrderPaymentSection :total-final-price="totalFinalPrice" v-model:pg-method="pgMethod"  />
 
-            <div class="payment__method">
-                <div class="payment__method--list">
-                    <div class="payment__method--list-item selected">
-                        <img :src="IconToss" alt="">
-                    </div>
-                    <div class="payment__method--list-item">
-                        <img :src="IconKakao" alt="">
-                    </div>
-                    <div class="payment__method--list-item">
-                        <img :src="IconPayco" alt="">
-                    </div>
-                    <div class="payment__method--list-item">
-                        <span>계좌이체</span>
-                    </div>
-                    <div class="payment__method--list-item">
-                        <span>무통장입금</span>
-                    </div>
-                </div>
-            </div>
-            <div class="payment__info">
-                <div class="payment__info--text">최종 결제금액</div>
-                <div class="payment__info--price">{{ totalFinalPrice.toLocaleString() }}원</div>
-            </div>
-            <div class="payment__action">
-                <ActionButton class="w-100 payment__action--button">결제하기</ActionButton>
-            </div>
-        </section>
+        <div class="payment__action">
+            <ActionButton class="w-100 payment__action--button" @action="handlePayment">결제하기</ActionButton>
+        </div>
     </div>
 </template>
 
@@ -141,53 +117,6 @@ const totalFinalPrice = computed(() => {
 
 .order__info--table {
     word-break: keep-all;
-}
-.order__payment {
-    display: flex;
-    flex-direction: column;
-    gap: 3.2rem;
-}
-.payment__info {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    gap: 2.4rem;
-}
-
-.payment__info--price {
-    font-size: 2.4rem;
-    font-weight: 700;
-}
-
-.payment__method--list {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.8rem;
-}
-
-.payment__method--list-item {
-    display: grid;
-    place-items: center;
-    padding: 1.6rem;
-    flex: 1; 
-    word-break: keep-all;
-    border-radius: 4px;
-    user-select: none;
-    border: 1px solid transparent;
-
-    &.selected {
-        border: 1px solid #ccc;
-    }
-
-    &:hover {
-        border: 1px solid #ddd;
-        cursor: pointer;
-    }
-
-    &:active {
-        border-color: #ccc;
-    }
 }
 
 .payment__action--button {
