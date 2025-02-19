@@ -1,4 +1,6 @@
 <script setup>
+import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
+import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
 import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
@@ -34,9 +36,6 @@ const totalDiscountAmount = computed(() => {
     }, 0);
 })
 
-
-const val = formatSellingPrice(2000.0, 20.1);
-console.log(val);
 // actions
 const fetchcartProducts = async () => {
     try {
@@ -46,7 +45,7 @@ const fetchcartProducts = async () => {
         console.log("fetchcartProducts() err:", err);
     }
 }
-fetchcartProducts();
+fetchcartProducts(); // get list on setup
 
 const handleDeleteClick = async (productId) => {
     try {
@@ -149,129 +148,142 @@ const handleOrderClick = async (productId) => {
 
 
 <template>
-    <section class="cart">
-        <h1 class="mb-4">장바구니</h1>
-        <div class="cart__control">
-            <div>
-                <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
+    <div class="cart-container">
+        <section class="cart">
+            <h1 class="mb-4">장바구니</h1>
+            <div class="cart__control">
+                <div>
+                    <input type="checkbox" name="all" id="all" v-model="allChecked" @change="toggleCheckAll">
+                </div>
+                <div colspan="2">
+                    <label for="all">전체선택</label>
+                    <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select">선택삭제
+                    </ActionButton>
+                    <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0" class="btn-select">선택주문
+                    </ActionButton>
+                </div>
             </div>
-            <div colspan="2">
-                <label for="all">전체선택</label>
-                <ActionButton @action="handleCheckedDelete" :disabled="checkedItems.size === 0" class="btn-select">선택삭제
-                </ActionButton>
-                <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0" class="btn-select">선택주문
-                </ActionButton>
-            </div>
-        </div>
-        <table class="table cart__table">
-            <colgroup>
-                <col width="5%" />
-                <col width="10%" />
-                <col width="50%" />
-                <col width="5%" />
-                <col width="10%" />
-                <col width="20%" />
-            </colgroup>
-            <thead>
-                <tr v-if="cartDto && cartDto.length > 0" class="text-center">
-                    <th></th>
-                    <th colspan="2">상품정보</th>
-                    <th>수량</th>
-                    <th>상품금액</th>
-                    <th>배송정보</th>
-                    <th>주문</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-if="cartDto && cartDto.length > 0">
-                    <tr v-for="dto in cartDto">
-                        <td class="text-center">
-                            <input type="checkbox" :checked="checkedItems.has(dto.productId)"
-                                @change="toggleCheck(dto.productId)">
-                        </td>
-                        <td>
-                            <RouterLink :to="`/products/${dto.productId}`">
-                                <img class="img-product" :src="getImageFromServer(dto.thumbnail)" alt="상품 이미지">
-                            </RouterLink>
-                        </td>
-                        <td>
-                            <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
-                            <div class="text-muted prices">
-                                <small class="text-cross mr-2">{{ dto.originalPrice.toLocaleString() }}</small>
-                                <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원</span>
+            <table class="table cart__table">
+                <colgroup>
+                    <col width="5%" />
+                    <col width="10%" />
+                    <col width="50%" />
+                    <col width="5%" />
+                    <col width="10%" />
+                    <col width="20%" />
+                </colgroup>
+                <thead>
+                    <tr v-if="cartDto && cartDto.length > 0" class="text-center">
+                        <th></th>
+                        <th colspan="2">상품정보</th>
+                        <th>수량</th>
+                        <th>상품금액</th>
+                        <th>배송정보</th>
+                        <th>주문</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-if="cartDto && cartDto.length > 0">
+                        <tr v-for="dto in cartDto">
+                            <td class="text-center">
+                                <input type="checkbox" :checked="checkedItems.has(dto.productId)"
+                                    @change="toggleCheck(dto.productId)">
+                            </td>
+                            <td>
+                                <RouterLink :to="`/products/${dto.productId}`">
+                                    <img class="img-product" :src="getImageFromServer(dto.thumbnail)" alt="상품 이미지">
+                                </RouterLink>
+                            </td>
+                            <td>
+                                <RouterLink :to="`/products/${dto.productId}`" class="link-dark">{{ dto.name }}</RouterLink>
+                                <div class="text-muted prices">
+                                    <small class="text-cross mr-2">{{ dto.originalPrice.toLocaleString() }}</small>
+                                    <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원</span>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- TODO: quantity -->
+                                1
+                            </td>
+                            <td>
+                                {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
+                            </td>
+                            <td>구매 후 바로 다운로드</td>
+                            <td class="td-action">
+                                <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
+                                <ActionButton class="w-100" @action="handleOrderClick(dto.productId)">주문하기</ActionButton>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr>
+                            <td colspan="6" class="td-empty text-muted"><small>장바구니가 비었습니다.</small></td>
+                        </tr>
+                    </template>
+                </tbody>
+                <tfoot v-if="cartDto && cartDto.length > 0">
+                    <tr>
+                        <td colspan="7" class="text-end">합계: {{ totalFinalPrice.toLocaleString() }}원</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+        <section class="cart__numbers" v-if="cartDto && cartDto.length > 0">
+            <table class="table table-borderless cart__numbers--table text-center">
+                <colgroup>
+                    <col width="30%" />
+                    <col width="5%" />
+                    <col width="30%" />
+                    <col width="5%" />
+                    <col width="30%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>총 상품금액</th>
+                        <th></th>
+                        <th>총 할인금액</th>
+                        <th></th>
+                        <th>최종 결제금액</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="price-emphasis">{{ totalOriginalPrice.toLocaleString() }}</span>원</td>
+                        <td class="icon-cell">
+                            <div class="price-icon">
+                                <PhMinus :size="32" color="#71c1cc" weight="fill" />
                             </div>
                         </td>
-                        <td>
-                            <!-- TODO: quantity -->
-                            1
+                        <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
+                        <td class="icon-cell">
+                            <div class="price-icon">
+                                <PhEquals :size="32" color="#71c1cc" weight="fill" />
+                            </div>
                         </td>
-                        <td>
-                            {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
-                        </td>
-                        <td>구매 후 바로 다운로드</td>
-                        <td class="td-action">
-                            <ActionButton class="w-100" @action="handleDeleteClick(dto.productId)">삭제</ActionButton>
-                            <ActionButton class="w-100" @action="handleOrderClick(dto.productId)">주문하기</ActionButton>
-                        </td>
+                        <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
                     </tr>
-                </template>
-                <template v-else>
-                    <tr>
-                        <td colspan="6" class="td-empty text-muted"><small>장바구니가 비었습니다.</small></td>
-                    </tr>
-                </template>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="7" class="text-end">합계: {{ totalFinalPrice.toLocaleString() }}원</td>
-                </tr>
-            </tfoot>
-        </table>
-    </section>
-    <section class="cart__numbers">
-        <table class="table table-borderless cart__numbers--table text-center">
-            <colgroup>
-                <col width="30%" />
-                <col width="5%" />
-                <col width="30%" />
-                <col width="5%" />
-                <col width="30%" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>총 상품금액</th>
-                    <th></th>
-                    <th>총 할인금액</th>
-                    <th></th>
-                    <th>최종 결제금액</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="price-emphasis">{{ totalOriginalPrice.toLocaleString() }}</span>원</td>
-                    <td class="icon-cell">
-                        <div class="price-icon">
-                            <PhMinus :size="32" color="#71c1cc" weight="fill" />
-                        </div>
-                    </td>
-                    <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
-                    <td class="icon-cell">
-                        <div class="price-icon">
-                            <PhEquals :size="32" color="#71c1cc" weight="fill" />
-                        </div>
-                    </td>
-                    <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
-                </tr>
-            </tbody>
-        </table>
-
-        
-    </section>
+                </tbody>
+            </table>
+        </section>
+        <section class="orders__action">
+            <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0">주문하기</ActionButton>
+            <RouterLink to="/">
+                <ActionButton>쇼핑 계속하기</ActionButton>
+            </RouterLink>
+        </section>
+        <DeliveryAndRefundSection />
+    </div>
 </template>
 
 
 
 <style scoped>
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+}
+
 .cart__numbers--table {
     margin: 0;
     border-collapse: separate;
@@ -342,5 +354,12 @@ const handleOrderClick = async (productId) => {
 .price-emphasis {
     font-size: 3rem;
     font-weight: 600;
+}
+
+.orders__action {
+    padding: 3.2rem;
+    display: flex;
+    gap: 1.6rem;
+    justify-content: center;
 }
 </style>
