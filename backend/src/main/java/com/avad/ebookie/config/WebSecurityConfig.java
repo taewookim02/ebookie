@@ -61,6 +61,8 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults()) // WebConfig cors config 사용
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll() // 로그인, 로그아웃, 토큰 관련
                         .requestMatchers("/api/v1/image").permitAll()   //
                         .requestMatchers("/api/v1/categories").permitAll()

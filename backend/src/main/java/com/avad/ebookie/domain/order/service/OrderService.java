@@ -52,11 +52,22 @@ public class OrderService {
                 .member(loggedInMember)
                 .status(newOrderStatus)
                 .build();
+        
+        // Calculate total price
+        List<Product> productByIds = productRepository.findAllById(productIds);
+        Double totalPrice = productByIds.stream()
+                .mapToDouble(product -> {
+                    Double price = product.getPrice();
+                    Double discountRatePercentage = product.getDiscountRate();
+                    return price - (price * discountRatePercentage / 100);
+                })
+                .sum();
+        newOrder.setTotalPrice(totalPrice);
+        
         Order savedOrder = orderRepository.save(newOrder);
 
         // 주문 상세에 상품 넣기
         List<OrderDetail> orderDetailsToSave = new ArrayList<>();
-        List<Product> productByIds = productRepository.findAllById(productIds);
         for (Product product : productByIds) {
             OrderDetail orderDetail = OrderDetail.builder()
                     .order(savedOrder)

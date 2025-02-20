@@ -6,17 +6,22 @@ import { formatDiscountAmount, formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import OrderPaymentSection from '@/components/sections/order/OrderPaymentSection.vue';
 import { useToast } from 'vue-toastification';
+import { useMemberStore } from '@/store/memberStore';
+
 const route = useRoute();
+const router = useRouter()
 const toast = useToast();
+const memberStore = useMemberStore();
 
 // get orderid and fetch
 const orderId = route.params.id;
 const dtoList = ref([]);
 const pgMethod = ref("toss");
 const paymentStatus = ref({ status: "PENDING" });
+
 // initial fetch
 const fetchOrderDetail = async (orderId) => {
     try {
@@ -45,29 +50,92 @@ const totalFinalPrice = computed(() => {
     }, 0);
 })
 
+const randomId = () => {
+    return [...crypto.getRandomValues(new Uint32Array(2))]
+    .map((word) => word.toString(16).padStart(8, "0"))
+    .join("");
+}
+// console.log(memberStore.get);
 // actions
 const handlePayment = async () => {
-    console.log("pgMethod:", pgMethod.value);
-    console.log("totalFinalPrice:", totalFinalPrice.value);
-    // 서버에 결제 테이블 insert
+    if (!confirm("구매 하시겠습니까?") || totalFinalPrice.value <= 0) {
+        return;
+    }
 
-    // 서버에서 paymentId get
+    try {
+        const paymentId = randomId();
+        
+        // 서버에 결제 테이블 insert
+        const res = await customAxios.post("/api/v1/payments", {
+            paymentId,
+            orderId,
+            paidPrice: totalFinalPrice.value,
+            paymentStatus: "PENDING"
+        });
 
+        if (!res.data) {
+            toast.error("결제 생성에 실패했습니다. 다시 시도해주세요.");
+            return;
+        }
 
-    paymentStatus.value = ({ status: "PENDING" }); 
-    const paymentId = "ASDFASDFADS";
-    const payment = await PortOne.requestPayment({
-        storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
-        channelKey: "channel-key-bdb9666b-9eba-4cc3-bc3e-cca13a1ff2f9",
-        paymentId,
-        orderName: "orderName TEST",
-        totalAmount: totalFinalPrice.value,
-        currency: "KRW",
-        payMethod: "EASY_PAY",
-        customData: {
-            item: 123
-        },
-    });
+        // Continue with PortOne payment flow
+        paymentStatus.value = ({ status: "PENDING" });
+        const payment = await PortOne.requestPayment({
+            storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
+            channelKey: "channel-key-bdb9666b-9eba-4cc3-bc3e-cca13a1ff2f9",
+            paymentId,
+            orderName: "ebookie 상품구매", // TODO: order name
+            totalAmount: totalFinalPrice.value,
+            currency: "KRW",
+            payMethod: "EASY_PAY",
+            // redirectUrl: `/payments/${paymentId}`,
+            productType: "PRODUCT_TYPE_DIGITAL",
+            // products: [{id, name, code, amount, quantity, tag}],
+            isCulturalExpense: true,
+            // noticeUrls: ["https://abe1-112-186-26-198.ngrok-free.app/api/v1/payments/webhook"],
+            customer: {
+                email: memberStore.getMemberEmail
+            },
+            customData: {
+                item: paymentId
+            },
+        });
+
+        if (payment.code !== undefined) {
+            paymentStatus.value = { status: "FAILED" };
+            toast.error("결제에 실패했습니다. 다시 시도해주세요.");
+            return;
+        }
+
+        const completeRes = await customAxios.post("/api/v1/payments/complete", {
+            paymentId: payment.paymentId
+        });
+        paymentStatus.value.status = completeRes.data.paymentStatus;
+        
+        switch (paymentStatus.value.status) {
+            case "PAID":
+                toast.success("결제가 완료되었습니다!");
+                router.push("/library"); 
+                break;
+            case "FAILED":
+                toast.error("결제 처리 중 오류가 발생했습니다.");
+                break;
+            case "CANCELLED":
+                toast.info("결제가 취소되었습니다.");
+                break;
+            default:
+                toast.warning("알 수 없는 결제 상태입니다.");
+        }
+    } catch (error) {
+        console.error("Payment creation error:", error);
+        
+        if (error.response?.status === 409) {
+            toast.error("이미 처리 중인 결제가 있습니다. 잠시 후 다시 시도해주세요.");
+        } else {
+            toast.error("결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+        return;
+    }
 }
 
 // lifecycle hooks
