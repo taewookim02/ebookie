@@ -76,7 +76,10 @@ public class ProductService {
 
 
         // 관련상품 추가
-        List<Product> relatedProductsByCategory = productRepository.findTop15ByCategoryIdOrderByPublishedDateDesc(product.getCategory().getId());
+        List<Product> relatedProductsByCategory = productRepository.findTop15ByCategoryIdAndIdNotOrderByPublishedDateDesc(
+            product.getCategory().getId(),
+            product.getId()
+        );
         List<ProductRelatedResponseDto> relatedProducts = productMapper.toRelatedDtos(relatedProductsByCategory);
         detailDto.setRelatedProducts(relatedProducts);
 

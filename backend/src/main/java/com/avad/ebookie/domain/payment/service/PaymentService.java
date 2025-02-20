@@ -86,14 +86,12 @@ public class PaymentService {
         Order order = payment.getOrder();
         double expectedTotal = order.getTotalPrice();
 
-        // Verify payment status
         if (!"PAID".equals(status)) {
             payment.setPaymentStatus(PaymentStatus.FAILED);
             paymentRepository.save(payment);
             throw new RuntimeException("Payment not completed successfully");
         }
 
-        // Verify payment amount (with small tolerance for floating point precision)
         double tolerance = 0.01;
         if (Math.abs(expectedTotal - paid) > tolerance) {
             payment.setPaymentStatus(PaymentStatus.FAILED);
@@ -104,6 +102,8 @@ public class PaymentService {
         // 검사 완료,
         payment.setPaymentStatus(PaymentStatus.PAID);
         Payment savedPayment = paymentRepository.save(payment);
+        // TODO: 주문 상태 변겅
+        // order.setStatus();
 
         return PaymentCompleteResponseDto.builder()
                 .paymentId(savedPayment.getId())

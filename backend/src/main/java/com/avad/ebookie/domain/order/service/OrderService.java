@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.order.service;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.dto.request.OrderCreateRequestDto;
 import com.avad.ebookie.domain.order.dto.response.OrderPageDetailResponseDto;
+import com.avad.ebookie.domain.order.dto.response.OrderPageResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.mapper.OrderMapper;
@@ -53,7 +54,7 @@ public class OrderService {
                 .status(newOrderStatus)
                 .build();
         
-        // Calculate total price
+        // 할인율 적용한 가격 계산
         List<Product> productByIds = productRepository.findAllById(productIds);
         Double totalPrice = productByIds.stream()
                 .mapToDouble(product -> {
@@ -105,5 +106,22 @@ public class OrderService {
         return OrderPageDetailResponseDto.builder()
                 .orderDetailDtos(orderDetailDtos)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public OrderPageResponseDto getListOfOrders() {
+        // get member
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        // get Order
+        List<Order> orders = loggedInMember.getOrders();
+
+        // get order details
+//        List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderIn(orders);
+
+//        System.out.println("orders = " + orders);
+        System.out.println("hello world");
+        return null;
     }
 }

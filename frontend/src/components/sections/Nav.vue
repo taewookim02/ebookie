@@ -20,7 +20,7 @@ const shouldShowBottomNav = computed(() => {
 })
 const shouldShowMemberNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
-    return ["/member/edit", "/liked", "/saved", "/cart", "/orders"].includes(currentURLPath);
+    return ["/member/edit", "/liked", "/saved", "/cart", "/orders", "/library"].includes(currentURLPath);
 })
 // actions
 const handleLogout = (e) => {
@@ -106,7 +106,9 @@ onMounted(() => {
             <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between mt-4">
                 <RouterLink to="/liked" class="flex-grow-1 link-dark p-3 text-center">좋아요 목록</RouterLink>
                 <RouterLink to="/saved" class="flex-grow-1 link-dark p-3 text-center">찜 목록</RouterLink>
+                <RouterLink to="/cart" class="flex-grow-1 link-dark p-3 text-center">장바구니</RouterLink>
                 <RouterLink to="/orders" class="flex-grow-1 link-dark p-3 text-center">주문 목록</RouterLink>
+                <RouterLink to="/library" class="flex-grow-1 link-dark p-3 text-center">라이브러리</RouterLink>
             </div>
         </template>
         <!-- 유저 정보 네비게이션 END -->

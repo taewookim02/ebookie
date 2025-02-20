@@ -13,8 +13,8 @@ const paymentMethods = [
     { id: 'toss', name: 'Toss', icon: IconToss },
     { id: 'kakao', name: 'Kakao', icon: IconKakao },
     { id: 'payco', name: 'Payco', icon: IconPayco },
-    { id: 'bank-transfer', name: '계좌이체' },
-    { id: 'virtual-account', name: '무통장입금' }
+    // { id: 'bank-transfer', name: '계좌이체' },
+    // { id: 'virtual-account', name: '무통장입금' }
 ];
 
 const emit = defineEmits(['update:pgMethod']);
