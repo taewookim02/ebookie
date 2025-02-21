@@ -1,12 +1,17 @@
 package com.avad.ebookie.domain.product.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class ProductListResponseDto {
-    private String hello;
+    private List<ProductRelatedResponseDto> products;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
 }

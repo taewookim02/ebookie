@@ -45,15 +45,6 @@ public class ProductController {
         return ResponseEntity.ok(productDetailResponseDto);
     }
 
-    // 상품 목록
-//    @GetMapping("/products")
-//    public ResponseEntity<ProductListResponseDto> getProducts(@RequestParam("show") String show) {
-//        ProductListResponseDto responseDtos = productService.getProducts(show);
-//        return ResponseEntity.ok(responseDtos);
-//    }
-
-    // it should use pageable to take in page, size, sort
-    // which Pageable should i import?
     @GetMapping("/products")
     public ResponseEntity<ProductListResponseDto> getProducts(Pageable pageable) {
         ProductListResponseDto responseDtos = productService.getProducts(pageable);

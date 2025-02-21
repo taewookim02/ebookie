@@ -76,9 +76,9 @@ public class ProductMapper {
                 .build();
     }
 
-    public List<ProductRelatedResponseDto> toRelatedDtos(List<Product> relatedProductsByCategory) {
+    public List<ProductRelatedResponseDto> toRelatedDtos(List<Product> products) {
 
-        List<ProductRelatedResponseDto> relatedDtos = relatedProductsByCategory
+        List<ProductRelatedResponseDto> relatedDtos = products
                 .stream()
                 .map(product -> {
                     // 저자 이름만 구하기

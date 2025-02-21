@@ -117,13 +117,11 @@ public class ProductService {
 
     public ProductListResponseDto getProducts(Pageable pageable) {
         System.out.println("pageable = " + pageable);
-        Page<Product> all = productRepository.findAll(pageable);
+        Page<Product> productsPagination = productRepository.findAll(pageable);
 
-        // should i return Page<Product>
-        // or Page<ProductResponseDto>
-        // or ProductListResponseDto?
-        String test = "";
-        System.out.println("all = " + all);
+        int totalPages = productsPagination.getTotalPages();
+        long totalElements = productsPagination.getTotalElements();
+        List<ProductRelatedResponseDto> relatedDtos = productMapper.toRelatedDtos(productsPagination.stream().collect(Collectors.toList()));
         return null;
     }
 }
