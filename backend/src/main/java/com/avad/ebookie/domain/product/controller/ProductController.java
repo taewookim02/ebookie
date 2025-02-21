@@ -2,15 +2,15 @@ package com.avad.ebookie.domain.product.controller;
 
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class ProductController {
-
 
 
     private final ProductService productService;
@@ -44,6 +43,21 @@ public class ProductController {
     public ResponseEntity<ProductDetailResponseDto> details(@PathVariable("productId") Long productId) {
         ProductDetailResponseDto productDetailResponseDto = productService.details(productId);
         return ResponseEntity.ok(productDetailResponseDto);
+    }
+
+    // 상품 목록
+//    @GetMapping("/products")
+//    public ResponseEntity<ProductListResponseDto> getProducts(@RequestParam("show") String show) {
+//        ProductListResponseDto responseDtos = productService.getProducts(show);
+//        return ResponseEntity.ok(responseDtos);
+//    }
+
+    // it should use pageable to take in page, size, sort
+    // which Pageable should i import?
+    @GetMapping("/products")
+    public ResponseEntity<ProductListResponseDto> getProducts(Pageable pageable) {
+        ProductListResponseDto responseDtos = productService.getProducts(pageable);
+        return ResponseEntity.ok(responseDtos);
     }
 
 }

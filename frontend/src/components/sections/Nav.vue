@@ -87,8 +87,8 @@ onMounted(() => {
                     data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
                     aria-controls="navbarToggleExternalContent" aria-expanded="false"
                     aria-label="Toggle navigation">카테고리</a>
-                <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
-                <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
                 <RouterLink to="/todo" class="flex-grow-1 link-dark p-3 text-center">이벤트</RouterLink>
             </div>
             <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">

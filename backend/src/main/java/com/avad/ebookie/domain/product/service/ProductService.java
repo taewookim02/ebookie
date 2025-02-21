@@ -11,6 +11,7 @@ import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
@@ -18,6 +19,8 @@ import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.avad.ebookie.domain.saved_product.repository.SavedProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,11 +72,8 @@ public class ProductService {
             detailDto.setIsLiked(likedProduct != null);
             detailDto.setIsInCart(cartProduct != null);
         }
-        System.out.println("authentication = " + authentication); // AnonymousAuthenticationToken
-        System.out.println("authentication.getClass() = " + authentication.getClass());
-
-//        System.out.println("loggedInMember = " + loggedInMember);
-
+//        System.out.println("authentication = " + authentication); // AnonymousAuthenticationToken
+//        System.out.println("authentication.getClass() = " + authentication.getClass());
 
         // 관련상품 추가
         List<Product> relatedProductsByCategory = productRepository.findTop15ByCategoryIdAndIdNotOrderByPublishedDateDesc(
@@ -95,20 +95,6 @@ public class ProductService {
         // 카테고리 별 추천 도서
         List<Category> categories = categoryRepository.findAll();
 
-//        Map<Long, CategoryProductsResponseDto> collect = categories.stream()
-//                .collect(Collectors.toMap(
-//                        category -> category.getId(),
-//                        category -> CategoryProductsResponseDto
-//                                .builder()
-//                                .id(category.getId())
-//                                .name(category.getName())
-//                                .products(
-//                                        productMapper
-//                                        .toRelatedDtos(productRepository.findTop15ByCategoryIdOrderBySoldDesc(category.getId()))
-//                                )
-//                                .build()
-//
-//                ));
         List<CategoryProductsResponseDto> collect = categories.stream()
                 .map(category -> {
                     return CategoryProductsResponseDto.builder()
@@ -127,5 +113,17 @@ public class ProductService {
                 .topFiveSellingProducts(null)
                 .categoryProducts(collect)
                 .build();
+    }
+
+    public ProductListResponseDto getProducts(Pageable pageable) {
+        System.out.println("pageable = " + pageable);
+        Page<Product> all = productRepository.findAll(pageable);
+
+        // should i return Page<Product>
+        // or Page<ProductResponseDto>
+        // or ProductListResponseDto?
+        String test = "";
+        System.out.println("all = " + all);
+        return null;
     }
 }
