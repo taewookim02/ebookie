@@ -3,8 +3,9 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
+import { onMounted, onUpdated } from 'vue';
 
-defineProps({
+const props = defineProps({
     detailDto: Object
 });
 
@@ -13,6 +14,10 @@ const handleAction = () => {
     // modal open
 };
 
+
+// onUpdated(() => {
+//     console.log(props.detailDto);
+// })
 </script>
 
 <template>
@@ -22,16 +27,16 @@ const handleAction = () => {
         </div>
 
         <!-- 리뷰  -->
-        <ReviewStats />
+        <ReviewStats :detail-dto="detailDto" />
 
         <!-- 리뷰 작성 -->
         <ReviewForm />
-          
+
 
         <!-- TODO: v-for each reviews -->
-         <template v-for="review in detailDto.reviews">
-             <ReviewBody :review="review" />
-         </template>
+        <template v-for="review in detailDto.reviews">
+            <ReviewBody :review="review" />
+        </template>
         <!-- <ReviewBody /> -->
     </section>
 </template>
@@ -54,5 +59,4 @@ const handleAction = () => {
 .review-action-btn {
     padding: 8px 16px;
 }
-
 </style>

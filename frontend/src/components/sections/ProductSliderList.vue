@@ -17,7 +17,7 @@ register();
 const initSwiper = () => {
     const swiperContainer = swiperRef.value;
     if (!swiperContainer) {
-        console.log("Swiper 컨테이너 부착 전");
+        // console.log("Swiper 컨테이너 부착 전");
         return;
     }
     
@@ -26,7 +26,7 @@ const initSwiper = () => {
         slidesPerGroup: 6,
         speed: 500,
         loop: false,
-        spaceBetween: 10,
+        spaceBetween: 0,
         pagination: {
             el: paginationRef.value,
             type: "fraction"

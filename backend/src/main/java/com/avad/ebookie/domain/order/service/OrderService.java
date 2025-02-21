@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.order.service;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.dto.request.OrderCreateRequestDto;
 import com.avad.ebookie.domain.order.dto.response.OrderPageDetailResponseDto;
+import com.avad.ebookie.domain.order.dto.response.OrderPageResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.mapper.OrderMapper;
@@ -52,11 +53,22 @@ public class OrderService {
                 .member(loggedInMember)
                 .status(newOrderStatus)
                 .build();
+        
+        // 할인율 적용한 가격 계산
+        List<Product> productByIds = productRepository.findAllById(productIds);
+        Double totalPrice = productByIds.stream()
+                .mapToDouble(product -> {
+                    Double price = product.getPrice();
+                    Double discountRatePercentage = product.getDiscountRate();
+                    return price - (price * discountRatePercentage / 100);
+                })
+                .sum();
+        newOrder.setTotalPrice(totalPrice);
+        
         Order savedOrder = orderRepository.save(newOrder);
 
         // 주문 상세에 상품 넣기
         List<OrderDetail> orderDetailsToSave = new ArrayList<>();
-        List<Product> productByIds = productRepository.findAllById(productIds);
         for (Product product : productByIds) {
             OrderDetail orderDetail = OrderDetail.builder()
                     .order(savedOrder)
@@ -94,5 +106,22 @@ public class OrderService {
         return OrderPageDetailResponseDto.builder()
                 .orderDetailDtos(orderDetailDtos)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public OrderPageResponseDto getListOfOrders() {
+        // get member
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        // get Order
+        List<Order> orders = loggedInMember.getOrders();
+
+        // get order details
+//        List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderIn(orders);
+
+//        System.out.println("orders = " + orders);
+        System.out.println("hello world");
+        return null;
     }
 }

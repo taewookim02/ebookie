@@ -1,0 +1,1 @@
+const o=t=>{if(!t)return"";const n=new Date(t);return new Intl.DateTimeFormat("ko-KR",{year:"numeric",month:"long",day:"numeric"}).format(n)},r=(t,n)=>(t-t*n/100).toLocaleString(),e=(t,n)=>(t*n/100).toLocaleString();export{e as a,o as b,r as f};

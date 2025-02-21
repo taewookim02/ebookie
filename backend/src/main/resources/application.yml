@@ -11,8 +11,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
-#      ddl-auto: update
+#      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -41,6 +41,10 @@ application:
       expiration: 86400000 # 1?
       refresh-token:
         expiration: 604800000 # 7?
+  port-one:
+    base-url: https://api.portone.io
+    secret-key: ${PORT_ONE_SECRET_KEY}
+    store-key: ${PORT_ONE_STORE_KEY}
 logging:
   level:
     org:

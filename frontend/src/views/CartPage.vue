@@ -38,15 +38,15 @@ const totalFinalPrice = computed(() => {
 
 
 // actions
-const fetchcartProducts = async () => {
+const fetchCartProducts = async () => {
     try {
         const res = await customAxios.get(`/api/v1/cart`);
         cartDto.value = res.data;
     } catch (err) {
-        console.log("fetchcartProducts() err:", err);
+        console.log("fetchCartProducts() err:", err);
     }
 }
-fetchcartProducts(); // get list on setup
+fetchCartProducts(); // get list on setup
 
 const handleDeleteClick = async (productId) => {
     try {
@@ -133,7 +133,7 @@ const handleCheckedOrders = async () => {
 const handleOrderClick = async (productId) => {
     console.log("구매하기", productId);
     try {
-        const res = await customAxios.post(`api/v1/orders`, { productIds: [productId] });
+        const res = await customAxios.post(`/api/v1/orders`, { productIds: [productId] });
 
         const orderId = res.data.orderId;
 

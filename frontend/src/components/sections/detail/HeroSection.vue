@@ -78,7 +78,7 @@ const computedStars = computed(() => {
     const avg = parseFloat(computedReviewAvg.value);
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-        stars.push(false); // TODO: fill based on avg
+        stars.push(i <= avg); // true if the star should be filled
     }
     return stars;
 });
@@ -109,15 +109,6 @@ const computedStars = computed(() => {
                     <span>{{ computedPublishedDate }}</span>
                 </div>
                 <div class="info-header__review">
-                    <!-- TODO: review rating -->
-                    <!-- <span class="info-header__review--icons">
-                        <PhStar :size="16" color="blue" weight="fill" />
-                        <PhStar :size="16" color="blue" weight="fill" />
-                        <PhStar :size="16" color="blue" weight="fill" />
-                        <PhStar :size="16" color="blue" weight="fill" />
-                        <PhStar :size="16" color="blue" weight="fill" />
-                    </span> -->
-                    <!-- FIXME: buggy -->
                     <div class="info-header__review--icons">
                         <PhStar v-for="(filled, index) in computedStars" :key="index" :size="16"
                             :color="filled ? 'blue' : '#ccc'" weight="fill" :class="{ 'empty-star': !filled }" />
@@ -126,15 +117,14 @@ const computedStars = computed(() => {
                     <span class="info-header__review--avg">{{ computedReviewAvg }}</span>
                     <span class="spacer text-muted">|</span>
                     <span>
-                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length
-                        }}건)</a>
+                        <a to="#" class="link-dark" @click="handleReviewClick">회원리뷰({{ detailDto.reviews?.length }}건)</a>
                     </span>
                 </div>
             </div>
             <div class="info-bottom pt-4">
                 <div class="info-bottom__price">
                     <span>정가 <span class="price text-muted price-original">{{ detailDto.price?.toLocaleString()
-                            }}원</span></span>
+                    }}원</span></span>
                     <span>판매가 <strong class="price">{{ computedSellingPrice }}원</strong> <span
                             v-if="detailDto.discountRate" class="badge text-bg-danger">{{ detailDto.discountRate
                             }}%</span></span>

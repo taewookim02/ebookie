@@ -21,7 +21,7 @@ public class Review extends BaseTimeEntity { // baseEntity: createdAt, updatedAt
 
     // TODO: check if min, max works with double
     @Min(1)
-    @Max(10)
+    @Max(5)
     private Double rating; // double
 
     @Column(length = 50)

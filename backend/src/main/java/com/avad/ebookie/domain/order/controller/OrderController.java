@@ -2,6 +2,7 @@ package com.avad.ebookie.domain.order.controller;
 
 import com.avad.ebookie.domain.order.dto.request.OrderCreateRequestDto;
 import com.avad.ebookie.domain.order.dto.response.OrderPageDetailResponseDto;
+import com.avad.ebookie.domain.order.dto.response.OrderPageResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,12 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderCreateRequestDto orderCreateRequestDto) {
         OrderResponseDto orderResponseDto = orderService.createOrder(orderCreateRequestDto);
         return ResponseEntity.ok(orderResponseDto);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<OrderPageResponseDto> getListOfOrders() {
+        OrderPageResponseDto responseDto = orderService.getListOfOrders();
+        return ResponseEntity.ok(responseDto);
     }
 
 }
