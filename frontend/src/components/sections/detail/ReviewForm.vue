@@ -1,11 +1,17 @@
 <script setup>
 import ActionButton from '@/components/shared/ActionButton.vue';
-import { computed, ref } from 'vue';
-
+import { computed, ref, defineProps } from 'vue';
+import { PhStar } from '@phosphor-icons/vue';
 
 // state
+const props = defineProps({
+    detailDto: Object
+});
 const rawContent = ref("");
+const rating = ref(0);
+const emit = defineEmits(["save"]);
 
+// computed
 const reviewContent = computed({
     get: () => rawContent.value,
     set: (value) => {
@@ -19,15 +25,43 @@ const charactersLeft = computed(() => {
     return `${char} / ${limit}`;
 });
 
+const computedStars = computed(() => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        stars.push(i <= rating.value);
+    }
+    return stars;
+});
+
+// actions
 const handleSave = () => {
-    console.log("handleSave", reviewContent.value);
+    emit("save", {
+        content: reviewContent.value,
+        rating: rating.value
+    });
 };
+
+const handleStarClick = (starIndex) => {
+    rating.value = starIndex;
+};
+
 </script>
 
 <template>
     <!-- TODO: if logged in -->
     <form class="review-form" @submit.prevent="handleSave">
         <h3>리뷰 작성</h3>
+        <div class="review-form__rating">
+            <PhStar 
+                v-for="(star, index) in computedStars" 
+                :key="index"
+                :size="24" 
+                :color="star ? 'blue' : '#ccc'" 
+                :weight="'fill'"
+                class="star-icon"
+                @click="handleStarClick(index + 1)"
+            />
+        </div>
         <div class="review-form__container">
             <textarea v-model="reviewContent" name="content" id="review-content"
                 class="review-content form-control w-100" rows="3" maxlength="50"></textarea>
@@ -65,6 +99,9 @@ const handleSave = () => {
     }
 }
 
+.star-icon {
+    cursor: pointer;
+}
 
 .char-count {
     text-align: end;

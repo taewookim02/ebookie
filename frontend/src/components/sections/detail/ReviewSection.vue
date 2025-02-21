@@ -3,15 +3,32 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
+import { customAxios } from '@/plugins/axios';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 const props = defineProps({
     detailDto: Object
 });
 
-const handleAction = () => {
-    console.log("handleAction");
-    // modal open
-};
+const handleReviewSave = async (reviewContent) => {
+    // check if rating is set
+    if (reviewContent.rating === 0) {
+        toast.error("별점을 선택해주세요.");
+        return;
+    }
+
+    // console.log(props.detailDto.id);
+    console.log(reviewContent);
+    const res = await customAxios.post("/api/v1/reviews", {
+        content: reviewContent.content,
+        rating: reviewContent.rating,
+        productId: props.detailDto.id
+    });
+    const reviewDto = res.data;
+
+    props.detailDto.reviews.push(reviewDto);
+};  
 
 </script>
 
@@ -25,7 +42,7 @@ const handleAction = () => {
         <ReviewStats :detail-dto="detailDto" />
 
         <!-- 리뷰 작성 -->
-        <ReviewForm />
+        <ReviewForm :detail-dto="detailDto" @save="handleReviewSave" />
 
 
         <!-- TODO: v-for each reviews -->
