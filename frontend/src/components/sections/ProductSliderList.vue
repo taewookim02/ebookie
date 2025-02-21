@@ -1,32 +1,57 @@
 <script setup>
 import { register } from "swiper/element/bundle";
-import { onMounted, onUpdated, ref } from "vue";
+import { onMounted, onUpdated, ref, computed, watch } from "vue";
 import FeatureSectionItem from "../shared/FeatureSectionItem.vue";
 import { PhCaretRight } from "@phosphor-icons/vue";
 import LoadingSpinner from "../shared/LoadingSpinner.vue";
+import { useRoute } from "vue-router";
 
 const props = defineProps({
     sliderTitle: String,
     products: Array // ProductRelatedResponseDto
 });
 
+const route = useRoute();
+
 const swiperRef = ref(null);
 const paginationRef = ref(null);
+const breakpoints = {
+    0: 2,
+    640: 3,
+    768: 4,
+    1024: 5,
+    1560: 6
+};
 
-register();
+const slidesPerView = computed(() => {
+    const windowWidth = window.innerWidth;
+    
+    if (windowWidth < 640) {
+        return breakpoints[0];
+    } else if (windowWidth < 768) {
+        return breakpoints[640];
+    } else if (windowWidth < 1024) {
+        return breakpoints[768]; 
+    } else if (windowWidth < 1560) {
+        return breakpoints[1024];
+    } else {
+        return breakpoints[1560];
+    }
+});
+
+// register();
 const initSwiper = () => {
     const swiperContainer = swiperRef.value;
     if (!swiperContainer) {
         // console.log("Swiper 컨테이너 부착 전");
         return;
     }
-    
     const params = {
-        slidesPerView: 6,
-        slidesPerGroup: 6,
+        slidesPerView: slidesPerView.value,
+        slidesPerGroup: slidesPerView.value,
         speed: 500,
         loop: false,
-        spaceBetween: 0,
+        spaceBetween: 10,
         pagination: {
             el: paginationRef.value,
             type: "fraction"
@@ -58,12 +83,15 @@ const initSwiper = () => {
     swiperContainer.initialize();
 }
 
+
 onMounted(() => {
     initSwiper();
+    
 })
 onUpdated(() => {
     initSwiper();
 });
+
 
 </script>
 
@@ -71,7 +99,6 @@ onUpdated(() => {
     <div class="swiper-container-wrapper">
         <div class="header-container">
             <h3>
-                <!-- FIXME: image not being rendered on build -->
                 <RouterLink to="#" class="link-dark d-flex align-items-center">{{ sliderTitle }}
                     <PhCaretRight :size="16" />
                 </RouterLink>
@@ -83,12 +110,14 @@ onUpdated(() => {
         </div>
         <template v-else>
             <swiper-container ref="swiperRef" init="false">
-                    <swiper-slide v-for="product in products">
-                        <div class="slide-div">
-                            <FeatureSectionItem :title="product.name" :author="product.authorNames" :img-src="product.thumbnail.fileName"
-                                :price="product.price" :publisher="product.publisherName" :rating-avg="product.reviewRating" :rating-cnt="product.reviewCount" :id="product.id" />
-                        </div>
-                    </swiper-slide>
+                <swiper-slide v-for="product in products">
+                    <div class="slide-div">
+                        <FeatureSectionItem :title="product.name" :author="product.authorNames"
+                            :img-src="product.thumbnail.fileName" :price="product.price"
+                            :publisher="product.publisherName" :rating-avg="product.reviewRating"
+                            :rating-cnt="product.reviewCount" :id="product.id" />
+                    </div>
+                </swiper-slide>
             </swiper-container>
         </template>
     </div>
@@ -113,6 +142,7 @@ swiper-container {
 swiper-container {
     width: 100%;
     height: 100%;
+    min-height: 368.3px;
 }
 
 swiper-slide {

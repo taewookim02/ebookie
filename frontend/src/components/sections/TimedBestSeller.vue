@@ -4,7 +4,7 @@ import { PhCaretRight, PhRows } from '@phosphor-icons/vue';
 import ProductCardHorizontal from '@/components/shared/ProductCardHorizontal.vue';
 import { register } from 'swiper/element';
 
-register();
+// register();
 
 // 상태
 const swiperRef = ref(null);

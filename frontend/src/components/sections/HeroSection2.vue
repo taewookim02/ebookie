@@ -2,7 +2,7 @@
 import { register } from "swiper/element/bundle";
 import { ref, onMounted } from 'vue';
 
-register();
+// register();
 
 const swiperRef = ref(null);
 

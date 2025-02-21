@@ -9,6 +9,7 @@ import './assets/main.css' // 공통 css
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'; // 라우터 설정
+import { register } from "swiper/element/bundle";
 
 const toastOptions = {
     toastDefaults: {
@@ -27,9 +28,10 @@ const toastOptions = {
     position: "bottom-right",
 };
 
+register();
 const pinia = createPinia();
 const app = createApp(App);
 app.use(pinia);
 app.use(router); // 라우터 설정
-app.use(Toast, toastOptions);
+app.use(Toast, toastOptions);   
 app.mount('#app');

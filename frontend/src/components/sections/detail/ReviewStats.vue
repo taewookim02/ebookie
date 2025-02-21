@@ -7,7 +7,7 @@ const props = defineProps({
 
 
 onUpdated(() => {
-    console.log(props.detailDto);
+    // console.log(props.detailDto);
 })
 
 
