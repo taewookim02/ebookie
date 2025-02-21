@@ -15,27 +15,23 @@ const store = useTokenStore();
 
 
 const handleLogin = async () => {
-    
-
-
-    customAxios.post("/api/v1/auth/login", {
-        email: email.value,
-        password: password.value
-    })
-    .then(res => {
-        console.log(res);
-        console.log("using customAxios");
+    try {
+        const res = await customAxios.post("/api/v1/auth/login", {
+            email: email.value,
+            password: password.value
+        });
+        
         
         // 메모리에 토큰 저장
         store.setAccessToken(res.data.accessToken);
 
-        // 보호된 url로
-        router.push("/member/edit")
-    }).catch(err => {
+        // 보호된 url로 
+        router.push("/member/edit");
+    } catch (err) {
         console.log(err);
-        // 에러 메세지 
+        // 에러 메세지
         errMsg.value = err.response.data.message;
-    });  
+    }
 }
 </script>
 

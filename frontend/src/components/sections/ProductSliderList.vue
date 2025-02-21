@@ -162,7 +162,7 @@ swiper-slide img {
 }
 
 
-.swiper-pagination-external {
+ .swiper-pagination-external {
     text-align: end;
     font-size: 1.2rem;
 }

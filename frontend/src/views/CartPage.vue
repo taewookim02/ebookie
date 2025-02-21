@@ -5,7 +5,7 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
@@ -13,7 +13,7 @@ import { useToast } from 'vue-toastification';
 const cartDto = ref([]);
 const toast = useToast();
 const checkedItems = ref(new Set());
-const allChecked = ref(false);
+const allChecked = ref(true);
 const router = useRouter();
 
 // computed
@@ -37,13 +37,13 @@ const totalFinalPrice = computed(() => {
 
 const isEmpty = computed(() => cartDto.value.length === 0);
 
-
-
 // actions
 const fetchCartProducts = async () => {
     try {
         const res = await customAxios.get(`/api/v1/cart`);
         cartDto.value = res.data;
+        // Check all items by default
+        checkedItems.value = new Set(cartDto.value.map(dto => dto.productId));
     } catch (err) {
         console.log("fetchCartProducts() err:", err);
     }
@@ -63,8 +63,6 @@ const handleDeleteClick = async (productId) => {
         toast.error("삭제 중 에러 발생!")
     }
 }
-
-
 
 const toggleCheckAll = () => {
     if (allChecked.value) {
@@ -112,7 +110,6 @@ const handleCheckedDelete = async () => {
         toast.error("선택한 상품 삭제 중 에러가 발생했습니다!");
     }
 };
-
 
 const handleCheckedOrders = async () => {
     try {

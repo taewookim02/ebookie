@@ -43,7 +43,7 @@ watch(
             fetchProductDetailDto(newId);
         }
     },
-    {immediate: true}
+    { immediate: true }
 )
 
 
@@ -61,7 +61,7 @@ const handleSave = async () => {
         console.log("handleSave() err:", err);
         const isNotLoggedIn = err.status === 401;
         if (isNotLoggedIn) {
-            router.push("/login") 
+            router.push("/login")
         }
     }
 }
@@ -80,7 +80,7 @@ const handleLike = async () => {
         console.log("handleLike() err:", err);
         const isNotLoggedIn = err.status === 401;
         if (isNotLoggedIn) {
-            router.push("/login") 
+            router.push("/login")
         }
     }
 }
@@ -99,17 +99,26 @@ const handleCart = async () => {
         console.log("handleLike() err:", err);
         const isNotLoggedIn = err.status === 401;
         if (isNotLoggedIn) {
-            router.push("/login") 
+            router.push("/login")
         }
     }
 }
 
 const handleBuy = async () => {
-    console.log("handleBuy");
-    const productIds = [route.params.id];
-    const res = await customAxios.post(`/api/v1/orders`, { productIds });
-    const orderId = res.data.orderId;
-    router.push(`/orders/${orderId}`);
+    try {
+        console.log("handleBuy");
+        const productIds = [route.params.id];
+        const res = await customAxios.post(`/api/v1/orders`, { productIds });
+        const orderId = res.data.orderId;
+        router.push(`/orders/${orderId}`);
+    }
+    catch (err) {
+        console.log("handleBuy() err:", err);
+        const isNotLoggedIn = err.status === 401;
+        if (isNotLoggedIn) {
+            router.push("/login")
+        }
+    }
 }
 </script>
 
@@ -120,11 +129,12 @@ const handleBuy = async () => {
         <!-- 히어로__정보 -->
         <!-- 정보 -->
         <!-- 액션 -->
-        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" @cart="handleCart" @buy="handleBuy" />
+        <HeroSection :detail-dto="detailDto" @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike"
+            @cart="handleCart" @buy="handleBuy" />
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->
-        <RelatedProductsSection :detail-dto="detailDto"  />
+        <RelatedProductsSection :detail-dto="detailDto" />
 
         <!-- _상세 네비게이션 -->
         <!-- <DetailNavSection /> -->
@@ -135,7 +145,7 @@ const handleBuy = async () => {
         <!-- 도서소개 -->
         <!-- 목차 -->
         <!-- 이미지 -->
-        <BookDetailsSection :detail-dto="detailDto"/>
+        <BookDetailsSection :detail-dto="detailDto" />
 
         <!-- 저자소개 -->
         <!-- 만든이 -->
@@ -155,7 +165,7 @@ const handleBuy = async () => {
         <DeliveryAndRefundSection />
     </template>
     <LoadingSpinner v-else />
-    
+
 </template>
 
 <style scoped></style>

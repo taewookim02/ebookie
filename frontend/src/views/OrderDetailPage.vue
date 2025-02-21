@@ -19,7 +19,7 @@ const memberStore = useMemberStore();
 // get orderid and fetch
 const orderId = route.params.id;
 const dtoList = ref([]);
-const pgMethod = ref("toss");
+const pgMethod = ref("kakao");
 const paymentStatus = ref({ status: "PENDING" });
 const orderStatus = ref("PENDING");
 const isLoading = ref(true);

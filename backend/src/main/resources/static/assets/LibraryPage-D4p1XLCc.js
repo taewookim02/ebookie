@@ -1,0 +1,1 @@
+import{r as t,o as s,c as o,a as c,g as n}from"./index-BQLI52zX.js";const p={__name:"LibraryPage",setup(i){const e=t([]);return(async()=>{const a=await n.get("/api/v1/library");e.value=a.data})(),(a,r)=>(s(),o("div",null,r[0]||(r[0]=[c("h1",null,"Library",-1)])))}};export{p as default};
