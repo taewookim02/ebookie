@@ -27,6 +27,7 @@ public class PaymentController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // TODO: 후순위
     @PostMapping("/payments/webhook")
     public ResponseEntity<?> webhook(@RequestBody String payload,
                                      @RequestHeader("webhook-id") String webhookId,

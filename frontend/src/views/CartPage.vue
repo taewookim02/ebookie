@@ -5,7 +5,6 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { PhEquals, PhMinus } from '@phosphor-icons/vue';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
@@ -35,6 +34,9 @@ const totalFinalPrice = computed(() => {
         return sum + discountedPrice
     }, 0);
 });
+
+const isEmpty = computed(() => cartDto.value.length === 0);
+
 
 
 // actions
@@ -204,7 +206,7 @@ const handleOrderClick = async (productId) => {
                                 <div class="text-muted prices">
                                     <small class="text-cross mr-2">{{ dto.originalPrice.toLocaleString() }}</small>
                                     <span>{{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage)
-                                        }}원</span>
+                                    }}원</span>
                                 </div>
                             </td>
                             <td>
@@ -237,17 +239,18 @@ const handleOrderClick = async (productId) => {
 
         </section>
 
+        <template v-if="!isEmpty">
+            <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
+                :total-final-price="totalFinalPrice" />
 
-        <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
-            :total-final-price="totalFinalPrice" />
 
-
-        <section class="orders__action">
-            <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0">주문하기</ActionButton>
-            <RouterLink to="/">
-                <ActionButton>쇼핑 계속하기</ActionButton>
-            </RouterLink>
-        </section>
+            <section class="orders__action">
+                <ActionButton @action="handleCheckedOrders" :disabled="checkedItems.size === 0">주문하기</ActionButton>
+                <RouterLink to="/">
+                    <ActionButton>쇼핑 계속하기</ActionButton>
+                </RouterLink>
+            </section>
+        </template>
 
 
         <DeliveryAndRefundSection />

@@ -68,7 +68,7 @@ const randomId = () => {
     .map((word) => word.toString(16).padStart(8, "0"))
     .join("");
 }
-// console.log(memberStore.get);
+
 // actions
 const handlePayment = async () => {
     if (!confirm("구매 하시겠습니까?") || totalFinalPrice.value <= 0) {

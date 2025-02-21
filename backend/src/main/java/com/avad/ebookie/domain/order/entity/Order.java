@@ -30,10 +30,12 @@ public class Order extends BaseTimeEntity {
     @JsonBackReference
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "status_id", nullable = false)
-    @JsonBackReference
-    private Status status;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "status_id", nullable = false)
+//    @JsonBackReference
+//    private Status status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
     private Payment payment;

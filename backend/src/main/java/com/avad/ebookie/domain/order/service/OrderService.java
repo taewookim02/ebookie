@@ -6,6 +6,7 @@ import com.avad.ebookie.domain.order.dto.response.OrderPageDetailResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderPageResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.entity.Order;
+import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.mapper.OrderMapper;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
 import com.avad.ebookie.domain.order_detail.dto.response.OrderDetailResponseDto;
@@ -48,10 +49,10 @@ public class OrderService {
 
 
         // 새 주문 생성
-        Status newOrderStatus = statusRepository.findByName("신규주문");
+//        Status newOrderStatus = statusRepository.findByName("신규주문");
         Order newOrder = Order.builder()
                 .member(loggedInMember)
-                .status(newOrderStatus)
+                .orderStatus(OrderStatus.PENDING)
                 .build();
         
         // 할인율 적용한 가격 계산

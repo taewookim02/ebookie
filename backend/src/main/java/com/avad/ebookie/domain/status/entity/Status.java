@@ -22,6 +22,6 @@ public class Status {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "status", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Order> orders;
+//    @OneToMany(mappedBy = "status", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    List<Order> orders;
 }

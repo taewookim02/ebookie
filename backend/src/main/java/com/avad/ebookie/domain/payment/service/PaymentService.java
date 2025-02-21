@@ -3,6 +3,7 @@ package com.avad.ebookie.domain.payment.service;
 import com.avad.ebookie.client.PortOneApiClient;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.entity.Order;
+import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
 import com.avad.ebookie.domain.order_detail.entity.OrderDetail;
 import com.avad.ebookie.domain.payment.dto.PaymentCompleteResponseDto;
@@ -102,8 +103,10 @@ public class PaymentService {
         // 검사 완료,
         payment.setPaymentStatus(PaymentStatus.PAID);
         Payment savedPayment = paymentRepository.save(payment);
-        // TODO: 주문 상태 변겅
-        // order.setStatus();
+        // TODO: 주문 상태 변경
+       order.setOrderStatus(OrderStatus.PAID);
+       orderRepository.save(order);
+        
 
         return PaymentCompleteResponseDto.builder()
                 .paymentId(savedPayment.getId())

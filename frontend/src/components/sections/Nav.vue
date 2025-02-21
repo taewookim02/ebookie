@@ -48,8 +48,8 @@ const fetchCategories = async () => {
     }
 };
 
-fetchCategories();
 onMounted(() => {
+    fetchCategories();
 })
 
 </script>
