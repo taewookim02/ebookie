@@ -4,10 +4,12 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.review.dto.request.ReviewCreateRequestDto;
+import com.avad.ebookie.domain.review.dto.request.ReviewUpdateRequestDto;
 import com.avad.ebookie.domain.review.dto.response.ReviewResponseDto;
 import com.avad.ebookie.domain.review.entity.Review;
 import com.avad.ebookie.domain.review.mapper.ReviewMapper;
 import com.avad.ebookie.domain.review.repository.ReviewRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,5 +48,15 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Transactional
+    public ReviewResponseDto updateReview(Long reviewId, @Valid ReviewUpdateRequestDto requestDto) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("review not found: " + reviewId));
+        review.setContent(requestDto.getContent());
+        reviewRepository.save(review);
+        return reviewMapper.toDto(review);
+
     }
 }

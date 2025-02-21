@@ -4,22 +4,37 @@ import { formatYYYYMMDDKr } from '@/helper/format';
 import { useMemberStore } from '@/store/memberStore';
 import { useTokenStore } from '@/store/tokenStore';
 import { PhStar } from '@phosphor-icons/vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 // state
 const props = defineProps({
-    review: Object
+    review: Object,
+    isEditing: Boolean
 })
 const memberStore = useMemberStore();
-const emit = defineEmits(['edit', 'delete']);
+const emit = defineEmits(['edit', 'editOpen', 'editCancel', 'delete']);
+const editContent = ref(props.review.content);
 
 // actions
-const handleEdit = () => {
-    emit('edit', props.review.id);
+const handleEditSubmit = () => {
+    emit('edit', props.review.id, editContent.value);
 };
 const handleDelete = () => {
     emit('delete', props.review.id);
 };
+
+const handleEdit = () => {
+    // props.isEditing.valueo = true;
+    emit('editOpen', props.review.id);
+    // console.log("handleEdit");
+}
+const handleEditCancel = () => {
+    // props.isEditing.value = false;
+    console.log("handleEditCancel");
+
+    editContent.value = props.review.content;
+    emit('editCancel');
+}
 
 const isOwner = computed(() => {
     return memberStore.getMemberEmail === props.review.writerEmail;
@@ -32,6 +47,12 @@ const computedStars = computed(() => {
         stars.push(i <= avg); // true if the star should be filled
     }
     return stars;
+});
+
+const charactersLeft = computed(() => {
+    const char = editContent.value.length;
+    const limit = 50;
+    return `${char} / ${limit}`;
 });
 </script>
 
@@ -53,8 +74,22 @@ const computedStars = computed(() => {
             <small class="text-muted review-info__date">{{ formatYYYYMMDDKr(review.createdAt) }} 작성됨</small>
         </div>
 
-        <div class="review-content">
+        <div class="review-content" v-if="!isEditing">
             {{ review.content }}
+        </div>
+
+        <div v-if="isEditing" class="review-form__container">
+            <textarea 
+                v-model="editContent" 
+                class="review-content form-control w-100" 
+                rows="3" 
+                maxlength="50"
+            ></textarea>
+            <div>
+                <ActionButton class="btn-action" @click="handleEditSubmit">저장</ActionButton>
+                <ActionButton class="btn-action" @click="handleEditCancel">취소</ActionButton>
+            </div>
+            <small class="text-muted char-count">{{ charactersLeft }}</small>
         </div>
     </div>
 </template>
@@ -81,5 +116,26 @@ const computedStars = computed(() => {
 
 .review-content {
     padding: .8rem 0;
+}
+
+.review-form__container {
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+    column-gap: .8rem;
+}
+
+.review-content {
+    resize: none;
+    font-size: 1.4rem;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+.char-count {
+    text-align: end;
 }
 </style>

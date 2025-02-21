@@ -5,11 +5,15 @@ import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
 import { customAxios } from '@/plugins/axios';
 import { useToast } from 'vue-toastification';
-const toast = useToast();
+import { ref } from 'vue';
 
+
+// state
+const toast = useToast();
 const props = defineProps({
     detailDto: Object
 });
+const editingReviewId = ref(null);
 
 const handleReviewSave = async (reviewContent) => {
     // check if rating is set
@@ -18,8 +22,6 @@ const handleReviewSave = async (reviewContent) => {
         return;
     }
 
-    // console.log(props.detailDto.id);
-    console.log(reviewContent);
     const res = await customAxios.post("/api/v1/reviews", {
         content: reviewContent.content,
         rating: reviewContent.rating,
@@ -30,9 +32,19 @@ const handleReviewSave = async (reviewContent) => {
     props.detailDto.reviews.push(reviewDto);
 };  
 
-const handleReviewEdit = async (reviewId) => {
-
-    console.log(reviewId);
+const handleReviewEdit = async (reviewId, editContent) => {
+    try {
+        const res = await customAxios.patch(`/api/v1/reviews/${reviewId}`, {
+            content: editContent
+        });
+        if (res.status < 300) {
+            props.detailDto.reviews = props.detailDto.reviews.map(review => review.id === reviewId ? res.data : review);
+            toast.success("리뷰가 수정되었습니다.");
+            editingReviewId.value = null;
+        }
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const handleReviewDelete = async (reviewId) => {
@@ -41,11 +53,20 @@ const handleReviewDelete = async (reviewId) => {
         if (res.status < 300) {
             props.detailDto.reviews = props.detailDto.reviews.filter(review => review.id !== reviewId);
             toast.success("리뷰가 삭제되었습니다.");
+            editingReviewId.value = null;
         }
     } catch (error) {
         console.log(error);
     }
 };
+
+const handleEditOpen = (reviewId) => {
+    editingReviewId.value = reviewId;
+}
+
+const handleEditCancel = () => {
+    editingReviewId.value = null;
+}
 
 </script>
 
@@ -62,9 +83,15 @@ const handleReviewDelete = async (reviewId) => {
         <ReviewForm :detail-dto="detailDto" @save="handleReviewSave" />
 
 
-        <!-- TODO: v-for each reviews -->
         <template v-for="review in detailDto.reviews">
-            <ReviewBody :review="review" @edit="handleReviewEdit" @delete="handleReviewDelete" />
+            <ReviewBody 
+                :review="review" 
+                @edit="handleReviewEdit" 
+                @editOpen="handleEditOpen"
+                @editCancel="handleEditCancel"
+                @delete="handleReviewDelete" 
+                :is-editing="editingReviewId === review.id"
+            />
         </template>
         <!-- <ReviewBody /> -->
     </section>
