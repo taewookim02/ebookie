@@ -3,7 +3,6 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
-import { onMounted, onUpdated } from 'vue';
 
 const props = defineProps({
     detailDto: Object
@@ -14,10 +13,6 @@ const handleAction = () => {
     // modal open
 };
 
-
-// onUpdated(() => {
-//     console.log(props.detailDto);
-// })
 </script>
 
 <template>

@@ -104,6 +104,13 @@ const handleCart = async () => {
     }
 }
 
+const handleBuy = async () => {
+    console.log("handleBuy");
+    const productIds = [route.params.id];
+    const res = await customAxios.post(`/api/v1/orders`, { productIds });
+    const orderId = res.data.orderId;
+    router.push(`/orders/${orderId}`);
+}
 </script>
 
 <template>
@@ -113,7 +120,7 @@ const handleCart = async () => {
         <!-- 히어로__정보 -->
         <!-- 정보 -->
         <!-- 액션 -->
-        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" @cart="handleCart" />
+        <HeroSection :detail-dto="detailDto"  @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike" @cart="handleCart" @buy="handleBuy" />
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->

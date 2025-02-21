@@ -4,7 +4,6 @@ import { computed, ref } from 'vue';
 
 
 // state
-
 const rawContent = ref("");
 
 const reviewContent = computed({
@@ -13,7 +12,6 @@ const reviewContent = computed({
         rawContent.value = value.substring(0, 50);
     }
 });
-
 const charactersLeft = computed(() => {
     const char = rawContent.value.length;
     const limit = 50;

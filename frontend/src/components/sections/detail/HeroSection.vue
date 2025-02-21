@@ -133,8 +133,6 @@ const computedStars = computed(() => {
                     <LikeButton @like="handleLikeClick" :is-active="detailDto.isLiked" />
                     <SaveButton @save="handleSaveClick" :is-active="detailDto.isSaved" />
                     <CartButton @cart="handleCartClick" :is-active="detailDto.isInCart" />
-                    <!-- <ActionButton @action="handleSaveClick">찜하기</ActionButton> -->
-                    <!-- <ActionButton @action="handleCartClick">장바구니</ActionButton> -->
                     <ActionButton @action="handleBuyClick" :is-active="true">구매하기</ActionButton>
                 </div>
             </div>
