@@ -9,7 +9,6 @@ const props = defineProps({
     detailDto: Object
 });
 
-console.log(props.detailDto);
 
 </script>
 

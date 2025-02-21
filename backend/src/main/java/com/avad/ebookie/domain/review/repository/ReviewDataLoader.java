@@ -68,8 +68,8 @@ public class ReviewDataLoader {
                 // 리뷰 내용 생성
                 String content = String.format(template, adj1, aspect);
 
-                // 별점 생성 (1~10)
-                double rating = random.nextInt(10) + 1;
+                // 별점 생성 (1~5)
+                double rating = random.nextInt(5) + 1;
 
                 // 리뷰 생성 시간 - 최근 6개월 내
                 LocalDateTime createdAt = LocalDateTime.now().minusMonths(random.nextInt(6))

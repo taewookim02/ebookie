@@ -167,13 +167,13 @@ onMounted(() => {
             <h3>주문/결제</h3>
             <table class="table order__info--table">
                 <colgroup>
-                    <col width="10%" />
-                    <col width="45%" />
-                    <col width="10%" />
-                    <col width="5%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                    <col width="10%" />
+                    <col width="10%">
+                    <col width="45%">
+                    <col width="10%">
+                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
                 </colgroup>
                 <thead class="text-center">
                     <tr>

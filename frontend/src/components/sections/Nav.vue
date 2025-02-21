@@ -42,7 +42,7 @@ const fetchCategories = async () => {
     try {
         const res = await customAxios.get("/api/v1/categories");
         categoriesDto.value = res.data;
-        console.log(res);
+        // console.log(res);
     } catch (err) {
         console.log(err);
     }
