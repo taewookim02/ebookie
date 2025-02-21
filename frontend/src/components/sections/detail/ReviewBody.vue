@@ -10,15 +10,15 @@ import { computed } from 'vue';
 const props = defineProps({
     review: Object
 })
-const store = useTokenStore();
 const memberStore = useMemberStore();
+const emit = defineEmits(['edit', 'delete']);
 
 // actions
 const handleEdit = () => {
-    console.log("handleEdit");
+    emit('edit', props.review.id);
 };
 const handleDelete = () => {
-    console.log("handleDelete");
+    emit('delete', props.review.id);
 };
 
 const isOwner = computed(() => {
@@ -39,20 +39,14 @@ const computedStars = computed(() => {
     <div class="review-body">
         <div class="review-header">
             <strong class="review-header__writer">{{ review.writerEmail }}</strong>
-            <!-- TODO: v-if writer == member -->
             <div class="review-header__controls" v-if="isOwner">
-                <ActionButton @action="handleEdit">삭제</ActionButton>
-                <ActionButton @action="handleDelete">수정</ActionButton>
+                <ActionButton @action="handleDelete">삭제</ActionButton>
+                <ActionButton @action="handleEdit">수정</ActionButton>
             </div>
         </div>
 
         <div class="review-stars">
             <PhStar v-for="star in computedStars" :size="16" :color="star ? 'blue' : '#ccc'" :weight="'fill'" />
-            <!-- <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="regular" /> -->
         </div>
 
         <div class="review-info">

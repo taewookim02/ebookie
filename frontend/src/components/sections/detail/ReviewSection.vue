@@ -30,6 +30,23 @@ const handleReviewSave = async (reviewContent) => {
     props.detailDto.reviews.push(reviewDto);
 };  
 
+const handleReviewEdit = async (reviewId) => {
+
+    console.log(reviewId);
+};
+
+const handleReviewDelete = async (reviewId) => {
+    try {
+        const res = await customAxios.delete(`/api/v1/reviews/${reviewId}`);
+        if (res.status < 300) {
+            props.detailDto.reviews = props.detailDto.reviews.filter(review => review.id !== reviewId);
+            toast.success("리뷰가 삭제되었습니다.");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 </script>
 
 <template>
@@ -47,7 +64,7 @@ const handleReviewSave = async (reviewContent) => {
 
         <!-- TODO: v-for each reviews -->
         <template v-for="review in detailDto.reviews">
-            <ReviewBody :review="review" />
+            <ReviewBody :review="review" @edit="handleReviewEdit" @delete="handleReviewDelete" />
         </template>
         <!-- <ReviewBody /> -->
     </section>

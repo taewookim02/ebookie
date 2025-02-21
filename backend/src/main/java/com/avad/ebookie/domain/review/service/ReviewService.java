@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final ReviewMapper reviewMapper;
 
+    @Transactional
     public ReviewResponseDto createReview(ReviewCreateRequestDto requestDto) {
         // get member
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -39,5 +41,10 @@ public class ReviewService {
         Review savedReview = reviewRepository.save(review);
 
         return reviewMapper.toDto(savedReview);
+    }
+
+    @Transactional
+    public void deleteReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
     }
 }
