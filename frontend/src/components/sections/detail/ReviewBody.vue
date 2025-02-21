@@ -3,8 +3,8 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import { formatYYYYMMDDKr } from '@/helper/format';
 import { useMemberStore } from '@/store/memberStore';
 import { useTokenStore } from '@/store/tokenStore';
-import { PhPencil, PhPencilSimpleLine, PhStar, PhTrash } from '@phosphor-icons/vue';
-import { computed, onMounted } from 'vue';
+import { PhStar } from '@phosphor-icons/vue';
+import { computed } from 'vue';
 
 // state
 const props = defineProps({
@@ -24,6 +24,15 @@ const handleDelete = () => {
 const isOwner = computed(() => {
     return memberStore.getMemberEmail === props.review.writerEmail;
 })
+
+const computedStars = computed(() => {
+    const avg = parseFloat(props.review.rating);
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        stars.push(i <= avg); // true if the star should be filled
+    }
+    return stars;
+});
 </script>
 
 <template>
@@ -38,11 +47,12 @@ const isOwner = computed(() => {
         </div>
 
         <div class="review-stars">
+            <PhStar v-for="star in computedStars" :size="16" :color="star ? 'blue' : '#ccc'" :weight="'fill'" />
+            <!-- <PhStar :size="16" color="blue" weight="fill" />
             <PhStar :size="16" color="blue" weight="fill" />
             <PhStar :size="16" color="blue" weight="fill" />
             <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="fill" />
-            <PhStar :size="16" color="blue" weight="regular" />
+            <PhStar :size="16" color="blue" weight="regular" /> -->
         </div>
 
         <div class="review-info">
