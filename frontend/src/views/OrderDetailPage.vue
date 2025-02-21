@@ -21,28 +21,59 @@ const orderId = route.params.id;
 const dtoList = ref([]);
 const pgMethod = ref("toss");
 const paymentStatus = ref({ status: "PENDING" });
+const orderStatus = ref("PENDING");
+const isLoading = ref(true);
+const hasError = ref(false);
 
 // initial fetch
 const fetchOrderDetail = async (orderId) => {
     try {
+        isLoading.value = true;
+        hasError.value = false;
+        
         const res = await customAxios.get(`/api/v1/orders/${orderId}`);
+        
+        if (!res.data) {
+            throw new Error("주문을 찾을 수 없습니다.");
+        }
+
+        if (!res.data.orderStatus) {
+            throw new Error("Server response missing orderStatus");
+        }
+
         dtoList.value = res.data.orderDetailDtos;
+        orderStatus.value = res.data.orderStatus;
+
     } catch (error) {
-        toast.error("로드 실패!");
+        console.error("Order detail fetch error:", error);
+        hasError.value = true;
+        
+        if (error.response?.status === 403) {
+            toast.error("접근 권한이 없는 주문입니다.");
+            router.push('/orders');
+        } else if (error.response?.status === 404) {
+            toast.error("존재하지 않는 주문입니다.");
+            router.push('/orders');
+        } else {
+            toast.error("주문 정보 로드에 실패했습니다!");
+        }
+    } finally {
+        isLoading.value = false;
     }
 }
-
 
 // computed
 const totalOriginalPrice = computed(() => {
     return dtoList.value.reduce((sum, dto) => sum + dto.originalPrice, 0);
 });
+
 const totalDiscountAmount = computed(() => {
     return dtoList.value.reduce((sum, dto) => {
         const discountAmount = dto.originalPrice * dto.discountRatePercentage / 100;
         return sum + discountAmount
     }, 0);
 })
+
 const totalFinalPrice = computed(() => {
     return dtoList.value.reduce((sum, dto) => {
         const discountedPrice = dto.originalPrice - (dto.originalPrice * dto.discountRatePercentage / 100);
@@ -52,12 +83,8 @@ const totalFinalPrice = computed(() => {
 
 const channelKey = computed(() => {
     switch (pgMethod.value) {
-        // case "toss":
-        //     return import.meta.env.VITE_PORTONE_CHANNEL_KEY_TOSS;
         case "kakao":
             return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
-        // case "payco":
-        //     return import.meta.env.VITE_PORTONE_CHANNEL_KEY_PAYCO;
         default:
             return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
     }
@@ -78,7 +105,17 @@ const handlePayment = async () => {
     try {
         const paymentId = randomId();
         
-        // 서버에 결제 테이블 insert
+        if (!orderId) {
+            toast.error("주문 정보가 올바르지 않습니다.");
+            return;
+        }
+
+        console.log('Payment Config:', {
+            storeId: import.meta.env.VITE_PORTONE_STORE_ID,
+            channelKey: channelKey.value,
+            amount: totalFinalPrice.value
+        });
+
         const res = await customAxios.post("/api/v1/payments", {
             paymentId,
             orderId,
@@ -94,21 +131,17 @@ const handlePayment = async () => {
         console.log(import.meta.env.VITE_PORTONE_STORE_ID);
         console.log(channelKey.value);
 
-        // Continue with PortOne payment flow
         paymentStatus.value = ({ status: "PENDING" });
         const payment = await PortOne.requestPayment({
             storeId: import.meta.env.VITE_PORTONE_STORE_ID,
             channelKey: channelKey.value,
             paymentId,
-            orderName: "ebookie 상품구매", // TODO: order name
+            orderName: "ebookie 상품구매",
             totalAmount: totalFinalPrice.value,
             currency: "KRW",
             payMethod: "EASY_PAY",
-            // redirectUrl: `/payments/${paymentId}`,
             productType: "PRODUCT_TYPE_DIGITAL",
-            // products: [{id, name, code, amount, quantity, tag}],
             isCulturalExpense: true,
-            // noticeUrls: ["https://abe1-112-186-26-198.ngrok-free.app/api/v1/payments/webhook"],
             customer: {
                 email: memberStore.getMemberEmail
             },
@@ -117,16 +150,22 @@ const handlePayment = async () => {
             },
         });
 
-        if (payment.code !== undefined) {
+        if (payment.code !== undefined || !payment.paymentId) {
             paymentStatus.value = { status: "FAILED" };
-            toast.error("결제에 실패했습니다. 다시 시도해주세요.");
+            toast.error(`결제에 실패했습니다: ${payment.message || '알 수 없는 오류'}`);
             return;
         }
 
         const completeRes = await customAxios.post("/api/v1/payments/complete", {
             paymentId: payment.paymentId
         });
+        
+        if (!completeRes.data.orderStatus) {
+            throw new Error("Server response missing orderStatus");
+        }
+        
         paymentStatus.value.status = completeRes.data.paymentStatus;
+        orderStatus.value = completeRes.data.orderStatus;
         
         switch (paymentStatus.value.status) {
             case "PAID":
@@ -144,6 +183,7 @@ const handlePayment = async () => {
         }
     } catch (error) {
         console.error("Payment creation error:", error);
+        paymentStatus.value = { status: "FAILED" }; 
         
         if (error.response?.status === 409) {
             toast.error("이미 처리 중인 결제가 있습니다. 잠시 후 다시 시도해주세요.");
@@ -157,12 +197,17 @@ const handlePayment = async () => {
 // lifecycle hooks
 onMounted(() => {
     fetchOrderDetail(orderId);
-
 })
 </script>
 
 <template>
-    <div class="order">
+    <div v-if="isLoading" class="loading">
+        로딩중...
+    </div>
+    <div v-else-if="hasError" class="error">
+        주문 정보를 불러올 수 없습니다.
+    </div>
+    <div v-else class="order">
         <section class="order__info">
             <h3>주문/결제</h3>
             <table class="table order__info--table">
@@ -214,11 +259,26 @@ onMounted(() => {
         <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
             :total-final-price="totalFinalPrice" />
 
-        <OrderPaymentSection :total-final-price="totalFinalPrice" v-model:pg-method="pgMethod" />
+        <!-- Show payment section only if order is pending -->
+        <template v-if="orderStatus === 'PENDING'">
+            <OrderPaymentSection :total-final-price="totalFinalPrice" v-model:pg-method="pgMethod" />
+            <div class="payment__action">
+                <ActionButton class="w-100 payment__action--button" @action="handlePayment">결제하기</ActionButton>
+            </div>
+        </template>
 
-        <div class="payment__action">
-            <ActionButton class="w-100 payment__action--button" @action="handlePayment">결제하기</ActionButton>
-        </div>
+        <!-- Show status message for other states -->
+        <template v-else>
+            <section class="order__status">
+                <h3>주문 상태</h3>
+                <div class="status-message" :class="orderStatus.toLowerCase()">
+                    <p v-if="orderStatus === 'PAID'">결제가 완료된 주문입니다.</p>
+                    <p v-else-if="orderStatus === 'CANCELLED'">취소된 주문입니다.</p>
+                    <p v-else-if="orderStatus === 'REFUNDED'">환불된 주문입니다.</p>
+                    <p v-else>알 수 없는 주문 상태입니다.</p>
+                </div>
+            </section>
+        </template>
     </div>
 </template>
 
@@ -235,5 +295,42 @@ onMounted(() => {
 
 .payment__action--button {
     max-width: 100%;
+}
+
+.order__status {
+    text-align: center;
+    padding: 2rem;
+}
+
+.status-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.status-message.paid {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-message.cancelled {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.status-message.refunded {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+}
+
+.error {
+    color: #c62828;
 }
 </style>

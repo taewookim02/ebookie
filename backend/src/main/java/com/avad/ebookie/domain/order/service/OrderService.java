@@ -105,6 +105,7 @@ public class OrderService {
 
 
         return OrderPageDetailResponseDto.builder()
+                .orderStatus(order.getOrderStatus())
                 .orderDetailDtos(orderDetailDtos)
                 .build();
     }

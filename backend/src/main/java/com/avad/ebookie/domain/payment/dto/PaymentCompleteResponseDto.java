@@ -1,5 +1,6 @@
 package com.avad.ebookie.domain.payment.dto;
 
+import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.payment.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class PaymentCompleteResponseDto {
     private String paymentId;
     private PaymentStatus paymentStatus;
+    private OrderStatus orderStatus;
 
 }

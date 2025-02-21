@@ -111,6 +111,7 @@ public class PaymentService {
         return PaymentCompleteResponseDto.builder()
                 .paymentId(savedPayment.getId())
                 .paymentStatus(savedPayment.getPaymentStatus())
+                .orderStatus(order.getOrderStatus())
                 .build();
     }
 }
