@@ -8,7 +8,8 @@ import { useRoute } from "vue-router";
 
 const props = defineProps({
     sliderTitle: String,
-    products: Array // ProductRelatedResponseDto
+    products: Array, // ProductRelatedResponseDto
+    categoryId: Number
 });
 
 const route = useRoute();
@@ -99,7 +100,7 @@ onUpdated(() => {
     <div class="swiper-container-wrapper">
         <div class="header-container">
             <h3>
-                <RouterLink to="#" class="link-dark d-flex align-items-center">{{ sliderTitle }}
+                <RouterLink :to="`/categories/${props.categoryId}`" class="link-dark d-flex align-items-center">{{ sliderTitle }}
                     <PhCaretRight :size="16" />
                 </RouterLink>
             </h3>

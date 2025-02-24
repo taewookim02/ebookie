@@ -157,7 +157,7 @@ const handleBuy = async () => {
 
         <!-- 관련상품 -->
         <!-- 슬라이더 -->
-        <RelatedProductsSection :detail-dto="detailDto" />
+        <RelatedProductsSection :detail-dto="detailDto" :category-id="detailDto.categoryId" />
 
         <!-- _상세 네비게이션 -->
         <!-- <DetailNavSection /> -->

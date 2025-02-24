@@ -12,4 +12,5 @@ public class ProductListResponseDto {
     private int currentPage;
     private int totalPages;
     private long totalElements;
+    private String categoryName;
 }

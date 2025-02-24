@@ -1,88 +1,54 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, ref, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { customAxios } from '@/plugins/axios';
 import { getImageFromServer } from '@/helper/imgPath';
-import ActionButton from '@/components/shared/ActionButton.vue';
+import { formatDateYYMMKr } from '@/helper/format';
+import CartButton from '@/components/shared/CartButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
 import SaveButton from '@/components/shared/SaveButton.vue';
-import CartButton from '@/components/shared/CartButton.vue';
 import { useToast } from 'vue-toastification';
-import { formatDateYYMMKr } from '@/helper/format';
-// state
+
 const productDtos = ref([]);
 const totalPages = ref(0);
 const totalElements = ref(0);
 const currentPage = ref(0);
 const isLoading = ref(false);
-const pageSize = ref(20);
+const categoryName = ref('');
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
-
-// 쿼리 빌딩
-const query = ref(route.query);
-const paginationQueryString = ref(new URLSearchParams(query.value).toString());
-console.log(paginationQueryString.value);
+const categoryId = computed(() => route.params.id);
 
 const fetchProducts = async () => {
     isLoading.value = true;
     try {
-        const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}&size=${pageSize.value}`);
+        const res = await customAxios.get(`/api/v1/products/categories/${categoryId.value}`);
         productDtos.value = res.data.products;
         totalPages.value = res.data.totalPages;
         totalElements.value = res.data.totalElements;
         currentPage.value = res.data.currentPage;
+        categoryName.value = res.data.categoryName;
     } catch (err) {
         console.error("Failed to fetch products:", err);
         productDtos.value = [];
     } finally {
         isLoading.value = false;
     }
-};
+}
 
-// Initialize pageSize from URL on component mount
 onMounted(() => {
-    const urlSize = Number(route.query.size);
-    if (urlSize) {
-        pageSize.value = urlSize;
-    }
     fetchProducts();
-});
+})
 
-// on query change
-watch(route, (newValue, oldValue) => {
-    query.value = newValue.query;
-    paginationQueryString.value = new URLSearchParams(query.value).toString();
-
-    // Update pageSize when URL changes
-    const newSize = Number(newValue.query.size);
-    if (newSize && newSize !== pageSize.value) {
-        pageSize.value = newSize;
+watch(
+    () => route.params.id,
+    (newId, oldId) => {
+        fetchProducts();
     }
+)
 
-    fetchProducts();
-}, { deep: true })
-
-
-
-// computed
-const isBestSeller = computed(() => {
-    // if paginationQueryString includes sold 
-    return paginationQueryString.value.includes('sold') && paginationQueryString.value.includes('desc');
-})
-
-const isNew = computed(() => {
-    return paginationQueryString.value.includes('publishedDate') && paginationQueryString.value.includes('desc');
-})
-
-const isSale = computed(() => {
-    return paginationQueryString.value.includes('discountRate') && paginationQueryString.value.includes('desc');
-})
-
-
-// actions
 const handleSave = async (productId) => {
     try {
         await customAxios.post(`/api/v1/saved/${productId}`);
@@ -145,62 +111,13 @@ const handleCartAdd = async (productId) => {
         }
     }
 }
-
-const handleBuy = async (productId) => {
-    try {
-        console.log("handleBuy");
-        const productIds = [productId];
-        const res = await customAxios.post(`/api/v1/orders`, { productIds });
-        const orderId = res.data.orderId;
-        router.push(`/orders/${orderId}`);
-    }
-    catch (err) {
-        console.log("handleBuy() err:", err);
-        const isNotLoggedIn = err.status === 401;
-        if (isNotLoggedIn) {
-            router.push("/login")
-        }
-    }
-}
-
-const getUpdatedQueryString = (newPage) => {
-    const params = new URLSearchParams(query.value);
-    params.set('page', newPage);
-    params.set('size', pageSize.value);
-    return params.toString();
-};
-
-const handlePageSizeChange = () => {
-    const currentQuery = router.currentRoute.value.query;
-
-    router.push({
-        path: '/products',
-        query: {
-            page: '0',
-            size: pageSize.value,
-            sort: currentQuery.sort || 'publishedDate,desc'
-        }
-    });
-};
-
 </script>
 
 <template>
     <div class="product-list-page">
-        <h1 v-if="isBestSeller">베스트셀러 순위</h1>
-        <h1 v-if="isNew">신상품 순위</h1>
-        <h1 v-if="isSale">세일 순위</h1>
+        <h1>{{ categoryName }} 분야 도서목록</h1>
 
-        <!-- Page size selector -->
-        <div class="d-flex justify-content-end mb-3">
-            <select class="form-select" style="width: auto;" v-model="pageSize" @change="handlePageSizeChange">
-                <option value="10">10개씩 보기</option>
-                <option value="20">20개씩 보기</option>
-                <option value="50">50개씩 보기</option>
-            </select>
-        </div>
-
-        <!-- Loading state -->
+        <!-- 로딩 -->
         <div v-if="isLoading" class="text-center py-5">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -217,11 +134,8 @@ const handlePageSizeChange = () => {
         </div>
 
         <!-- Product list -->
-        <div v-else>
-            <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
-                <div class="product-rank">
-                    <span>{{ currentPage * pageSize + index + 1 }}</span>
-                </div>
+        <div v-else class="product-grid">
+            <div class="product-item" v-for="product in productDtos" :key="product.id">
                 <div class="product-image">
                     <RouterLink :to="`/products/${product.id}`">
                         <img :src="getImageFromServer(product.thumbnail.fileName)" alt="상품 이미지">
@@ -240,11 +154,8 @@ const handlePageSizeChange = () => {
                     </div>
                     <div>
                         <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
-                        <span class="product-price">{{ (product.price - product.price * product.discountRate /
-                            100).toLocaleString()
-                            }}원</span>
-                        <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate
-                        }}%</span>
+                        <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString() }}원</span>
+                        <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate }}%</span>
                     </div>
                     <div>
                         <span>판매량 {{ product.sold.toLocaleString() }}부</span>
@@ -254,89 +165,56 @@ const handlePageSizeChange = () => {
                     <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
                     <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
                     <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
-                    <ActionButton @action="handleBuy(product.id)">구매하기</ActionButton>
                 </div>
             </div>
-        </div>
-
-        <!-- 페이지네이션 -->
-        <div v-if="productDtos.length" class="pagination mt-4 d-flex justify-content-center gap-2">
-            <button class="btn btn-outline-primary" :disabled="currentPage === 0"
-                @click="router.push(`/products?${getUpdatedQueryString(currentPage - 1)}`)">
-                이전
-            </button>
-            <button v-for="page in totalPages" :key="page" class="btn"
-                :class="page - 1 === currentPage ? 'btn-primary' : 'btn-outline-primary'"
-                @click="router.push(`/products?${getUpdatedQueryString(page - 1)}`)">
-                {{ page }}
-            </button>
-            <button class="btn btn-outline-primary" :disabled="currentPage === totalPages - 1"
-                @click="router.push(`/products?${getUpdatedQueryString(currentPage + 1)}`)">
-                다음
-            </button>
         </div>
     </div>
 </template>
 
 <style scoped>
-.product-item {
-    display: grid;
-    grid-template-columns: auto 150px 1fr auto;
-    gap: 1.6rem;
-    padding: 1.6rem;
-    border-bottom: 1px solid #eee;
-    align-items: center;
+.product-list-page {
+    padding: 20px;
 }
 
-.product-rank {
-    width: 40px;
-    height: 40px;
+.product-grid {
     display: grid;
-    place-items: center;
-    font-size: 2.4rem;
-    font-weight: bolder;
-    background: #f8f9fa;
-    border-radius: 50%;
+    grid-template-columns: repeat(auto-fill, minmax(20.8rem, 1fr));
+    gap: 20px;
+}
+
+.product-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
 }
 
 .product-image img {
-    width: 150px;
+    width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
 .product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    margin-top: 10px;
 }
 
 .product-name {
-    font-size: 1.8rem;
+    font-size: 1.1em;
     font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
 }
 
-.product-info>div {
-    display: flex;
-    gap: 0.4rem;
-    align-items: center;
-    color: #6c757d;
+.product-price {
+    font-weight: bold;
+    color: #e74c3c;
+    margin-left: 5px;
 }
 
 .product-actions {
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: stretch;
-}
-
-.product-price {
-    font-size: 1.8rem;
-    font-weight: bolder;
-}
-
-.empty-state {
-    padding: 4rem;
-    color: #6c757d;
+    gap: 10px;
+    margin-top: 10px;
 }
 </style>

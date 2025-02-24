@@ -25,7 +25,7 @@ fetchHomeDto();
 <template>
     <HeroSection2 />
     <template v-for="dto in categoryProductsDto">
-        <ProductSliderList :slider-title="`${dto.name} 관련도서`" :products="dto.products"  />
+        <ProductSliderList :slider-title="`${dto.name} 관련도서`" :products="dto.products" :category-id="dto.id" />
     </template>
     <!-- <TimedBestSeller /> -->
 </template>

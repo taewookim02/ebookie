@@ -3,9 +3,9 @@ package com.avad.ebookie.domain.product.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.avad.ebookie.domain.product.dto.response.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +22,11 @@ import com.avad.ebookie.domain.category.repository.CategoryRepository;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
+import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListItemResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -134,6 +139,26 @@ public class ProductService {
                 .totalPages(totalPages)
                 .totalElements(totalElements)
                 .products(relatedDtos)
+                .build();
+    }
+
+    public ProductListResponseDto getProductsByCategory(Long categoryId, Pageable pageable) {
+        System.out.println("categoryId = " + categoryId);
+        System.out.println("pageable = " + pageable);
+        // find All by categoryId
+        Page<Product> productsPagination = productRepository.findAllByCategoryId(categoryId, pageable);
+        int totalPages = productsPagination.getTotalPages();
+        long totalElements = productsPagination.getTotalElements();
+
+        List<ProductListItemResponseDto> relatedDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("category not found: " + categoryId));
+
+        return ProductListResponseDto.builder()
+                .currentPage(pageable.getPageNumber())
+                .totalPages(totalPages)
+                .totalElements(totalElements)
+                .products(relatedDtos)
+                .categoryName(category.getName())
                 .build();
     }
 }

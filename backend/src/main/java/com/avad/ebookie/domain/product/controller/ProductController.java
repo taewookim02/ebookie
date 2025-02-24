@@ -45,9 +45,17 @@ public class ProductController {
         return ResponseEntity.ok(productDetailResponseDto);
     }
 
+    // 상품 목록 페이지네이션
     @GetMapping("/products")
     public ResponseEntity<ProductListResponseDto> getProducts(Pageable pageable) {
         ProductListResponseDto responseDtos = productService.getProducts(pageable);
+        return ResponseEntity.ok(responseDtos);
+    }
+
+    // 카테고리별 상품
+    @GetMapping("/products/categories/{categoryId}")
+    public ResponseEntity<ProductListResponseDto> getProductsByCategory(@PathVariable("categoryId") Long categoryId, Pageable pageable) {
+        ProductListResponseDto responseDtos = productService.getProductsByCategory(categoryId, pageable);
         return ResponseEntity.ok(responseDtos);
     }
 
