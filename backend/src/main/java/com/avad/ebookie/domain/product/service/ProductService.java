@@ -1,5 +1,18 @@
 package com.avad.ebookie.domain.product.service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.avad.ebookie.domain.product.dto.response.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.category.dto.response.CategoryProductsResponseDto;
@@ -9,28 +22,13 @@ import com.avad.ebookie.domain.category.repository.CategoryRepository;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
-import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.avad.ebookie.domain.saved_product.repository.SavedProductRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -117,11 +115,25 @@ public class ProductService {
 
     public ProductListResponseDto getProducts(Pageable pageable) {
         System.out.println("pageable = " + pageable);
+        // 페이지네이션 조회
         Page<Product> productsPagination = productRepository.findAll(pageable);
-
         int totalPages = productsPagination.getTotalPages();
         long totalElements = productsPagination.getTotalElements();
-        List<ProductRelatedResponseDto> relatedDtos = productMapper.toRelatedDtos(productsPagination.stream().collect(Collectors.toList()));
-        return null;
+
+        List<ProductListItemResponseDto> relatedDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Boolean isLoggedIn = authentication.getClass() == UsernamePasswordAuthenticationToken.class;
+
+
+
+
+        return ProductListResponseDto.builder()
+                .currentPage(pageable.getPageNumber())
+                .totalPages(totalPages)
+                .totalElements(totalElements)
+                .products(relatedDtos)
+                .build();
     }
 }
