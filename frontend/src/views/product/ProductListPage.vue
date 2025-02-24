@@ -38,6 +38,8 @@ const isBestSeller = computed(() => {
     return paginationQueryString.includes('sold') && paginationQueryString.includes('desc');
 })
 
+
+// actions
 const handleSave = async (productId) => {
     try {
         await customAxios.post(`/api/v1/saved/${productId}`);
@@ -126,17 +128,21 @@ onMounted(() => {
 
 <template>
     <div>
-        <h1>베스트셀러 순위</h1>
+        <h1 v-if="isBestSeller">베스트셀러 순위</h1>
         <div>
             <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
                 <div class="product-rank">
                     <span>{{ index + 1 }}</span>
                 </div>
                 <div class="product-image">
-                    <img :src="getImageFromServer(product.thumbnail.fileName)" alt="상품 이미지">
+                    <RouterLink :to="`/products/${product.id}`">
+                        <img :src="getImageFromServer(product.thumbnail.fileName)" alt="상품 이미지">
+                    </RouterLink>
                 </div>
                 <div class="product-info">
-                    <span>{{ product.name }}</span>
+                    <span class="product-name">
+                        <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}</RouterLink>
+                    </span>
                     <div>
                         <span>{{ product.authorNames }} 저</span>
                         <small>|</small>
@@ -145,12 +151,15 @@ onMounted(() => {
                         <span>{{ product.publishedDate }}</span>
                     </div>
                     <div>
-                        <small class="text-decoration-line-through">{{ product.price }}원</small>
-                        <span>{{ product.price - product.price * product.discountRate / 100 }}원</span>
-                        <span>({{ product.discountRate }}% 할인)</span>
+                        <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
+                        <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString()
+                        }}원</span>
+                        <!-- <span>({{ product.discountRate }}% 할인)</span> -->
+                        <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate
+                            }}%</span>
                     </div>
                     <div>
-                        <span>판매량 {{ product.sold }}</span>
+                        <span>판매량 {{ product.sold.toLocaleString() }}부</span>
                     </div>
                 </div>
                 <div class="product-actions">
@@ -164,4 +173,60 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.product-item {
+    display: grid;
+    grid-template-columns: auto 150px 1fr auto;
+    gap: 1.6rem;
+    padding: 1.6rem;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.product-rank {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    font-size: 2.4rem;
+    font-weight: bolder;
+    background: #f8f9fa;
+    border-radius: 50%;
+}
+
+.product-image img {
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.product-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.product-info>div {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    color: #6c757d;
+}
+
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: stretch;
+}
+
+.product-price {
+    font-size: 1.8rem;
+    font-weight: bolder;
+}
+</style>
