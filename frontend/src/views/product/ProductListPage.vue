@@ -8,6 +8,7 @@ import CartButton from '@/components/shared/CartButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
 import SaveButton from '@/components/shared/SaveButton.vue';
 import { useToast } from 'vue-toastification';
+import Pagination from '@/components/common/Pagination.vue';
 
 const productDtos = ref([]);
 const totalPages = ref(0);
@@ -15,6 +16,7 @@ const totalElements = ref(0);
 const currentPage = ref(0);
 const isLoading = ref(false);
 const categoryName = ref('');
+const pageSize = ref(2);
 
 const route = useRoute();
 const router = useRouter();
@@ -24,7 +26,7 @@ const categoryId = computed(() => route.params.id);
 const fetchProducts = async () => {
     isLoading.value = true;
     try {
-        const res = await customAxios.get(`/api/v1/products/categories/${categoryId.value}`);
+        const res = await customAxios.get(`/api/v1/products/categories/${categoryId.value}?page=${currentPage.value}&size=${pageSize.value}`);
         productDtos.value = res.data.products;
         totalPages.value = res.data.totalPages;
         totalElements.value = res.data.totalElements;
@@ -39,15 +41,26 @@ const fetchProducts = async () => {
 }
 
 onMounted(() => {
+    const page = Number(route.query.page) || 0;
+    currentPage.value = page;
     fetchProducts();
 })
 
 watch(
     () => route.params.id,
     (newId, oldId) => {
+        currentPage.value = 0;
         fetchProducts();
     }
 )
+
+const handlePageChange = (page) => {
+    currentPage.value = page - 1;
+    router.push({
+        query: { ...route.query, page: currentPage.value }
+    });
+    fetchProducts();
+};
 
 const handleSave = async (productId) => {
     try {
@@ -115,7 +128,8 @@ const handleCartAdd = async (productId) => {
 
 <template>
     <div class="product-list-page">
-        <h1>{{ categoryName }} 분야 도서목록</h1>
+        <h3>{{ categoryName }} 분야</h3>
+        <h4>상품 ({{ totalElements.toLocaleString() }})</h4>
 
         <!-- 로딩 -->
         <div v-if="isLoading" class="text-center py-5">
@@ -133,40 +147,50 @@ const handleCartAdd = async (productId) => {
             </div>
         </div>
 
-        <!-- Product list -->
-        <div v-else class="product-grid">
-            <div class="product-item" v-for="product in productDtos" :key="product.id">
-                <div class="product-image">
-                    <RouterLink :to="`/products/${product.id}`">
-                        <img :src="getImageFromServer(product.thumbnail.fileName)" alt="상품 이미지">
-                    </RouterLink>
-                </div>
-                <div class="product-info">
-                    <span class="product-name">
-                        <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}</RouterLink>
-                    </span>
-                    <div>
-                        <span>{{ product.authorNames }} 저</span>
-                        <small>|</small>
-                        <span>{{ product.publisherName }}</span>
-                        <small>|</small>
-                        <span>{{ formatDateYYMMKr(product.publishedDate) }}</span>
+        <!-- 상품목록 -->
+        <div v-else>
+            <div class="product-grid">
+                <div class="product-item" v-for="product in productDtos" :key="product.id">
+                    <div class="product-image">
+                        <RouterLink :to="`/products/${product.id}`">
+                            <img :src="getImageFromServer(product.thumbnail.fileName)" alt="상품 이미지">
+                        </RouterLink>
                     </div>
-                    <div>
-                        <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
-                        <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString() }}원</span>
-                        <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate }}%</span>
+                    <div class="product-info">
+                        <span class="product-name">
+                            <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}</RouterLink>
+                        </span>
+                        <div>
+                            <span>{{ product.authorNames }} 저</span>
+                            <small>|</small>
+                            <span>{{ product.publisherName }}</span>
+                            <small>|</small>
+                            <span>{{ formatDateYYMMKr(product.publishedDate) }}</span>
+                        </div>
+                        <div>
+                            <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
+                            <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString() }}원</span>
+                            <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate }}%</span>
+                        </div>
+                        <div>
+                            <span>판매량 {{ product.sold.toLocaleString() }}부</span>
+                        </div>
                     </div>
-                    <div>
-                        <span>판매량 {{ product.sold.toLocaleString() }}부</span>
+                    <div class="product-actions">
+                        <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
+                        <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
+                        <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
                     </div>
-                </div>
-                <div class="product-actions">
-                    <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
-                    <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
-                    <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
                 </div>
             </div>
+
+            <!-- Pagination -->
+            <Pagination 
+                v-if="totalPages > 0"
+                :current-page="currentPage + 1"
+                :total-pages="totalPages"
+                @page-change="handlePageChange"
+            />
         </div>
     </div>
 </template>
@@ -174,6 +198,9 @@ const handleCartAdd = async (productId) => {
 <style scoped>
 .product-list-page {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
 }
 
 .product-grid {

@@ -9,6 +9,8 @@ import SaveButton from '@/components/shared/SaveButton.vue';
 import CartButton from '@/components/shared/CartButton.vue';
 import { useToast } from 'vue-toastification';
 import { formatDateYYMMKr } from '@/helper/format';
+import Pagination from '@/components/common/Pagination.vue';
+
 // state
 const productDtos = ref([]);
 const totalPages = ref(0);
@@ -42,7 +44,7 @@ const fetchProducts = async () => {
     }
 };
 
-// Initialize pageSize from URL on component mount
+// 마운트되면 페이지 사이즈 초기화
 onMounted(() => {
     const urlSize = Number(route.query.size);
     if (urlSize) {
@@ -51,12 +53,11 @@ onMounted(() => {
     fetchProducts();
 });
 
-// on query change
 watch(route, (newValue, oldValue) => {
     query.value = newValue.query;
     paginationQueryString.value = new URLSearchParams(query.value).toString();
 
-    // Update pageSize when URL changes
+    // 쿼리 변경되면 페이지 사이즈 초기화
     const newSize = Number(newValue.query.size);
     if (newSize && newSize !== pageSize.value) {
         pageSize.value = newSize;
@@ -69,7 +70,7 @@ watch(route, (newValue, oldValue) => {
 
 // computed
 const isBestSeller = computed(() => {
-    // if paginationQueryString includes sold 
+    // paginationQueryString에 sold 포함 내림차순
     return paginationQueryString.value.includes('sold') && paginationQueryString.value.includes('desc');
 })
 
@@ -170,6 +171,10 @@ const getUpdatedQueryString = (newPage) => {
     return params.toString();
 };
 
+const handlePageChange = (page) => {
+    router.push(`/products?${getUpdatedQueryString(page - 1)}`);
+};
+
 const handlePageSizeChange = () => {
     const currentQuery = router.currentRoute.value.query;
 
@@ -260,21 +265,12 @@ const handlePageSizeChange = () => {
         </div>
 
         <!-- 페이지네이션 -->
-        <div v-if="productDtos.length" class="pagination mt-4 d-flex justify-content-center gap-2">
-            <button class="btn btn-outline-primary" :disabled="currentPage === 0"
-                @click="router.push(`/products?${getUpdatedQueryString(currentPage - 1)}`)">
-                이전
-            </button>
-            <button v-for="page in totalPages" :key="page" class="btn"
-                :class="page - 1 === currentPage ? 'btn-primary' : 'btn-outline-primary'"
-                @click="router.push(`/products?${getUpdatedQueryString(page - 1)}`)">
-                {{ page }}
-            </button>
-            <button class="btn btn-outline-primary" :disabled="currentPage === totalPages - 1"
-                @click="router.push(`/products?${getUpdatedQueryString(currentPage + 1)}`)">
-                다음
-            </button>
-        </div>
+        <Pagination 
+            v-if="totalPages > 0"
+            :current-page="currentPage + 1"
+            :total-pages="totalPages"
+            @page-change="handlePageChange"
+        />
     </div>
 </template>
 
