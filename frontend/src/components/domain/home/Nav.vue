@@ -58,23 +58,23 @@ onMounted(() => {
     <nav class="navbar mt-5">
         <!-- 탑 네비게이션 START -->
         <div class="d-flex align-items-center w-100 justify-content-between">
-            <RouterLink to="/" class="d-flex">
-                <img src="@/assets/logo.png" alt="Logo" style="max-height: 31px; width: auto;">
+            <RouterLink to="/" class="navbar__logo">
+                <img src="@/assets/logo.png" alt="Logo">
             </RouterLink>
             <div class="navbar__search">
                 <SearchBar></SearchBar>
             </div>
-            <div class="navbar__links d-flex gap-4">
+            <div class="navbar__links">
                 <!-- 로그인 안된 상태 -->
                 <template v-if="!tokenStore.isLoggedIn">
-                    <RouterLink to="/login" class="link-dark">로그인</RouterLink>
-                    <RouterLink to="/register" class="link-dark">회원가입</RouterLink>
+                    <RouterLink to="/login" class="nav-link">로그인</RouterLink>
+                    <RouterLink to="/register" class="nav-link">회원가입</RouterLink>
                 </template>
                 <!-- 로그인된 상태 -->
                 <template v-if="tokenStore.isLoggedIn">
-                    <RouterLink to="/member/edit" class="link-dark">마이페이지</RouterLink>
-                    <RouterLink to="/cart" class="link-dark">장바구니</RouterLink>
-                    <a to="#" class="link-dark" @click.prevent="handleLogout" style="cursor: pointer;">로그아웃</a>
+                    <RouterLink to="/member/edit" class="nav-link">마이페이지</RouterLink>
+                    <RouterLink to="/cart" class="nav-link">장바구니</RouterLink>
+                    <a class="nav-link" @click.prevent="handleLogout">로그아웃</a>
                 </template>
             </div>
         </div>
@@ -82,19 +82,19 @@ onMounted(() => {
 
         <!-- 바텀 네비게이션 START -->
         <template v-if="shouldShowBottomNav && !shouldShowMemberNav">
-            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between mt-4">
-                <a href="#" class="flex-grow-1 p-3 link-dark text-center dropdown-toggle" role="button"
+            <div class="navbar__bottom">
+                <a href="#" class="nav-item dropdown-toggle" role="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
                     aria-controls="navbarToggleExternalContent" aria-expanded="false"
                     aria-label="Toggle navigation">카테고리</a>
                     
-                <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="flex-grow-1 link-dark p-3 text-center">베스트상품</RouterLink>
-                <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="flex-grow-1 link-dark p-3 text-center">신상품</RouterLink>
-                <RouterLink to="/products?page=0&size=20&sort=discountRate,desc" class="flex-grow-1 link-dark p-3 text-center">세일</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="nav-item">베스트상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="nav-item">신상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=discountRate,desc" class="nav-item">세일</RouterLink>
             </div>
-            <div class="collapse w-100" id="navbarToggleExternalContent" data-bs-theme="light">
-                <div class="p-4 d-flex gap-2">
-                    <RouterLink class="link-dark" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto">
+            <div class="collapse category-menu" id="navbarToggleExternalContent" data-bs-theme="light">
+                <div class="category-list">
+                    <RouterLink class="category-item" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto">
                         {{ dto.name }}
                     </RouterLink>
                 </div>
@@ -104,12 +104,12 @@ onMounted(() => {
 
         <!-- 유저 정보 네비게이션 START -->
         <template v-if="shouldShowMemberNav">
-            <div class="navbar__bottom d-flex align-items-center w-100 justify-content-between mt-4">
-                <RouterLink to="/liked" class="flex-grow-1 link-dark p-3 text-center">좋아요 목록</RouterLink>
-                <RouterLink to="/saved" class="flex-grow-1 link-dark p-3 text-center">찜 목록</RouterLink>
-                <RouterLink to="/cart" class="flex-grow-1 link-dark p-3 text-center">장바구니</RouterLink>
-                <RouterLink to="/orders" class="flex-grow-1 link-dark p-3 text-center">주문 목록</RouterLink>
-                <RouterLink to="/library" class="flex-grow-1 link-dark p-3 text-center">라이브러리</RouterLink>
+            <div class="navbar__bottom">
+                <RouterLink to="/liked" class="nav-item">좋아요 목록</RouterLink>
+                <RouterLink to="/saved" class="nav-item">찜 목록</RouterLink>
+                <RouterLink to="/cart" class="nav-item">장바구니</RouterLink>
+                <RouterLink to="/orders" class="nav-item">주문 목록</RouterLink>
+                <RouterLink to="/library" class="nav-item">라이브러리</RouterLink>
             </div>
         </template>
         <!-- 유저 정보 네비게이션 END -->
@@ -118,28 +118,85 @@ onMounted(() => {
 
 </template>
 <style scoped>
-/* NAV */
-.nav {
-    padding: 2.4rem;
-    /* display: flex; */
-    align-items: center;
-    justify-content: space-between;
+.navbar {
+    padding: 0 2rem;
 }
 
-.nav__logo {
-    max-height: 3.2rem;
+.navbar__logo {
+    display: flex;
+    align-items: center;
+}
+
+.navbar__logo img {
+    max-height: 31px;
     width: auto;
-    display: block;
+}
+
+.navbar__links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: #333333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
     cursor: pointer;
 }
 
-.nav__links {
-    display: flex;
-    gap: 2.4rem;
+.nav-link:hover {
+    color: #4D4D4D;
 }
 
+.navbar__bottom {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 2rem;
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+}
 
-.navbar__bottom>a:hover {
-    background-color: #ddd;
+.nav-item {
+    flex-grow: 1;
+    padding: 1rem;
+    color: #333333;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #F5F5F5;
+    color: #1A1A1A;
+}
+
+.category-menu {
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.category-list {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.category-item {
+    color: #333333;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.category-item:hover {
+    background-color: #F5F5F5;
+    color: #1A1A1A;
 }
 </style>
