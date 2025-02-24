@@ -1,13 +1,13 @@
 <script setup>
 import PortOne from '@portone/browser-sdk/v2';
-import OrderPricesSection from '@/components/sections/order/OrderPricesSection.vue';
+import OrderPricesSection from '@/components/domain/order/OrderPricesSection.vue';
 import ActionButton from '@/components/buttons/ActionButton.vue';
 import { formatDiscountAmount, formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import OrderPaymentSection from '@/components/sections/order/OrderPaymentSection.vue';
+import OrderPaymentSection from '@/components/domain/order/OrderPaymentSection.vue';
 import { useToast } from 'vue-toastification';
 import { useMemberStore } from '@/store/memberStore';
 

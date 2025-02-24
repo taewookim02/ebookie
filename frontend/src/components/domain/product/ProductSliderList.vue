@@ -1,9 +1,9 @@
 <script setup>
 import { register } from "swiper/element/bundle";
 import { onMounted, onUpdated, ref, computed, watch } from "vue";
-import FeatureSectionItem from "../shared/FeatureSectionItem.vue";
+import FeatureSectionItem from "@/components/domain/product/FeatureSectionItem.vue";
 import { PhCaretRight } from "@phosphor-icons/vue";
-import LoadingSpinner from "../shared/LoadingSpinner.vue";
+import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 import { useRoute } from "vue-router";
 
 const props = defineProps({

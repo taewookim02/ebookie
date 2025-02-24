@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import SearchBar from '../shared/SearchBar.vue';
+import SearchBar from '@/components/common/SearchBar.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';

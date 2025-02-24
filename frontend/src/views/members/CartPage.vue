@@ -1,6 +1,6 @@
 <script setup>
-import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
-import OrderPricesSection from '@/components/sections/order/OrderPricesSection.vue';
+import DeliveryAndRefundSection from '@/components/domain/product/detail/DeliveryAndRefundSection.vue';
+import OrderPricesSection from '@/components/domain/order/OrderPricesSection.vue';
 import ActionButton from '@/components/buttons/ActionButton.vue';
 import { formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';

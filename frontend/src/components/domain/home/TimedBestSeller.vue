@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { PhCaretRight, PhRows } from '@phosphor-icons/vue';
-import ProductCardHorizontal from '@/components/shared/ProductCardHorizontal.vue';
-import { register } from 'swiper/element';
+import ProductCardHorizontal from '@/components/domain/product/ProductCardHorizontal.vue';
+// import { register } from 'swiper/element';
 
 // register();
 

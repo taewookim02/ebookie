@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import ProductSliderList from '../ProductSliderList.vue';
+import ProductSliderList from '@/components/domain/product/ProductSliderList.vue';
 
 
 // state

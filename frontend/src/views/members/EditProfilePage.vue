@@ -1,6 +1,6 @@
 
 <script setup>
-import AuthInputField from '@/components/forms/AuthInputField.vue';
+import AuthInputField from '@/components/domain/member/AuthInputField.vue';
 import { PhArrowLeft } from '@phosphor-icons/vue';
 import { onMounted, ref } from 'vue';
 import { useTokenStore } from '@/store/tokenStore';

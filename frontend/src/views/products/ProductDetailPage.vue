@@ -1,12 +1,12 @@
 <script setup>
-import AuthorDetailsSection from '@/components/sections/detail/AuthorDetailsSection.vue';
-import BookDetailsSection from '@/components/sections/detail/BookDetailsSection.vue';
-import DeliveryAndRefundSection from '@/components/sections/detail/DeliveryAndRefundSection.vue';
-import HeroSection from '@/components/sections/detail/HeroSection.vue';
-import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSection.vue';
-import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
-import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
-import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
+import AuthorDetailsSection from '@/components/domain/product/detail/AuthorDetailsSection.vue';
+import BookDetailsSection from '@/components/domain/product/detail/BookDetailsSection.vue';
+import DeliveryAndRefundSection from '@/components/domain/product/detail/DeliveryAndRefundSection.vue';
+import HeroSection from '@/components/domain/product/detail/HeroSection.vue';
+import ProductDetailsSection from '@/components/domain/product/detail/ProductDetailsSection.vue';
+import RelatedProductsSection from '@/components/domain/product/detail/RelatedProductsSection.vue';
+import ReviewSection from '@/components/domain/product/detail/ReviewSection.vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import ActionButton from '@/components/buttons/ActionButton.vue';
 import { customAxios } from '@/plugins/axios';
 import { ref, watch } from 'vue';
