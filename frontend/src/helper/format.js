@@ -16,3 +16,8 @@ export const formatSellingPrice = (originalPrice, discountPercentage) => {
 export const formatDiscountAmount = (originalPrice, discountPercentage) => {
     return (originalPrice * discountPercentage / 100).toLocaleString();
 }
+
+export const formatDateYYMMKr = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월';
+}

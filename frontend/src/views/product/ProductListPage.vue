@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { customAxios } from '@/plugins/axios';
 import { getImageFromServer } from '@/helper/imgPath';
 import ActionButton from '@/components/shared/ActionButton.vue';
@@ -8,7 +8,7 @@ import LikeButton from '@/components/shared/LikeButton.vue';
 import SaveButton from '@/components/shared/SaveButton.vue';
 import CartButton from '@/components/shared/CartButton.vue';
 import { useToast } from 'vue-toastification';
-
+import { formatDateYYMMKr } from '@/helper/format';
 // state
 const productDtos = ref([]);
 const totalPages = ref(0);
@@ -19,23 +19,33 @@ const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
-const query = route.query;
-console.log(query);
+// 쿼리 빌딩
+const query = ref(route.query);
+const paginationQueryString = ref(new URLSearchParams(query.value).toString());
 
-const paginationQueryString = new URLSearchParams(query).toString();
-console.log(paginationQueryString);
+// on query change
+watch(route, (newValue, oldValue) => {
+    query.value = newValue.query;
+    paginationQueryString.value = new URLSearchParams(query.value).toString();
+    fetchProducts();
+}, { deep: true })
 
 const fetchProducts = async () => {
-    const res = await customAxios.get(`/api/v1/products?${paginationQueryString}`);
+    const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}`);
     productDtos.value = res.data.products;
     totalPages.value = res.data.totalPages;
     totalElements.value = res.data.totalElements;
     currentPage.value = res.data.currentPage;
 };
 
+// computed
 const isBestSeller = computed(() => {
     // if paginationQueryString includes sold 
-    return paginationQueryString.includes('sold') && paginationQueryString.includes('desc');
+    return paginationQueryString.value.includes('sold') && paginationQueryString.value.includes('desc');
+})
+
+const isNew = computed(() => {
+    return paginationQueryString.value.includes('publishedDate') && paginationQueryString.value.includes('desc');
 })
 
 
@@ -127,8 +137,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
+    <div class="product-list-page">
         <h1 v-if="isBestSeller">베스트셀러 순위</h1>
+        <h1 v-if="isNew">신상품 순위</h1>
         <div>
             <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
                 <div class="product-rank">
@@ -148,7 +159,7 @@ onMounted(() => {
                         <small>|</small>
                         <span>{{ product.publisherName }}</span>
                         <small>|</small>
-                        <span>{{ product.publishedDate }}</span>
+                        <span>{{ formatDateYYMMKr(product.publishedDate) }}</span>
                     </div>
                     <div>
                         <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
