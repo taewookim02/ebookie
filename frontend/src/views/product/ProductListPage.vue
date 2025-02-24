@@ -7,6 +7,7 @@ import ActionButton from '@/components/shared/ActionButton.vue';
 import LikeButton from '@/components/shared/LikeButton.vue';
 import SaveButton from '@/components/shared/SaveButton.vue';
 import CartButton from '@/components/shared/CartButton.vue';
+import { useToast } from 'vue-toastification';
 
 // state
 const productDtos = ref([]);
@@ -14,8 +15,10 @@ const totalPages = ref(0);
 const totalElements = ref(0);
 const currentPage = ref(0);
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
+
 const query = route.query;
 console.log(query);
 
@@ -38,11 +41,14 @@ const isBestSeller = computed(() => {
 const handleSave = async (productId) => {
     try {
         await customAxios.post(`/api/v1/saved/${productId}`);
-        detailDto.value.isSaved = !detailDto.value.isSaved;
-        if (detailDto.value.isSaved) {
-            toast.success("찜 목록에 저장 완료!");
-        } else {
-            toast.info("찜 목록에서 삭제 완료!");
+        const product = productDtos.value.find(p => p.id === productId);
+        if (product) {
+            product.isSaved = !product.isSaved;
+            if (product.isSaved) {
+                toast.success("찜 목록에 저장 완료!");
+            } else {
+                toast.info("찜 목록에서 삭제 완료!");
+            }
         }
     } catch (err) {
         console.log("handleSave() err:", err);
@@ -56,11 +62,14 @@ const handleSave = async (productId) => {
 const handleLike = async (productId) => {
     try {
         await customAxios.post(`/api/v1/liked/${productId}`);
-        detailDto.value.isLiked = !detailDto.value.isLiked;
-        if (detailDto.value.isLiked) {
-            toast.success("좋아요 목록에 저장 완료!");
-        } else {
-            toast.info("좋아요 목록에서 삭제 완료!");
+        const product = productDtos.value.find(p => p.id === productId);
+        if (product) {
+            product.isLiked = !product.isLiked;
+            if (product.isLiked) {
+                toast.success("좋아요 목록에 저장 완료!");
+            } else {
+                toast.info("좋아요 목록에서 삭제 완료!");
+            }
         }
     } catch (err) {
         console.log("handleLike() err:", err);
@@ -74,11 +83,14 @@ const handleLike = async (productId) => {
 const handleCartAdd = async (productId) => {
     try {
         await customAxios.post(`/api/v1/cart/${productId}`);
-        detailDto.value.isInCart = !detailDto.value.isInCart;
-        if (detailDto.value.isInCart) {
-            toast.success("장바구니 목록에 저장 완료!");
-        } else {
-            toast.info("장바구니 목록에서 삭제 완료!");
+        const product = productDtos.value.find(p => p.id === productId);
+        if (product) {
+            product.isInCart = !product.isInCart;
+            if (product.isInCart) {
+                toast.success("장바구니 목록에 저장 완료!");
+            } else {
+                toast.info("장바구니 목록에서 삭제 완료!");
+            }
         }
     } catch (err) {
         console.log("handleCartAdd() err:", err);
@@ -142,9 +154,9 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="product-actions">
-                    <CartButton @cart="handleCartAdd(product.id)" />
-                    <LikeButton @like="handleLike(product.id)" />
-                    <SaveButton @save="handleSave(product.id)" />
+                    <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
+                    <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
+                    <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
                     <ActionButton @action="handleBuy(product.id)">구매하기</ActionButton>
                 </div>
             </div>
