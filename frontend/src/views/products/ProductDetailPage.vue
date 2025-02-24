@@ -7,7 +7,7 @@ import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSe
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
 import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
-import ActionButton from '@/components/shared/ActionButton.vue';
+import ActionButton from '@/components/buttons/ActionButton.vue';
 import { customAxios } from '@/plugins/axios';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

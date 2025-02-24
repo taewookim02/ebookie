@@ -1,6 +1,6 @@
 <script setup>
-import GoogleAuthButton from '../shared/GoogleAuthButton.vue';
-import AuthInputField from './AuthInputField.vue';
+import GoogleAuthButton from '@/components/buttons/GoogleAuthButton.vue';
+import AuthInputField from '@/components/forms/AuthInputField.vue';
 
 const props = defineProps({
   heading: {

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
+import GoogleAuthButton from '@/components/buttons/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';

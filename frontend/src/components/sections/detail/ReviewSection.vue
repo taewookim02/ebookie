@@ -1,5 +1,5 @@
 <script setup>
-import ActionButton from '@/components/shared/ActionButton.vue';
+import ActionButton from '@/components/buttons/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';

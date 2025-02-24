@@ -1,7 +1,7 @@
 <script setup>
 import PortOne from '@portone/browser-sdk/v2';
 import OrderPricesSection from '@/components/sections/order/OrderPricesSection.vue';
-import ActionButton from '@/components/shared/ActionButton.vue';
+import ActionButton from '@/components/buttons/ActionButton.vue';
 import { formatDiscountAmount, formatSellingPrice } from '@/helper/format';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';

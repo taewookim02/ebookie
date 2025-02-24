@@ -1,27 +1,27 @@
 <script setup>
-import ActionButton from '@/components/shared/ActionButton.vue';
+import ActionButton from '@/components/buttons/ActionButton.vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
 // state
-const savedDto = ref([]);
+const likedDto = ref([]);
 const toast = useToast();
 const checkedItems = ref(new Set());
 const allChecked = ref(false);
 
 
 // actions
-const fetchSavedProducts = async () => {
+const fetchLikedProducts = async () => {
     try {
-        const res = await customAxios.get(`/api/v1/saved`);
-        savedDto.value = res.data;
+        const res = await customAxios.get(`/api/v1/liked`);
+        likedDto.value = res.data;
     } catch (err) {
-        console.log("fetchSavedProducts() err:", err);
+        console.log("fetchLikedProducts() err:", err);
     }
 }
-fetchSavedProducts();
+fetchLikedProducts();
 
 const handleCartClick = async (productId) => {
     try {
@@ -37,12 +37,12 @@ const handleCartClick = async (productId) => {
 
 const handleDeleteClick = async (productId) => {
     try {
-        const res = await customAxios.delete(`/api/v1/saved/${productId}`);
+        const res = await customAxios.delete(`/api/v1/liked/${productId}`);
 
         // UI상에서 productId 같은 것 없애기
-        savedDto.value = savedDto.value.filter(dto => dto.productId !== productId);
+        likedDto.value = likedDto.value.filter(dto => dto.productId !== productId);
         checkedItems.value.delete(productId);
-        toast.info("찜 목록에서 삭제 완료!");
+        toast.info("좋아요 목록에서 삭제 완료!");
     } catch (err) {
         console.log("handleDeleteClick() err:", err);
         toast.error("삭제 중 에러 발생!")
@@ -51,7 +51,7 @@ const handleDeleteClick = async (productId) => {
 
 const toggleCheckAll = () => {
     if (allChecked.value) {
-        checkedItems.value = new Set(savedDto.value.map(dto => dto.productId));
+        checkedItems.value = new Set(likedDto.value.map(dto => dto.productId));
     } else {
         checkedItems.value.clear();
     }
@@ -63,7 +63,7 @@ const toggleCheck = (productId) => {
         allChecked.value = false;
     } else {
         checkedItems.value.add(productId);
-        allChecked.value = checkedItems.value.size === savedDto.value.length;
+        allChecked.value = checkedItems.value.size === likedDto.value.length;
     }
 }
 
@@ -78,18 +78,18 @@ const handleCheckedDelete = async () => {
     try {
         const productIds = Array.from(checkedItems.value);
 
-        await customAxios.delete(`/api/v1/saved/bulk`, {
+        await customAxios.delete(`/api/v1/liked/bulk`, {
             data: { productIds }
         });
 
-        savedDto.value = savedDto.value.filter(
+        likedDto.value = likedDto.value.filter(
             dto => !checkedItems.value.has(dto.productId)
         );
 
         // hmm?
         checkedItems.value.clear();
         allChecked.value = false;
-        toast.info(`${productIds.length}개 상품이 찜 목록에서 삭제되었습니다`);
+        toast.info(`${productIds.length}개 상품이 좋아요 목록에서 삭제되었습니다`);
     } catch (err) {
         console.log("handleCheckedDelete() err:", err);
         toast.error("선택한 상품 삭제 중 에러가 발생했습니다!");
@@ -100,8 +100,8 @@ const handleCheckedDelete = async () => {
 
 
 <template>
-    <h1>찜한 상품</h1>
-    <section class="saved">
+    <h1>좋아요한 상품</h1>
+    <section class="liked">
         <table class="table">
             <colgroup>
                 <col width="1%" />
@@ -122,8 +122,8 @@ const handleCheckedDelete = async () => {
                 </tr>
             </thead>
             <tbody>
-                <template v-if="savedDto && savedDto.length > 0">
-                    <tr v-for="dto in savedDto">
+                <template v-if="likedDto && likedDto.length > 0">
+                    <tr v-for="dto in likedDto">
                         <td>
                             <input type="checkbox" :checked="checkedItems.has(dto.productId)" @change="toggleCheck(dto.productId)">
                         </td>
@@ -145,7 +145,7 @@ const handleCheckedDelete = async () => {
                 </template>
                 <template v-else>
                     <tr>
-                        <td colspan="4" class="td-empty text-muted"><small>찜 한 상품이 없습니다.</small></td>
+                        <td colspan="4" class="td-empty text-muted"><small>좋아요 한 상품이 없습니다.</small></td>
                     </tr>
                 </template>
             </tbody>
@@ -154,7 +154,7 @@ const handleCheckedDelete = async () => {
 </template>
 
 <style scoped>
-.saved td {
+.liked td {
     vertical-align: middle;
 }
 

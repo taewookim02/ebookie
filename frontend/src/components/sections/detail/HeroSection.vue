@@ -1,8 +1,8 @@
 <script setup>
-import ActionButton from '@/components/shared/ActionButton.vue';
-import CartButton from '@/components/shared/CartButton.vue';
-import LikeButton from '@/components/shared/LikeButton.vue';
-import SaveButton from '@/components/shared/SaveButton.vue';
+import ActionButton from '@/components/buttons/ActionButton.vue';
+import CartButton from '@/components/buttons/CartButton.vue';
+import LikeButton from '@/components/buttons/LikeButton.vue';
+import SaveButton from '@/components/buttons/SaveButton.vue';
 import { PhStar } from '@phosphor-icons/vue';
 import { computed, onMounted, ref } from 'vue';
 import { VueSpinner } from "vue3-spinners";
