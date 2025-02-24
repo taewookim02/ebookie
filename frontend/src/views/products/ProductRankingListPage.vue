@@ -192,9 +192,9 @@ const handlePageSizeChange = () => {
 
 <template>
     <div class="product-list-page">
-        <h1 v-if="isBestSeller">베스트셀러 순위</h1>
-        <h1 v-if="isNew">신상품 순위</h1>
-        <h1 v-if="isSale">세일 순위</h1>
+        <h3 v-if="isBestSeller">베스트셀러 순위</h3>
+        <h3 v-if="isNew">신상품 순위</h3>
+        <h3 v-if="isSale">세일 순위</h3>
 
         <!-- Page size selector -->
         <div class="d-flex justify-content-end mb-3">
