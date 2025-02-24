@@ -1,0 +1,1 @@
+const n=t=>{if(!t)return"";const e=new Date(t);return new Intl.DateTimeFormat("ko-KR",{year:"numeric",month:"long",day:"numeric"}).format(e)},r=(t,e)=>(t-t*e/100).toLocaleString(),o=(t,e)=>(t*e/100).toLocaleString(),a=t=>{const e=new Date(t);return e.getFullYear()+"년 "+(e.getMonth()+1)+"월"};export{o as a,a as b,n as c,r as f};

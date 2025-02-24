@@ -1,6 +1,6 @@
 <script setup>
-import Nav from '@/components/sections/Nav.vue';
-import Footer from '@/components/sections/Footer.vue';
+import Nav from '@/components/domain/home/Nav.vue';
+import Footer from '@/components/domain/home/Footer.vue';
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import { useTokenStore } from '@/store/tokenStore';

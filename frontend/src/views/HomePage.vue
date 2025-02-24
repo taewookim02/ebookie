@@ -1,7 +1,7 @@
 <script setup>
-import ProductSliderList from '@/components/sections/ProductSliderList.vue';
-import HeroSection2 from '@/components/sections/HeroSection2.vue';
-import TimedBestSeller from '@/components/sections/TimedBestSeller.vue';
+import ProductSliderList from '@/components/domain/product/ProductSliderList.vue';
+import HeroSection2 from '@/components/domain/home/HeroSection.vue';
+import TimedBestSeller from '@/components/domain/home/TimedBestSeller.vue';
 import { customAxios } from '@/plugins/axios';
 import { ref } from 'vue';
 
