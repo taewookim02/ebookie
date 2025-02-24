@@ -182,7 +182,7 @@ const handleBuy = async () => {
         <ReviewSection ref="reviewSection" :detail-dto="detailDto" />
 
         <!-- 관련상품 -->
-        <RelatedProductsSection :detail-dto="detailDto" />
+        <RelatedProductsSection :detail-dto="detailDto" :category-id="detailDto.categoryId" />
 
         <!-- 배송/반품 안내 -->
         <DeliveryAndRefundSection />

@@ -8,42 +8,41 @@ import { watch } from 'vue';
 const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
-    { path: '/login', component: () => import('@/views/LoginPage.vue') },
-    { path: '/register', component: () => import('@/views/RegisterPage.vue') },
+    { path: '/login', component: () => import('@/views/member/LoginPage.vue') },
+    { path: '/register', component: () => import('@/views/member/RegisterPage.vue') },
     {
-        path: '/member/edit', component: () => import('@/views/EditProfilePage.vue'),
+        path: '/member/edit', component: () => import('@/views/member/EditProfilePage.vue'),
         meta: { requiresAuth: true, hideAuthLinks: true }
     },
     {
-        path: "/liked", component: () => import("@/views/LikedPage.vue"),
+        path: "/liked", component: () => import("@/views/member/LikedPage.vue"),
         meta: { requiresAuth: true }
     },
     {
-        path: "/saved", component: () => import("@/views/SavedPage.vue"),
+        path: "/saved", component: () => import("@/views/member/SavedPage.vue"),
         meta: { requiresAuth: true }
     },
     {
-        path: "/cart", component: () => import("@/views/CartPage.vue"),
+        path: "/cart", component: () => import("@/views/member/CartPage.vue"),
         meta: { requiresAuth: true }
     },
     {
-        path: "/library", component: () => import("@/views/LibraryPage.vue"),
+        path: "/library", component: () => import("@/views/product/ProductLibraryPage.vue"),
         meta: { requiresAuth: true }
     },
     {
-        path: "/orders", component: () => import("@/views/OrderPage.vue"),
+        path: "/orders", component: () => import("@/views/order/OrderPage.vue"),
         meta: { requiresAuth: true }
     },
     {
-        path: "/orders/:id", component: () => import("@/views/OrderDetailPage.vue"),
+        path: "/orders/:id", component: () => import("@/views/order/OrderDetailPage.vue"),
         meta: { requiresAuth: true }
     },
     {
         path: "/products", component: () => import("@/views/product/ProductRankingListPage.vue"),
     },
-    { path: '/products/:id', component: () => import('@/views/ProductDetailPage.vue') },
+    { path: '/products/:id', component: () => import('@/views/product/ProductDetailPage.vue') },
     { path: '/categories/:id', component: () => import('@/views/product/ProductListPage.vue') },
-    { path: '/testing', component: () => import('@/views/TestingPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },
 ];
 
