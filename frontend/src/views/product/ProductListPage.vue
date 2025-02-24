@@ -14,6 +14,8 @@ const productDtos = ref([]);
 const totalPages = ref(0);
 const totalElements = ref(0);
 const currentPage = ref(0);
+const isLoading = ref(false);
+const pageSize = ref(20);
 
 const route = useRoute();
 const router = useRouter();
@@ -22,21 +24,48 @@ const toast = useToast();
 // 쿼리 빌딩
 const query = ref(route.query);
 const paginationQueryString = ref(new URLSearchParams(query.value).toString());
+console.log(paginationQueryString.value);
+
+const fetchProducts = async () => {
+    isLoading.value = true;
+    try {
+        const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}&size=${pageSize.value}`);
+        productDtos.value = res.data.products;
+        totalPages.value = res.data.totalPages;
+        totalElements.value = res.data.totalElements;
+        currentPage.value = res.data.currentPage;
+    } catch (err) {
+        console.error("Failed to fetch products:", err);
+        productDtos.value = [];
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+// Initialize pageSize from URL on component mount
+onMounted(() => {
+    const urlSize = Number(route.query.size);
+    if (urlSize) {
+        pageSize.value = urlSize;
+    }
+    fetchProducts();
+});
 
 // on query change
 watch(route, (newValue, oldValue) => {
     query.value = newValue.query;
     paginationQueryString.value = new URLSearchParams(query.value).toString();
+
+    // Update pageSize when URL changes
+    const newSize = Number(newValue.query.size);
+    if (newSize && newSize !== pageSize.value) {
+        pageSize.value = newSize;
+    }
+
     fetchProducts();
 }, { deep: true })
 
-const fetchProducts = async () => {
-    const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}`);
-    productDtos.value = res.data.products;
-    totalPages.value = res.data.totalPages;
-    totalElements.value = res.data.totalElements;
-    currentPage.value = res.data.currentPage;
-};
+
 
 // computed
 const isBestSeller = computed(() => {
@@ -46,6 +75,10 @@ const isBestSeller = computed(() => {
 
 const isNew = computed(() => {
     return paginationQueryString.value.includes('publishedDate') && paginationQueryString.value.includes('desc');
+})
+
+const isSale = computed(() => {
+    return paginationQueryString.value.includes('discountRate') && paginationQueryString.value.includes('desc');
 })
 
 
@@ -130,9 +163,25 @@ const handleBuy = async (productId) => {
     }
 }
 
-onMounted(() => {
-    fetchProducts();
-});
+const getUpdatedQueryString = (newPage) => {
+    const params = new URLSearchParams(query.value);
+    params.set('page', newPage);
+    params.set('size', pageSize.value);
+    return params.toString();
+};
+
+const handlePageSizeChange = () => {
+    const currentQuery = router.currentRoute.value.query;
+
+    router.push({
+        path: '/products',
+        query: {
+            page: '0',
+            size: pageSize.value,
+            sort: currentQuery.sort || 'publishedDate,desc'
+        }
+    });
+};
 
 </script>
 
@@ -140,10 +189,38 @@ onMounted(() => {
     <div class="product-list-page">
         <h1 v-if="isBestSeller">베스트셀러 순위</h1>
         <h1 v-if="isNew">신상품 순위</h1>
-        <div>
+        <h1 v-if="isSale">세일 순위</h1>
+
+        <!-- Page size selector -->
+        <div class="d-flex justify-content-end mb-3">
+            <select class="form-select" style="width: auto;" v-model="pageSize" @change="handlePageSizeChange">
+                <option value="10">10개씩 보기</option>
+                <option value="20">20개씩 보기</option>
+                <option value="50">50개씩 보기</option>
+            </select>
+        </div>
+
+        <!-- Loading state -->
+        <div v-if="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div v-else-if="!productDtos.length" class="text-center py-5">
+            <div class="empty-state">
+                <i class="bi bi-book" style="font-size: 4rem;"></i>
+                <h3 class="mt-4">상품이 없습니다</h3>
+                <p class="text-muted">해당하는 상품을 찾을 수 없습니다.</p>
+            </div>
+        </div>
+
+        <!-- Product list -->
+        <div v-else>
             <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
                 <div class="product-rank">
-                    <span>{{ index + 1 }}</span>
+                    <span>{{ currentPage * pageSize + index + 1 }}</span>
                 </div>
                 <div class="product-image">
                     <RouterLink :to="`/products/${product.id}`">
@@ -163,11 +240,11 @@ onMounted(() => {
                     </div>
                     <div>
                         <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
-                        <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString()
-                        }}원</span>
-                        <!-- <span>({{ product.discountRate }}% 할인)</span> -->
+                        <span class="product-price">{{ (product.price - product.price * product.discountRate /
+                            100).toLocaleString()
+                            }}원</span>
                         <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate
-                            }}%</span>
+                        }}%</span>
                     </div>
                     <div>
                         <span>판매량 {{ product.sold.toLocaleString() }}부</span>
@@ -180,6 +257,23 @@ onMounted(() => {
                     <ActionButton @action="handleBuy(product.id)">구매하기</ActionButton>
                 </div>
             </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div v-if="productDtos.length" class="pagination mt-4 d-flex justify-content-center gap-2">
+            <button class="btn btn-outline-primary" :disabled="currentPage === 0"
+                @click="router.push(`/products?${getUpdatedQueryString(currentPage - 1)}`)">
+                이전
+            </button>
+            <button v-for="page in totalPages" :key="page" class="btn"
+                :class="page - 1 === currentPage ? 'btn-primary' : 'btn-outline-primary'"
+                @click="router.push(`/products?${getUpdatedQueryString(page - 1)}`)">
+                {{ page }}
+            </button>
+            <button class="btn btn-outline-primary" :disabled="currentPage === totalPages - 1"
+                @click="router.push(`/products?${getUpdatedQueryString(currentPage + 1)}`)">
+                다음
+            </button>
         </div>
     </div>
 </template>
@@ -239,5 +333,10 @@ onMounted(() => {
 .product-price {
     font-size: 1.8rem;
     font-weight: bolder;
+}
+
+.empty-state {
+    padding: 4rem;
+    color: #6c757d;
 }
 </style>

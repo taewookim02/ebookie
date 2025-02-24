@@ -1,13 +1,5 @@
 package com.avad.ebookie.domain.product.repository;
 
-import com.avad.ebookie.domain.category.entity.Category;
-import com.avad.ebookie.domain.product.entity.Product;
-import com.avad.ebookie.domain.publisher.entity.Publisher;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.datafaker.Faker;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -15,6 +7,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import org.springframework.stereotype.Component;
+
+import com.avad.ebookie.domain.category.entity.Category;
+import com.avad.ebookie.domain.product.entity.Product;
+import com.avad.ebookie.domain.publisher.entity.Publisher;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 
 @Slf4j
 @Component
@@ -56,7 +58,7 @@ public class ProductDataLoader {
             if (bookTitles != null) {
                 String title = bookTitles[i % bookTitles.length];
                 LocalDate randomPastDate = faker.timeAndDate().past(365, TimeUnit.DAYS).atZone(ZoneId.systemDefault()).toLocalDate();
-                Double randomDiscountRate = faker.number().randomDouble(1, 0, 100);
+                Double randomDiscountRate = faker.number().randomDouble(0, 0, 50);
 
                 Product product = Product.builder()
                         .name(title)
@@ -65,8 +67,8 @@ public class ProductDataLoader {
                         .category(category)
                         .description(faker.lorem().paragraphs(3).toString())
                         .publishedDate(randomPastDate) // 랜덤 LocalDate
-//                        .discountRate(randomDiscountRate) // 랜덤 할인율 (0~100)
-                        .discountRate(10.0)
+                       .discountRate(randomDiscountRate) // 랜덤 할인율 (0~100)
+                        // .discountRate(10.0)
                         .sold(faker.random().nextLong(0, 25000))
                         .build();
                 productsToSave.add(product);

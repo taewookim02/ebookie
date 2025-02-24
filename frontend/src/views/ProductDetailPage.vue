@@ -7,6 +7,7 @@ import ProductDetailsSection from '@/components/sections/detail/ProductDetailsSe
 import RelatedProductsSection from '@/components/sections/detail/RelatedProductsSection.vue';
 import ReviewSection from '@/components/sections/detail/ReviewSection.vue';
 import LoadingSpinner from '@/components/shared/LoadingSpinner.vue';
+import ActionButton from '@/components/shared/ActionButton.vue';
 import { customAxios } from '@/plugins/axios';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -20,6 +21,8 @@ const router = useRouter();
 const reviewSection = ref(null);
 const detailDto = ref({});
 const toast = useToast();
+const isLoading = ref(true);
+const hasError = ref(false);
 
 // actions
 const scrollToReview = () => {
@@ -28,10 +31,21 @@ const scrollToReview = () => {
 
 const fetchProductDetailDto = async (id) => {
     try {
+        isLoading.value = true;
+        hasError.value = false;
         const res = await customAxios.get(`/api/v1/products/${id}`);
         detailDto.value = res.data;
     } catch (err) {
         console.log("err:", err);
+        hasError.value = true;
+        if (err.response?.status === 404) {
+            toast.error("존재하지 않는 상품입니다.");
+            router.push('/products');
+        } else {
+            toast.error("상품 정보를 불러올 수 없습니다.");
+        }
+    } finally {
+        isLoading.value = false;
     }
 }
 
@@ -123,7 +137,16 @@ const handleBuy = async () => {
 </script>
 
 <template>
-    <template v-if="detailDto">
+    <div v-if="isLoading" class="loading">
+        <LoadingSpinner />
+    </div>
+    <div v-else-if="hasError" class="empty-state">
+        <i class="bi bi-exclamation-circle" style="font-size: 4rem;"></i>
+        <h3 class="mt-4">상품 정보를 불러올 수 없습니다</h3>
+        <p class="text-muted">잠시 후 다시 시도해주세요.</p>
+        <ActionButton class="mt-3" @action="router.push('/products')">상품 목록으로</ActionButton>
+    </div>
+    <template v-else-if="detailDto">
         <!-- 히어로 -->
         <!-- 히어로__이미지 -->
         <!-- 히어로__정보 -->
@@ -164,8 +187,18 @@ const handleBuy = async () => {
         <!-- 배송/반품 안내 -->
         <DeliveryAndRefundSection />
     </template>
-    <LoadingSpinner v-else />
-
 </template>
 
-<style scoped></style>
+<style scoped>
+.loading,
+.empty-state {
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem;
+    color: #6c757d;
+}
+</style>

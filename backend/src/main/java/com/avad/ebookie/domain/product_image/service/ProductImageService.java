@@ -16,7 +16,6 @@ public class ProductImageService {
         try {
             // TODO: is this optimal?
             String fullPath = filePath + imageName;
-            System.out.println("fullPath = " + fullPath);
             return new FileSystemResource(fullPath);
         } catch (Exception e) {
             // TODO: handle FileNotFoundException

@@ -3,6 +3,7 @@ import { customAxios } from "@/plugins/axios";
 import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/shared/GoogleAuthButton.vue';
 import AuthInputField from '@/components/forms/AuthInputField.vue';
+import ActionButton from '@/components/shared/ActionButton.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 
@@ -11,16 +12,16 @@ const email = ref("");
 const password = ref("");
 const errMsg = ref("");
 const store = useTokenStore();
-
-
+const isLoading = ref(false);
+const hasError = ref(false);
 
 const handleLogin = async () => {
     try {
+        isLoading.value = true;
         const res = await customAxios.post("/api/v1/auth/login", {
             email: email.value,
             password: password.value
         });
-        
         
         // 메모리에 토큰 저장
         store.setAccessToken(res.data.accessToken);
@@ -29,14 +30,28 @@ const handleLogin = async () => {
         router.push("/member/edit");
     } catch (err) {
         console.log(err);
+        hasError.value = true;
         // 에러 메세지
         errMsg.value = err.response.data.message;
+    } finally {
+        isLoading.value = false;
     }
 }
 </script>
 
 <template>
-    <section class="auth">
+    <div v-if="isLoading" class="loading">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div v-else-if="hasError" class="empty-state">
+        <i class="bi bi-exclamation-circle" style="font-size: 4rem;"></i>
+        <h3 class="mt-4">로그인에 실패했습니다</h3>
+        <p class="text-muted">{{ errMsg }}</p>
+        <ActionButton class="mt-3" @action="hasError = false">다시 시도</ActionButton>
+    </div>
+    <section v-else class="auth">
         <form @submit.prevent="handleLogin" class="auth__form">
             <h1 class="auth__heading">로그인</h1>
             <!-- TODO: Google Login
@@ -88,5 +103,17 @@ const handleLogin = async () => {
 
 .auth__err {
     color: red;
+}
+
+.loading,
+.empty-state {
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem;
+    color: #6c757d;
 }
 </style>

@@ -202,10 +202,20 @@ onMounted(() => {
 
 <template>
     <div v-if="isLoading" class="loading">
-        로딩중...
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
-    <div v-else-if="hasError" class="error">
-        주문 정보를 불러올 수 없습니다.
+    <div v-else-if="hasError" class="empty-state">
+        <i class="bi bi-exclamation-circle" style="font-size: 4rem;"></i>
+        <h3 class="mt-4">주문 정보를 불러올 수 없습니다</h3>
+        <p class="text-muted">잠시 후 다시 시도해주세요.</p>
+    </div>
+    <div v-else-if="!dtoList.length" class="empty-state">
+        <i class="bi bi-cart" style="font-size: 4rem;"></i>
+        <h3 class="mt-4">주문 내역이 없습니다</h3>
+        <p class="text-muted">주문하신 상품이 없습니다.</p>
+        <ActionButton class="mt-3" @action="router.push('/products')">상품 보러가기</ActionButton>
     </div>
     <div v-else class="order">
         <section class="order__info">
@@ -323,14 +333,14 @@ onMounted(() => {
     color: #ef6c00;
 }
 
-.loading,
-.error {
+.loading {
     text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
+    padding: 4rem;
 }
 
-.error {
-    color: #c62828;
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    color: #6c757d;
 }
 </style>
