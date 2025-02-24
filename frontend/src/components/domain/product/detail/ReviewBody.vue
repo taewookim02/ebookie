@@ -1,5 +1,5 @@
 <script setup>
-import ActionButton from '@/components/buttons/ActionButton.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import { formatYYYYMMDDKr } from '@/helper/format';
 import { useMemberStore } from '@/store/memberStore';
 import { useTokenStore } from '@/store/tokenStore';

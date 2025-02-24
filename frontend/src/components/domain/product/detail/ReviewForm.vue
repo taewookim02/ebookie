@@ -1,5 +1,5 @@
 <script setup>
-import ActionButton from '@/components/buttons/ActionButton.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import { computed, ref, defineProps } from 'vue';
 import { PhStar } from '@phosphor-icons/vue';
 

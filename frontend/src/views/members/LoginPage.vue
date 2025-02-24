@@ -3,7 +3,7 @@ import { customAxios } from "@/plugins/axios";
 import { onMounted, ref } from 'vue';
 import GoogleAuthButton from '@/components/domain/member/GoogleAuthButton.vue';
 import AuthInputField from '@/components/domain/member/AuthInputField.vue';
-import ActionButton from '@/components/buttons/ActionButton.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 

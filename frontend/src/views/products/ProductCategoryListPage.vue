@@ -4,9 +4,9 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { customAxios } from '@/plugins/axios';
 import { getImageFromServer } from '@/helper/imgPath';
 import { formatDateYYMMKr } from '@/helper/format';
-import CartButton from '@/components/buttons/CartButton.vue';
-import LikeButton from '@/components/buttons/LikeButton.vue';
-import SaveButton from '@/components/buttons/SaveButton.vue';
+import CartButton from '@/components/common/CartButton.vue';
+import LikeButton from '@/components/common/LikeButton.vue';
+import SaveButton from '@/components/common/SaveButton.vue';
 import { useToast } from 'vue-toastification';
 import Pagination from '@/components/common/Pagination.vue';
 

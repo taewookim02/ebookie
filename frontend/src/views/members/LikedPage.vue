@@ -1,5 +1,5 @@
 <script setup>
-import ActionButton from '@/components/buttons/ActionButton.vue';
+import ActionButton from '@/components/common/ActionButton.vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
 import { ref } from 'vue';
