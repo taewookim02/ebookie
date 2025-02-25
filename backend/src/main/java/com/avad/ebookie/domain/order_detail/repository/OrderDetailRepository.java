@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -24,6 +25,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     AND od.product.id = :productId
     AND od.order.orderStatus = 'PAID'
     """)
-    void incrementDownloadCount(Long memberId, Long productId);
+    void incrementDownloadCount(@Param("memberId") Long memberId, @Param("productId") Long productId);
 //    Page<OrderDetail> findByOrderMemberIdAndOrderOrderStatus(Long memberId, OrderStatus orderStatus, Pageable pageable);
 }

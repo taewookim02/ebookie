@@ -1,22 +1,19 @@
 package com.avad.ebookie.domain.product_file.service;
 
+import com.avad.ebookie.domain.member.entity.Member;
+import com.avad.ebookie.domain.order.repository.OrderRepository;
 import com.avad.ebookie.domain.order_detail.repository.OrderDetailRepository;
 import com.avad.ebookie.domain.product.entity.Product;
+import com.avad.ebookie.domain.product.repository.ProductRepository;
+import com.avad.ebookie.domain.product_file.dto.response.ProductFileResponseDto;
 import com.avad.ebookie.domain.product_file.entity.ProductFile;
 import com.avad.ebookie.domain.product_file.mapper.ProductFileMapper;
-import org.springframework.beans.factory.annotation.Value;
+import com.avad.ebookie.domain.product_file.repository.ProductFileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.avad.ebookie.domain.member.entity.Member;
-import com.avad.ebookie.domain.order.repository.OrderRepository;
-import com.avad.ebookie.domain.product.repository.ProductRepository;
-import com.avad.ebookie.domain.product_file.dto.response.ProductFileResponseDto;
-import com.avad.ebookie.domain.product_file.repository.ProductFileRepository;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
@@ -48,7 +45,7 @@ public class ProductFileService {
 
         List<ProductFile> files = product.getFiles();
 
-//        orderDetailRepository.incrementDownloadCount(loggedInMember.getId(), productId);
+        orderDetailRepository.incrementDownloadCount(loggedInMember.getId(), productId);
 
         return productFileMapper.toDtoList(files);
     }
