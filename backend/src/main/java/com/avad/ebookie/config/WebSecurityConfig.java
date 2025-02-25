@@ -28,34 +28,14 @@ public class WebSecurityConfig {
     private final PasswordEncoder passwordEncoder; // Bcrypt 인코더
     private final JwtAuthenticationFilter jwtAuthFilter; // JWT 필터
     private final LogoutHandler logoutHandler; // LogoutService implements LogoutHandler
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; //
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    /*
-     * 1. 보호할 URL 선언하기
-     * 2. jwtfilter 추가하기
-     *
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(); // 인증하려면 authProvider 필요
         authProvider.setUserDetailsService(userDetailsService); // 유저찾을 곳 설정
         authProvider.setPasswordEncoder(passwordEncoder); // 비밀번호 인코더 설정
 
-
-//        String[] allowedPaths = {
-//                "/",
-//                "/api/auth/**",
-//                "/lib/**",
-//                "favicon.ico",
-//                "/index.html",
-//                "/static/**",
-//                "/assets/**",
-//                "/js/**",
-//                "/css/**",
-//                "/img/**",
-//                "/favicon-32x32.png",
-//                "/site.webmanifest"
-//        };
 
         http
                 .cors(Customizer.withDefaults()) // WebConfig cors config 사용
@@ -64,8 +44,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/assets/**").permitAll()
                         .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll() // 로그인, 로그아웃, 토큰 관련
-                        .requestMatchers("/api/v1/image").permitAll()   //
-                        .requestMatchers("/api/v1/categories").permitAll()
+                        .requestMatchers("/api/v1/image").permitAll()   // 이미지는 허용
+                        .requestMatchers("/api/v1/categories").permitAll() // 카테고리 혀용
                         .requestMatchers("/api/v1/products/**").permitAll() // TODO: limit methods POST, PATCH, PUT, DELETE
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
@@ -98,7 +78,8 @@ public class WebSecurityConfig {
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
-        cookie.setSecure(true);
+//        cookie.setSecure(true); // TODO: localhost == true , 192.168.2.69:8080 == false
+        cookie.setSecure(false);
         response.addCookie(cookie);
     }
 

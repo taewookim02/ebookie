@@ -22,25 +22,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:" + portNo, "http://localhost:" + portNo,
-                        "http://192.168.2.69:" + portNo, "http://localhost:5173", "http://127.0.0.1:5173",
-                        "http://192.168.2.69:8080", "http://192.168.2.69")
+                .allowedOrigins("http://127.0.0.1:8080", "http://localhost:8080", "http://192.168.2.69:8080", "http://182.214.77.230:8080", "http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
-
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry
-//                .addMapping("/**")
-//                .allowedOrigins("*", "http://192.168.2.69:8080")
-//                .allowedMethods("*")
-//                .allowedHeaders("*")
-//                .allowCredentials(true)
-//        ;
-//    }
 
 
     // vue

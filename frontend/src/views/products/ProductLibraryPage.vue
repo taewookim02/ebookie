@@ -71,9 +71,9 @@ onMounted(() => {
 
 <template>
     <div class="library">
-        <h1 class="mb-4">내 서재</h1>
+        <h1 class="mb-4 text-center">내 서재</h1>
 
-        <div class="page-controls">
+        <div class="page-controls d-flex justify-content-end">
             <select v-model="pageSize" @change="handlePageSizeChange">
                 <option v-for="size in pageSizeOptions" :key="size" :value="size">
                     {{ size }}개씩 보기
@@ -107,7 +107,7 @@ onMounted(() => {
 
 <style scoped>
 .library {
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .page-controls {

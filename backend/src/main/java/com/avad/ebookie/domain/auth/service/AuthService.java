@@ -83,7 +83,8 @@ public class AuthService {
     private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refresh_token", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+//        cookie.setSecure(true); // TODO: localhost == true, 192.168.2.69 == false
+        cookie.setSecure(false); // TODO: localhost == true, 192.168.2.69 == false
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(cookie);
