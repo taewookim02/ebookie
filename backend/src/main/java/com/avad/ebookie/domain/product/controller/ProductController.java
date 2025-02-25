@@ -1,9 +1,6 @@
 package com.avad.ebookie.domain.product.controller;
 
-import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
+import com.avad.ebookie.domain.product.dto.response.*;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +64,10 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 다운로드
-//    @GetMapping("/products/download/{productId}")
-//    public
-
+    // 상품 검색 (이름, 저자, 카테고리)
+    @GetMapping("/products/search")
+    public ResponseEntity<List<ProductSearchResponseDto>> searchProducts(@RequestParam("query") String query) {
+        List<ProductSearchResponseDto> responseDtos = productService.searchProducts(query);
+        return ResponseEntity.ok(responseDtos);
+    }
 }
