@@ -123,7 +123,7 @@ const handleBuy = async () => {
         console.log("handleBuy");
         const productIds = [route.params.id];
         const res = await customAxios.post(`/api/v1/orders`, { productIds });
-        const orderId = res.data.orderId;
+        const orderId = res.data.id;
         router.push(`/orders/${orderId}`);
     }
     catch (err) {

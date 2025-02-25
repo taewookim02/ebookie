@@ -118,7 +118,8 @@ const handleCheckedOrders = async () => {
         const res = await customAxios.post(`/api/v1/orders`, { productIds });
 
         // get back the order id
-        const orderId = res.data.orderId;
+        const orderId = res.data.id;
+        
 
         toast.success("주문 생성 성공!");
 
@@ -134,7 +135,7 @@ const handleOrderClick = async (productId) => {
     try {
         const res = await customAxios.post(`/api/v1/orders`, { productIds: [productId] });
 
-        const orderId = res.data.orderId;
+        const orderId = res.data.id;
 
         toast.success("주문 생성 성공!");
 
