@@ -41,8 +41,21 @@ const handlePageSizeChange = () => {
 
 const handleDownload = async (productId) => {
     try {
-        const res = await customAxios.get(`/api/v1/products/files/download/${productId}`);
-
+        const res = await customAxios.get(`/api/v1/products/files/download/${productId}`, {
+            responseType: 'arraybuffer'
+        });
+        
+        const blob = new Blob([res.data], { type: 'application/zip' });
+        
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'files.zip';  
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
         toast.success("다운로드가 시작됩니다.");
     } catch (err) {
         console.log("handleDownload() err:", err);
