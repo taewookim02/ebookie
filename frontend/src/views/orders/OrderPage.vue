@@ -34,6 +34,36 @@ const handlePageSizeChange = () => {
     fetchOrders(0);
 }
 
+const orderStatusToKorean = status => {
+    switch (status) {
+        case "PENDING":
+            return "결제대기";
+        case "PAID":
+            return "결제완료";
+        case "CANCELLED":
+            return "주문취소";
+        case "REFUNDED":
+            return "환불완료";
+        default:
+            return "";
+    }
+}
+
+const getStatusColor = status => {
+    switch (status) {
+        case "PENDING":
+            return "#ff4444"; // red
+        case "PAID":
+            return "#00C851"; // green
+        case "CANCELLED":
+            return "#ff8800"; // orange
+        case "REFUNDED":
+            return "#666666"; // gray
+        default:
+            return "#000000";
+    }
+}
+
 fetchOrders();
 
 </script>
@@ -60,7 +90,9 @@ fetchOrders();
                     </div>
                     <div class="order-content">
                         <span>총 금액: {{ order.totalPrice.toLocaleString() }}원</span>
-                        <span>상태: {{ order.orderStatus }}</span>
+                        <span class="order-status" :style="{ color: getStatusColor(order.orderStatus) }">
+                            상태: {{ orderStatusToKorean(order.orderStatus) }}
+                        </span>
                     </div>
                     <div class="order-products">
                         <div v-for="product in order.products" :key="product.productId">
@@ -114,6 +146,10 @@ fetchOrders();
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+}
+
+.order-status {
+    font-weight: bold;
 }
 
 .order-products {
