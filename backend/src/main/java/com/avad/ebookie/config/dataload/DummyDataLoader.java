@@ -70,6 +70,7 @@ public class DummyDataLoader {
         // 상품 이미지 생성 및 DB 저장
         List<ProductImage> productImages = productImageDataLoader.generateProductImageData(products);
 
+        // 상품 파일 생성 및 DB 저장
         List<ProductFile> productFiles = productFileDataLoader.generateProductFileData(products);
 
         // 리뷰 데이터 생성 및 DB 저장

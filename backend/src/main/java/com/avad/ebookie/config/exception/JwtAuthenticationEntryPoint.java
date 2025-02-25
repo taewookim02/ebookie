@@ -32,7 +32,5 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.AUTH_FAILURE);
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-
-//        resolver.resolveException(request, response, null, authException);
     }
 }

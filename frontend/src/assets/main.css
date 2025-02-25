@@ -1,39 +1,60 @@
 @import './base.css';
+
 :root {
     /* 부트스트랩 오버라이딩 */
-    --bs-border-color: #ccc;
+    --bs-border-color: #E5E7EB;
+
+    /* 테마 */
+    --primary-color: #2563EB;  /* 메인 */
+    --primary-hover: #1D4ED8;  /* 호버 */
+    --primary-active: #1E40AF; /* 활성 */
+
+    --text-color: #111827;          /* 메인 텍스트 */
+    --text-secondary-color: #4B5563; /* 보조 텍스트 */
+    --background-color: #FFFFFF;    /* 페이지 배경 */
+    --surface-color: #F3F4F6;       /* 카드, 입력 */
+    --border-color: #E5E7EB;        /* 구분선, 테두리 */
+
+    /* 악센트 (단일 톤 피드백: 초록색) */
+    --accent-color: #22C55E;        /* 성공 */
+    --accent-hover: #16A34A;
+    --accent-active: #15803D;   
 }
-#app, main, footer {
-  width: 100%;
-  max-width: 100vw;
+
+#app,
+main,
+footer {
+    width: 100%;
+    max-width: 100vw;
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
 }
 
 main {
-  flex-grow: 1; /* fill remaining space */
-  padding: 2.4rem;
+    flex-grow: 1;
+    /* fill remaining space */
+    padding: 2.4rem;
 }
 
 img {
-  /* width: 100%; */
+    /* width: 100%; */
 }
 
 button,
 input,
 textarea {
-  font-family: inherit;
-  font-size: inherit;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .link-dark {
     text-decoration: none;
-    
+
     &:hover {
         text-decoration: underline;
     }

@@ -125,9 +125,13 @@ const computedStars = computed(() => {
                 <div class="info-bottom__price">
                     <span>정가 <span class="price text-muted price-original">{{ detailDto.price?.toLocaleString()
                     }}원</span></span>
-                    <span>판매가 <strong class="price">{{ computedSellingPrice }}원</strong> <span
-                            v-if="detailDto.discountRate" class="badge text-bg-danger">{{ detailDto.discountRate
-                            }}%</span></span>
+                    <span class="d-flex align-items-center gap-2">판매가 
+                        <strong class="price">{{ computedSellingPrice }}원</strong> 
+                        <span v-if="detailDto.discountRate" class="discount-badge">
+                            {{ detailDto.discountRate
+                            }}%
+                        </span>
+                    </span>
                 </div>
                 <div class="info-bottom__action">
                     <LikeButton @like="handleLikeClick" :is-active="detailDto.isLiked" />
@@ -207,4 +211,14 @@ strong.price {
 .empty-star {
     color: #ccc;
 }
+
+
+.discount-badge {
+    background: var(--accent-color);
+    color: var(--background-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.6rem;
+    font-weight: 600;
+}
+
 </style>

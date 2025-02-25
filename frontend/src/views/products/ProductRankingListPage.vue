@@ -152,7 +152,7 @@ const handleBuy = async (productId) => {
         console.log("handleBuy");
         const productIds = [productId];
         const res = await customAxios.post(`/api/v1/orders`, { productIds });
-        const orderId = res.data.orderId;
+        const orderId = res.data.id;
         router.push(`/orders/${orderId}`);
     }
     catch (err) {
@@ -215,7 +215,7 @@ const handlePageSizeChange = () => {
         <!-- 빈 상태 -->
         <div v-else-if="!productDtos.length" class="text-center py-5">
             <div class="empty-state">
-                <i class="bi bi-book" style="font-size: 4rem; color: var(--bs-primary)"></i>
+                <i class="bi bi-book" style="font-size: 4rem; color: var(--primary-color)"></i>
                 <h3 class="mt-4">상품이 없습니다</h3>
                 <p class="text-muted">해당하는 상품을 찾을 수 없습니다.</p>
             </div>
@@ -276,50 +276,53 @@ const handlePageSizeChange = () => {
 
 <style scoped>
 .product-list-page {
-    background: #fff;
+    background: var(--background-color);
     min-height: 100vh;
+    padding: 2rem;
 }
 
 .product-list {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
     overflow: hidden;
+    background: var(--surface-color);
 }
 
 .product-item {
     display: grid;
     grid-template-columns: auto 150px 1fr auto;
-    gap: 2rem;
-    padding: 2rem;
-    border-bottom: 1px solid var(--bs-gray-200);
+    gap: 2.4rem;
+    padding: 2.4rem;
+    border-bottom: 1px solid var(--border-color);
     align-items: center;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .product-item:hover {
-    background-color: var(--bs-gray-100);
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
 }
 
 .product-rank {
-    width: 48px;
-    height: 48px;
+    width: 5rem;
+    height: 5rem;
     display: grid;
     place-items: center;
     font-size: 2.4rem;
     font-weight: 700;
-    background: var(--bs-primary);
-    color: white;
+    background: var(--primary-color);
+    color: var(--background-color);
     border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.15);
 }
 
 .product-image img {
     width: 150px;
     height: 200px;
     object-fit: cover;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
 .product-image img:hover {
@@ -329,76 +332,86 @@ const handlePageSizeChange = () => {
 .product-info {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
 }
 
 .product-name {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
     margin: 0;
+    line-height: 1.4;
 }
 
 .product-name a {
     text-decoration: none;
-    color: var(--bs-dark);
-    transition: color 0.2s ease;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .product-name a:hover {
-    color: var(--bs-primary);
+    color: var(--primary-color);
 }
 
 .product-meta {
     display: flex;
-    gap: 0.8rem;
+    gap: 1rem;
     align-items: center;
-    color: var(--bs-gray-600);
-    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    font-size: 1rem;
 }
 
 .product-price-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.2rem;
 }
 
 .original-price {
-    color: var(--bs-gray-500);
+    color: var(--text-secondary-color);
+    text-decoration: line-through;
 }
 
 .discounted-price {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--bs-primary);
+    color: var(--primary-color);
 }
 
 .discount-badge {
-    background: var(--bs-danger);
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
+    background: var(--accent-color);
+    color: var(--background-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.6rem;
     font-weight: 600;
 }
 
 .product-sold {
-    color: var(--bs-gray-600);
-    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    font-size: 1rem;
 }
 
 .product-actions {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    min-width: 120px;
+    gap: 1.2rem;
+    min-width: 140px;
 }
 
 .buy-button {
     width: 100%;
+    padding: 1rem;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+}
+
+.buy-button:hover {
+    transform: translateY(-2px);
 }
 
 .empty-state {
     padding: 6rem 2rem;
-    background: var(--bs-gray-100);
-    border-radius: 8px;
+    background: var(--surface-color);
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 }
 </style>

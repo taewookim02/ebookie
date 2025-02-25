@@ -49,7 +49,7 @@ const computedRatingPercentages = computed(() => {
             <div class="stars-main">
                 <div class="stars-main__icons">
                     <PhStar v-for="(filled, index) in computedStars" :key="index" :size="32"
-                        :color="filled ? 'blue' : '#ccc'" weight="fill" :class="{ 'empty-star': !filled }" />
+                        :color="filled ? 'var(--primary-color)' : 'var(--border-color)'" weight="fill" :class="{ 'empty-star': !filled }" />
                 </div>
                 <div class="stars-main__numbers">
                     <span class="rating-avg">{{ computedAvgRating }}</span>
@@ -60,11 +60,11 @@ const computedRatingPercentages = computed(() => {
         <div class="review-container__percentage">
             <!-- 5 stars -->
             <div class="percetage-stars__row">
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
             </div>
             <div class="progress" role="progressbar" :aria-valuenow="computedRatingPercentages[4]" aria-valuemin="0"
                 aria-valuemax="100">
@@ -73,11 +73,11 @@ const computedRatingPercentages = computed(() => {
 
             <!-- 4 stars -->
             <div class="percetage-stars__row">
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" color="blue" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
             </div>
             <div class="progress" role="progressbar" :aria-valuenow="computedRatingPercentages[3]" aria-valuemin="0"
                 aria-valuemax="100">
@@ -86,11 +86,11 @@ const computedRatingPercentages = computed(() => {
 
             <!-- 3 stars -->
             <div class="percetage-stars__row">
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
             </div>
             <div class="progress" role="progressbar" :aria-valuenow="computedRatingPercentages[2]" aria-valuemin="0"
                 aria-valuemax="100">
@@ -99,11 +99,11 @@ const computedRatingPercentages = computed(() => {
 
             <!-- 2 stars -->
             <div class="percetage-stars__row">
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
             </div>
             <div class="progress" role="progressbar" :aria-valuenow="computedRatingPercentages[1]" aria-valuemin="0"
                 aria-valuemax="100">
@@ -112,11 +112,11 @@ const computedRatingPercentages = computed(() => {
 
             <!-- 1 star -->
             <div class="percetage-stars__row">
-                <PhStar :size="16" weight="fill" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
-                <PhStar :size="16" color="blue" />
+                <PhStar :size="16" weight="fill" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
+                <PhStar :size="16" color="var(--primary-color)" />
             </div>
             <div class="progress" role="progressbar" :aria-valuenow="computedRatingPercentages[0]" aria-valuemin="0"
                 aria-valuemax="100">
@@ -132,10 +132,9 @@ const computedRatingPercentages = computed(() => {
     flex-direction: column;
     gap: 3.2rem;
     padding: 2.4rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; */
+    border: 1px solid var(--border-color);
+    border-radius: .6rem;
+    background-color: var(--background-color);
 }
 
 .review-container__stars {
@@ -148,6 +147,7 @@ const computedRatingPercentages = computed(() => {
     text-align: center;
     font-weight: 700;
     font-size: 1.8rem;
+    color: var(--text-color);
 }
 
 .stars-main {
@@ -158,11 +158,13 @@ const computedRatingPercentages = computed(() => {
 
 .stars-main__numbers {
     font-size: 1.7rem;
+    color: var(--text-secondary-color);
 }
 
 .rating-avg {
     font-size: 2.4rem;
     font-weight: 700;
+    color: var(--text-color);
 }
 
 /* 퍼센티지 */
@@ -175,22 +177,31 @@ const computedRatingPercentages = computed(() => {
     column-gap: 1.6rem;
 }
 
-
 .percetage-stars__row {
     align-self: center;
     display: flex;
     justify-content: center;
 }
 
-
 .progress,
 .progress-stacked {
-    height: auto;
+    height: 2.4rem;
+    border-radius: .4rem;
 }
 
 .progress {
-    background-color: #ccc;
+    background-color: var(--surface-color);
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    display: flex;
+    align-items: center;
+    padding: 0 .8rem;
+    font-weight: 500;
+    transition: width 0.3s ease;
 }
 </style>

@@ -70,8 +70,8 @@ fetchOrders();
 
 <template>
     <div>
-        <h1>주문 목록</h1>
-        <div class="page-controls">
+        <h1 class="text-center">주문 목록</h1>
+        <div class="page-controls d-flex justify-content-end">
             <select v-model="pageSize" @change="handlePageSizeChange">
                 <option v-for="size in pageSizeOptions" :key="size" :value="size">
                     {{ size }}개씩 보기

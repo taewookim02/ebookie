@@ -60,7 +60,7 @@ const handleLogin = async () => {
             -->
             <AuthInputField type="email" id="email" name="email" label="이메일" v-model="email" :required="true" />
             <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model="password" :required="true" />
-            <button type="submit" class="auth__btn">로그인</button>
+            <button type="submit" class="auth__btn btn btn-primary btn-lg">로그인</button>
             <span class="auth__err">{{errMsg}}</span>
 
             <div class="auth__link">

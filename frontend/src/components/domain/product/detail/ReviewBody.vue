@@ -35,7 +35,6 @@ const handleEditCancel = () => {
     editContent.value = props.review.content;
     emit('editCancel');
 }
-
 const isOwner = computed(() => {
     return memberStore.getMemberEmail === props.review.writerEmail;
 })

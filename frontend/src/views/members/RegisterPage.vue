@@ -5,7 +5,7 @@ import AuthInputField from '@/components/domain/member/AuthInputField.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
-
+import ActionButton from '@/components/common/ActionButton.vue';
 // state
 const email = ref("");
 const password = ref("");
@@ -64,7 +64,7 @@ const handleSubmit = (e) => {
                 :required="true" />
             <AuthInputField type="password" id="confirmPassword" name="confirmPassword" label="비밀번호 확인"
                 v-model="confirmPassword" :required="true" />
-            <button type="submit" class="auth__btn">회원가입</button>
+            <button type="submit" class="auth__btn btn btn-primary btn-lg">회원가입</button>
             <span class="auth__err">{{ errMsg }}</span>
 
             <div class="auth__link">

@@ -78,42 +78,44 @@ onMounted(() => {
         </swiper-container>
     </section>
 </template>
-
 <style scoped>
 .hero {
-    padding: 4rem 2rem;
-    background-color: #f5f5f5;
+    padding: 5rem 2rem;
+    background-color: var(--background-color);
+    border-radius: 8px;
 }
 
 .hero__header {
     text-align: center;
-    margin-bottom: 1.6rem;
+    margin-bottom: 2rem;
 }
 
 .hero__header-subtitle {
-    font-size: 1.2rem;
-    color: #666;
+    font-size: 1.4rem;
+    color: var(--text-secondary-color);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .hero__header-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin: 1rem 0;
-    color: #333;
+    color: var(--text-color);
+    font-weight: bold;
 }
 
 .hero__header-desc {
-    color: #666;
-    max-width: 600px;
+    color: var(--text-secondary-color);
+    max-width: 700px;
     margin: 1rem auto;
+    font-size: 1.1rem;
 }
 
 hr {
-    width: 60px;
+    width: 80px;
     margin: 1.5rem auto;
     border: none;
-    border-top: 2px solid #333;
+    border-top: 3px solid var(--primary-color);
 }
 
 .book-swiper {
@@ -121,65 +123,74 @@ hr {
 }
 
 .book-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
     position: relative;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
 }
 
 .book-card__rank {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: #333;
+    background: var(--primary-color);
     color: white;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    font-size: 1.2rem;
 }
 
 .book-card__title {
-    font-size: 1.5rem;
-    color: #333;
+    font-size: 1.6rem;
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
 .book-card__author {
-    color: #666;
-    font-size: 1rem;
+    color: var(--text-secondary-color);
+    font-size: 1.1rem;
     margin-bottom: 1rem;
 }
 
 .book-card__link {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    background: #333;
+    padding: 0.6rem 1.2rem;
+    background: var(--primary-color);
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .book-card__link:hover {
-    background: #555;
+    background: var(--primary-hover);
+    transform: scale(1.05);
 }
 
 :deep(.swiper-pagination-bullet) {
-    width: 12px;
-    height: 12px;
-    background: #333;
-    opacity: 0.3;
+    width: 14px;
+    height: 14px;
+    background: var(--text-secondary-color);
+    opacity: 0.5;
 }
 
 :deep(.swiper-pagination-bullet-active) {
     opacity: 1;
+    background: var(--primary-color);
 }
 </style>

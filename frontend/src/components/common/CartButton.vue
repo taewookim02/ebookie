@@ -8,7 +8,7 @@ const props = defineProps({
     },
     color: {
         type: String,
-        default: "#333333",
+        default: "var(--text-color)",
     },
     weight: {
         type: String,
@@ -27,15 +27,28 @@ const handleCartClick = () => {
 
 <template>
     <button class="btn-cart" @click="handleCartClick">
-        <PhShoppingBagOpen v-if="!isActive" :size="size" :color="color" :weight="weight"  />
-        <PhShoppingBagOpen v-else :size="size" color="#333333" weight="fill"  />
+        <PhShoppingBagOpen v-if="!isActive" :size="size" :color="color" :weight="weight" />
+        <PhShoppingBagOpen v-else :size="size" color="var(--primary-color)" weight="fill" />
     </button>
 </template>
 
 <style scoped>
 .btn-cart {
-    padding: .4rem;
-    border-radius: .8rem;
-    border: 1px solid #333333;
+    padding: .8rem;
+    border-radius: .6rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cart:hover {
+    border-color: var(--primary-hover);
+    background-color: var(--background-color);
+}
+
+.btn-cart:active {
+    border-color: var(--primary-active);
+    background-color: var(--surface-color);
 }
 </style>

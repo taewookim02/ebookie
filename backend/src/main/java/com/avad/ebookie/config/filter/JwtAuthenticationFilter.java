@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 유저 이메일로 유저 객체 구하기
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            // 토큰 만료 확인 // TODO: Caused by: org.hibernate.NonUniqueResultException: Query did not return a unique result: 2 results were returned
+            // 토큰 만료 확인
             Boolean isTokenValid = tokenRepository.findFirstByTokenOrderByIdDesc(jwt)
                     .map(token -> !token.isExpired() && !token.isRevoked())
                     .orElse(false);

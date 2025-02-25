@@ -58,7 +58,7 @@ const handleSubmit = (e) => {
       <AuthInputField type="password" id="password" name="password" label="비밀번호" v-model:password="props.password" />
       <!-- <AuthInputField v-if="isSignUp" type="password" id="confirmPassword" name="confirmPassword"
         label="비밀번호 확인" v-model:confirmPassword="props?.confirmPassword" /> -->
-      <button type="submit" class="auth__btn">{{ submitButtonText }}</button>
+      <ActionButton type="submit" class="auth__btn">{{ submitButtonText }}</ActionButton>
       <div class="auth__link">
         <RouterLink v-if="!isSignUp" to="/reset-password" class="auth__link--item">{{ linkText }}</RouterLink>
         <span>{{ footerText }}
@@ -75,6 +75,10 @@ const handleSubmit = (e) => {
   margin: auto;
   max-width: 38.4rem;
   width: 100%;
+  padding: 3.2rem 2.4rem;
+  background-color: var(--background-color);
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .auth__form {
@@ -82,7 +86,38 @@ const handleSubmit = (e) => {
   flex-direction: column;
   gap: 2.4rem;
   align-items: center;
-  border: 1px sold black;
+}
+
+.auth__heading {
+  color: var(--text-color);
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.auth__or {
+  color: var(--text-secondary-color);
+  font-size: 1.4rem;
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.auth__or::before,
+.auth__or::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.auth__or::before {
+  left: 0;
+}
+
+.auth__or::after {
+  right: 0;
 }
 
 .auth__link {
@@ -90,10 +125,39 @@ const handleSubmit = (e) => {
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
+  color: var(--text-secondary-color);
+  font-size: 1.4rem;
 }
+
+.auth__link--item {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth__link--item:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
 .auth__btn {
-    width: 100%;
-    cursor: pointer;
-    padding: .8rem;
+  width: 100%;
+  cursor: pointer;
+  padding: 1.2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  transition: background-color 0.2s ease;
+}
+
+.auth__btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.auth__btn:active {
+  background-color: var(--primary-active);
 }
 </style>
