@@ -128,7 +128,7 @@ const handleCartAdd = async (productId) => {
 
 <template>
     <div class="product-list-page">
-        <h3>{{ categoryName }} 분야</h3>
+        <h3>{{ categoryName }} 관련도서</h3>
         <h4>상품 ({{ totalElements.toLocaleString() }})</h4>
 
         <!-- 로딩 -->

@@ -191,14 +191,14 @@ const handlePageSizeChange = () => {
 </script>
 
 <template>
-    <div class="product-list-page">
-        <h3 v-if="isBestSeller">베스트셀러 순위</h3>
-        <h3 v-if="isNew">신상품 순위</h3>
-        <h3 v-if="isSale">세일 순위</h3>
+    <div class="product-list-page container py-5">
+        <h1 class="mb-4 text-center" v-if="isBestSeller">베스트셀러 순위</h1>
+        <h1 class="mb-4 text-center" v-if="isNew">신상품 순위</h1>
+        <h1 class="mb-4 text-center" v-if="isSale">세일 순위</h1>
 
         <!-- 페이지 사이즈 선택 -->
-        <div class="d-flex justify-content-end mb-3">
-            <select class="form-select" style="width: auto;" v-model="pageSize" @change="handlePageSizeChange">
+        <div class="d-flex justify-content-end mb-4">
+            <select class="form-select form-select-sm" style="width: 150px;" v-model="pageSize" @change="handlePageSizeChange">
                 <option value="10">10개씩 보기</option>
                 <option value="20">20개씩 보기</option>
                 <option value="50">50개씩 보기</option>
@@ -215,14 +215,14 @@ const handlePageSizeChange = () => {
         <!-- 빈 상태 -->
         <div v-else-if="!productDtos.length" class="text-center py-5">
             <div class="empty-state">
-                <i class="bi bi-book" style="font-size: 4rem;"></i>
+                <i class="bi bi-book" style="font-size: 4rem; color: var(--bs-primary)"></i>
                 <h3 class="mt-4">상품이 없습니다</h3>
                 <p class="text-muted">해당하는 상품을 찾을 수 없습니다.</p>
             </div>
         </div>
 
         <!-- 상품 리스트 -->
-        <div v-else>
+        <div v-else class="product-list">
             <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
                 <div class="product-rank">
                     <span>{{ currentPage * pageSize + index + 1 }}</span>
@@ -233,25 +233,24 @@ const handlePageSizeChange = () => {
                     </RouterLink>
                 </div>
                 <div class="product-info">
-                    <span class="product-name">
+                    <h2 class="product-name">
                         <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}</RouterLink>
-                    </span>
-                    <div>
+                    </h2>
+                    <div class="product-meta">
                         <span>{{ product.authorNames }} 저</span>
                         <small>|</small>
                         <span>{{ product.publisherName }}</span>
                         <small>|</small>
                         <span>{{ formatDateYYMMKr(product.publishedDate) }}</span>
                     </div>
-                    <div>
-                        <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
-                        <span class="product-price">{{ (product.price - product.price * product.discountRate /
+                    <div class="product-price-info">
+                        <small class="original-price">{{ product.price.toLocaleString() }}원</small>
+                        <span class="discounted-price">{{ (product.price - product.price * product.discountRate /
                             100).toLocaleString()
                             }}원</span>
-                        <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate
-                        }}%</span>
+                        <span v-if="product.discountRate" class="discount-badge">{{ product.discountRate }}%</span>
                     </div>
-                    <div>
+                    <div class="product-sold">
                         <span>판매량 {{ product.sold.toLocaleString() }}부</span>
                     </div>
                 </div>
@@ -259,7 +258,7 @@ const handlePageSizeChange = () => {
                     <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
                     <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
                     <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
-                    <ActionButton @action="handleBuy(product.id)">구매하기</ActionButton>
+                    <ActionButton @action="handleBuy(product.id)" class="buy-button">구매하기</ActionButton>
                 </div>
             </div>
         </div>
@@ -270,69 +269,136 @@ const handlePageSizeChange = () => {
             :current-page="currentPage + 1"
             :total-pages="totalPages"
             @page-change="handlePageChange"
+            class="mt-4"
         />
     </div>
 </template>
 
 <style scoped>
+.product-list-page {
+    background: #fff;
+    min-height: 100vh;
+}
+
+.product-list {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
 .product-item {
     display: grid;
     grid-template-columns: auto 150px 1fr auto;
-    gap: 1.6rem;
-    padding: 1.6rem;
-    border-bottom: 1px solid #eee;
+    gap: 2rem;
+    padding: 2rem;
+    border-bottom: 1px solid var(--bs-gray-200);
     align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.product-item:hover {
+    background-color: var(--bs-gray-100);
 }
 
 .product-rank {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     display: grid;
     place-items: center;
     font-size: 2.4rem;
-    font-weight: bolder;
-    background: #f8f9fa;
+    font-weight: 700;
+    background: var(--bs-primary);
+    color: white;
     border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .product-image img {
     width: 150px;
     height: 200px;
     object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.product-image img:hover {
+    transform: scale(1.05);
 }
 
 .product-info {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 1rem;
 }
 
 .product-name {
     font-size: 1.8rem;
-    font-weight: bold;
+    font-weight: 700;
+    margin: 0;
 }
 
-.product-info>div {
+.product-name a {
+    text-decoration: none;
+    color: var(--bs-dark);
+    transition: color 0.2s ease;
+}
+
+.product-name a:hover {
+    color: var(--bs-primary);
+}
+
+.product-meta {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.8rem;
     align-items: center;
-    color: #6c757d;
+    color: var(--bs-gray-600);
+    font-size: 0.9rem;
+}
+
+.product-price-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.original-price {
+    color: var(--bs-gray-500);
+}
+
+.discounted-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--bs-primary);
+}
+
+.discount-badge {
+    background: var(--bs-danger);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.product-sold {
+    color: var(--bs-gray-600);
+    font-size: 0.9rem;
 }
 
 .product-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-    align-items: stretch;
+    gap: 1rem;
+    min-width: 120px;
 }
 
-.product-price {
-    font-size: 1.8rem;
-    font-weight: bolder;
+.buy-button {
+    width: 100%;
 }
 
 .empty-state {
-    padding: 4rem;
-    color: #6c757d;
+    padding: 6rem 2rem;
+    background: var(--bs-gray-100);
+    border-radius: 8px;
 }
 </style>

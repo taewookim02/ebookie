@@ -13,6 +13,7 @@ const tokenStore = useTokenStore();
 const memberStore = useMemberStore();
 const categoriesDto = ref([]);
 const isMobileMenuOpen = ref(false);
+const isBottomNavOpen = ref(false);
 
 const shouldShowBottomNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
@@ -41,6 +42,13 @@ const handleLogout = (e) => {
 
 const toggleMobileMenu = () => {
     isMobileMenuOpen.value = !isMobileMenuOpen.value;
+    if (!isMobileMenuOpen.value) {
+        isBottomNavOpen.value = false;
+    }
+}
+
+const toggleBottomNav = () => {
+    isBottomNavOpen.value = !isBottomNavOpen.value;
 }
 
 const fetchCategories = async () => {
@@ -51,6 +59,9 @@ const fetchCategories = async () => {
         console.log(err);
     }
 };
+const isMobileWidth = computed(() => {
+    return window.innerWidth < 768;
+})
 
 onMounted(() => {
     fetchCategories();
@@ -95,17 +106,17 @@ onMounted(() => {
 
         <!-- 바텀 네비게이션 START -->
         <template v-if="shouldShowBottomNav && !shouldShowMemberNav">
-            <div class="navbar__bottom">
+            <div class="navbar__bottom" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
                 <a href="#" class="nav-item dropdown-toggle" role="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
                     aria-controls="navbarToggleExternalContent" aria-expanded="false"
-                    aria-label="Toggle navigation">카테고리</a>
+                    aria-label="Toggle navigation" @click="toggleBottomNav">카테고리</a>
                     
                 <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="nav-item">베스트상품</RouterLink>
                 <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="nav-item">신상품</RouterLink>
                 <RouterLink to="/products?page=0&size=20&sort=discountRate,desc" class="nav-item">세일</RouterLink>
             </div>
-            <div class="collapse category-menu" id="navbarToggleExternalContent" data-bs-theme="light">
+            <div class="collapse category-menu" :class="{ 'show': isBottomNavOpen && isMobileWidth }" id="navbarToggleExternalContent" data-bs-theme="light">
                 <div class="category-list">
                     <RouterLink class="category-item" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto">
                         {{ dto.name }}
@@ -117,7 +128,7 @@ onMounted(() => {
 
         <!-- 유저 정보 네비게이션 START -->
         <template v-if="shouldShowMemberNav">
-            <div class="navbar__bottom">
+            <div class="navbar__bottom" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
                 <RouterLink to="/liked" class="nav-item">좋아요 목록</RouterLink>
                 <RouterLink to="/saved" class="nav-item">찜 목록</RouterLink>
                 <RouterLink to="/cart" class="nav-item">장바구니</RouterLink>
@@ -233,7 +244,6 @@ onMounted(() => {
     background-color: #333;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
     .navbar {
         padding: 0 1rem;
@@ -267,7 +277,12 @@ onMounted(() => {
     }
 
     .navbar__bottom {
+        display: none;
         flex-direction: column;
+    }
+
+    .navbar__bottom.mobile-menu-open {
+        display: flex;
     }
 
     .nav-item {

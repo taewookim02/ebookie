@@ -1,0 +1,1 @@
+import{_ as s,o as a,c as i,A as r,E as l}from"./index-DZyeJC7V.js";const _={__name:"ActionButton",props:{isActive:Boolean},emits:["action"],setup(t,{emit:e}){const o=e,n=()=>{o("action")};return(c,m)=>(a(),i("button",{class:l(["btn-action",{active:t.isActive}]),onClick:n},[r(c.$slots,"default",{},void 0,!0)],2))}},d=s(_,[["__scopeId","data-v-a24f65ed"]]);export{d as A};

@@ -1,7 +1,7 @@
 <script setup>
 import Autocomplete from '@trevoreyre/autocomplete-vue'
 import '@trevoreyre/autocomplete-vue/dist/style.css'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { customAxios } from '@/plugins/axios';
 
 // state
@@ -30,6 +30,8 @@ const handleSubmit = (result) => {
         window.location.href = `/products/${result.id}`;
     }
 }
+
+// TODO: z-index for autocomplete-result-list
 </script>
 
 <template>
@@ -38,4 +40,5 @@ const handleSubmit = (result) => {
 </template>
 
 <style scoped>
+
 </style>

@@ -1,1 +1,0 @@
-import{r as e,o as s,c as o,a as c,g as n}from"./index-CSlCrRMK.js";const p={__name:"ProductLibraryPage",setup(i){const t=e([]);return(async()=>{const a=await n.get("/api/v1/library");t.value=a.data})(),(a,r)=>(s(),o("div",null,r[0]||(r[0]=[c("h1",null,"Library",-1)])))}};export{p as default};
