@@ -38,34 +38,4 @@ const handleSubmit = (result) => {
 </template>
 
 <style scoped>
-/* .search-bar {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.search-bar :deep(.autocomplete-input) {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.search-bar :deep(.autocomplete-result-list) {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-top: 4px;
-  padding: 0;
-  background: white;
-}
-
-.search-bar :deep(.autocomplete-result) {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.search-bar :deep(.autocomplete-result:hover) {
-  background-color: #f5f5f5;
-} */
 </style>

@@ -12,7 +12,7 @@ import { useMemberStore } from '@/store/memberStore';
 const tokenStore = useTokenStore();
 const memberStore = useMemberStore();
 const categoriesDto = ref([]);
-
+const isMobileMenuOpen = ref(false);
 
 const shouldShowBottomNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
@@ -22,6 +22,7 @@ const shouldShowMemberNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
     return ["/member/edit", "/liked", "/saved", "/cart", "/orders", "/library"].includes(currentURLPath);
 })
+
 // actions
 const handleLogout = (e) => {
     customAxios
@@ -38,11 +39,14 @@ const handleLogout = (e) => {
     router.push("/");
 }
 
+const toggleMobileMenu = () => {
+    isMobileMenuOpen.value = !isMobileMenuOpen.value;
+}
+
 const fetchCategories = async () => {
     try {
         const res = await customAxios.get("/api/v1/categories");
         categoriesDto.value = res.data;
-        // console.log(res);
     } catch (err) {
         console.log(err);
     }
@@ -57,14 +61,23 @@ onMounted(() => {
 <template>
     <nav class="navbar mt-5">
         <!-- 탑 네비게이션 START -->
-        <div class="d-flex align-items-center w-100 justify-content-between">
+        <div class="d-flex align-items-center w-100 justify-content-between flex-wrap">
             <RouterLink to="/" class="navbar__logo">
                 <img src="@/assets/logo.png" alt="Logo">
             </RouterLink>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" @click="toggleMobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="navbar__search">
                 <SearchBar></SearchBar>
             </div>
-            <div class="navbar__links">
+            
+            <div class="navbar__links" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
                 <!-- 로그인 안된 상태 -->
                 <template v-if="!tokenStore.isLoggedIn">
                     <RouterLink to="/login" class="nav-link">로그인</RouterLink>
@@ -157,6 +170,7 @@ onMounted(() => {
     margin-top: 2rem;
     border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid #E5E5E5;
+    flex-wrap: wrap;
 }
 
 .nav-item {
@@ -198,5 +212,78 @@ onMounted(() => {
 .category-item:hover {
     background-color: #F5F5F5;
     color: #1A1A1A;
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.mobile-menu-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    .navbar__search {
+        width: 100%;
+        order: 3;
+        margin: 1rem 0;
+    }
+
+    .navbar__links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+        order: 4;
+    }
+
+    .navbar__links.mobile-menu-open {
+        display: flex;
+    }
+
+    .nav-link {
+        padding: 1rem 0;
+        border-top: 1px solid #E5E5E5;
+    }
+
+    .navbar__bottom {
+        flex-direction: column;
+    }
+
+    .nav-item {
+        width: 100%;
+        border-bottom: 1px solid #E5E5E5;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-list {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .category-item {
+        width: calc(50% - 0.5rem);
+    }
 }
 </style>

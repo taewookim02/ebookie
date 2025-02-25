@@ -31,6 +31,7 @@ import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDt
 import com.avad.ebookie.domain.product.dto.response.ProductListItemResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductSearchResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -219,5 +220,21 @@ public class ProductService {
                 .totalElements(totalElements)
                 .libraryDtos(libraryDtos)
                 .build();
+    }
+    public List<ProductSearchResponseDto> searchProducts(String query) {
+        List<Product> products = productRepository.findAllBySearchQuery(query);
+
+        List<ProductSearchResponseDto> productDtos = products.stream()
+            .map(product -> ProductSearchResponseDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .authorNames(product.getAuthors().stream()
+                    .map(author -> author.getAuthor().getName())
+                    .collect(Collectors.joining(", ")))
+                .category(product.getCategory().getName())
+                .build())
+            .collect(Collectors.toList());
+
+        return productDtos;
     }
 }
