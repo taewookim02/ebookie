@@ -26,12 +26,11 @@ const fetchOrders = async (page = 0) => {
 }
 
 const handlePageChange = (page) => {
-    // Subtract 1 from page since pagination component is 1-based but API is 0-based
     fetchOrders(page - 1);
 }
 
 const handlePageSizeChange = () => {
-    currentPage.value = 0; // Reset to first page when changing page size
+    currentPage.value = 0;
     fetchOrders(0);
 }
 
@@ -41,7 +40,7 @@ fetchOrders();
 
 <template>
     <div>
-        <h1>Orders</h1>
+        <h1>주문 목록</h1>
         <div class="page-controls">
             <select v-model="pageSize" @change="handlePageSizeChange">
                 <option v-for="size in pageSizeOptions" :key="size" :value="size">

@@ -57,4 +57,5 @@ server:
 
 app:
   upload:
-    dir: D:/ebookie/product-images/
+    img-dir: D:/ebookie/product-images/
+    file-dir: D:/ebookie/product-files/

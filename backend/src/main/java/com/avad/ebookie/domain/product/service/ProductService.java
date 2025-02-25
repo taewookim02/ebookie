@@ -1,20 +1,5 @@
 package com.avad.ebookie.domain.product.service;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.category.dto.response.CategoryProductsResponseDto;
@@ -26,20 +11,28 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
-import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductLibraryItemResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductListItemResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
-import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
+import com.avad.ebookie.domain.product.dto.response.*;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
+import com.avad.ebookie.domain.product_file.mapper.ProductFileMapper;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.avad.ebookie.domain.saved_product.repository.SavedProductRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +45,7 @@ public class ProductService {
     private final CartRepository cartRepository;
     private final ProductMapper productMapper;
     private final OrderRepository orderRepository;
+    private final ProductFileMapper productFileMapper;
 
 
     public List<ProductDetailResponseDto> testProduct() {
@@ -88,8 +82,8 @@ public class ProductService {
 
         // 관련상품 추가
         List<Product> relatedProductsByCategory = productRepository.findTop15ByCategoryIdAndIdNotOrderByPublishedDateDesc(
-            product.getCategory().getId(),
-            product.getId()
+                product.getCategory().getId(),
+                product.getId()
         );
         List<ProductRelatedResponseDto> relatedProducts = productMapper.toRelatedDtos(relatedProductsByCategory);
         detailDto.setRelatedProducts(relatedProducts);
@@ -113,10 +107,10 @@ public class ProductService {
                             .id(category.getId())
                             .name(category.getName())
                             .products(productMapper
-                                        .toRelatedDtos(
-                                                productRepository
-                                                .findTop15ByCategoryIdOrderBySoldDesc(category.getId())
-                                        )
+                                    .toRelatedDtos(
+                                            productRepository
+                                                    .findTop15ByCategoryIdOrderBySoldDesc(category.getId())
+                                    )
                             )
                             .build();
                 }).collect(Collectors.toList());
@@ -140,8 +134,6 @@ public class ProductService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Boolean isLoggedIn = authentication.getClass() == UsernamePasswordAuthenticationToken.class;
-
-
 
 
         return ProductListResponseDto.builder()
@@ -182,11 +174,14 @@ public class ProductService {
         // 결제완료된 주문 구하기
         List<Order> paidOrders = orderRepository.findAllByMemberAndOrderStatus(loggedInMember, OrderStatus.PAID);
 
-        // 상품 목록 셋 구하기
+        // 주문을 업데이트 시간 기준으로 정렬
+        paidOrders.sort((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()));
+
+        // 상품 목록 구하기 (순서 유지를 위해 LinkedHashSet 사용)
         Set<Product> allProducts = paidOrders.stream()
                 .flatMap(order -> order.getOrderDetails().stream())
                 .map(orderDetail -> orderDetail.getProduct())
-                .collect(Collectors.toCollection(HashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         // 상품목록에 pagination 적용
         List<Product> paginatedProducts = allProducts.stream()
@@ -199,6 +194,9 @@ public class ProductService {
                         .productId(product.getId())
                         .title(product.getName())
                         .thumbnailUrl(product.getImages().get(0).getFileName())
+                        .files(product.getFiles().stream()
+                                .map(productFile -> productFileMapper.toDto(productFile))
+                                .collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
 

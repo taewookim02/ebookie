@@ -5,6 +5,7 @@ import { getImageFromServer } from '@/helper/imgPath';
 import ActionButton from '@/components/common/ActionButton.vue';
 import { useToast } from 'vue-toastification';
 import Pagination from '@/components/common/Pagination.vue';
+import { PhDownloadSimple } from '@phosphor-icons/vue';
 
 const libraryPageDto = ref({
     libraryDtos: [],
@@ -30,30 +31,17 @@ const fetchLibrary = async (page = 0) => {
 }
 
 const handlePageChange = (page) => {
-    // Subtract 1 from page since pagination component is 1-based but API is 0-based
     fetchLibrary(page - 1);
 }
 
 const handlePageSizeChange = () => {
-    currentPage.value = 0; // Reset to first page when changing page size
+    currentPage.value = 0;
     fetchLibrary(0);
 }
 
 const handleDownload = async (productId) => {
     try {
-        const res = await customAxios.get(`/api/v1/library/${productId}/download`, {
-            responseType: 'blob'
-        });
-        
-        // Create blob URL and trigger download
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `book-${productId}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
+        const res = await customAxios.get(`/api/v1/products/files/download/${productId}`);
 
         toast.success("다운로드가 시작됩니다.");
     } catch (err) {
@@ -86,22 +74,21 @@ onMounted(() => {
 
         <div v-else class="library-grid">
             <div v-for="product in libraryPageDto.libraryDtos" :key="product.productId" class="library-item">
-                <img :src="getImageFromServer(product.thumbnailUrl)" :alt="product.title" class="library-item__image">
+                <RouterLink :to="`/products/${product.productId}`">
+                    <img :src="getImageFromServer(product.thumbnailUrl)" :alt="product.title"
+                        class="library-item__image">
+                </RouterLink>
                 <div class="library-item__info">
                     <h3>{{ product.title }}</h3>
                     <ActionButton @action="() => handleDownload(product.productId)" class="download-btn">
-                        <i class="bi bi-download"></i> 다운로드
+                        <PhDownloadSimple /> 다운로드
                     </ActionButton>
                 </div>
             </div>
         </div>
 
-        <Pagination
-            v-if="libraryPageDto.totalPages > 1"
-            :current-page="currentPage + 1"
-            :total-pages="libraryPageDto.totalPages"
-            @page-change="handlePageChange"
-        />
+        <Pagination v-if="libraryPageDto.totalPages > 1" :current-page="currentPage + 1"
+            :total-pages="libraryPageDto.totalPages" @page-change="handlePageChange" />
     </div>
 </template>
 

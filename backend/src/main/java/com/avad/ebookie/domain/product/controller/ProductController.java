@@ -67,4 +67,8 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 다운로드
+//    @GetMapping("/products/download/{productId}")
+//    public
+
 }

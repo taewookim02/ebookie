@@ -4,6 +4,7 @@ import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.category.entity.Category;
 import com.avad.ebookie.domain.common.entity.BaseTimeEntity;
 import com.avad.ebookie.domain.product_author.entity.ProductAuthor;
+import com.avad.ebookie.domain.product_file.entity.ProductFile;
 import com.avad.ebookie.domain.product_image.entity.ProductImage;
 import com.avad.ebookie.domain.publisher.entity.Publisher;
 import com.avad.ebookie.domain.review.entity.Review;
@@ -76,6 +77,10 @@ public class Product extends BaseTimeEntity {
     @JsonManagedReference
     private List<ProductImage> images = new ArrayList<>();
 
+    // 파일 목록
+    @OneToMany(mappedBy = "parentProduct", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ProductFile> files = new ArrayList<>();
 
     // 찜하기 목록
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -86,6 +91,7 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Cart> cartList = new ArrayList<>();
+
 
     // 리뷰 평균 평점 구하기
     public double getAverageRating() {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductImageService {
 
-    @Value("${app.upload.dir}")
+    @Value("${app.upload.img-dir}")
     private String filePath;
 
     public Resource returnImage(String imageName) {
