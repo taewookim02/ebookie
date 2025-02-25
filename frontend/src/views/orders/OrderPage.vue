@@ -1,19 +1,39 @@
 <script setup>
 import { ref } from 'vue';
 import { customAxios } from '@/plugins/axios';
+import Pagination from '@/components/common/Pagination.vue';
 
 // state
-const ordersDto = ref([]);
+const orderPageDto = ref({
+    orders: [],
+    totalPages: 0,
+    totalElements: 0,
+    currentPage: 0
+});
+const currentPage = ref(0);
+const pageSize = ref(10);
+const pageSizeOptions = [5, 10, 20, 50];
 
 // actions
-const fetchOrders = async () => {
+const fetchOrders = async (page = 0) => {
     try {
-        const res = await customAxios.get(`/api/v1/orders`);
-        ordersDto.value = res.data;
+        const res = await customAxios.get(`/api/v1/orders?page=${page}&size=${pageSize.value}`);
+        orderPageDto.value = res.data;
+        currentPage.value = res.data.currentPage;
     } catch (err) {
         console.log("fetchOrders() err:", err);
     }
 }
+
+const handlePageChange = (page) => {
+    fetchOrders(page);
+}
+
+const handlePageSizeChange = () => {
+    currentPage.value = 0; // Reset to first page when changing page size
+    fetchOrders(0);
+}
+
 fetchOrders();
 
 </script>
@@ -21,11 +41,18 @@ fetchOrders();
 <template>
     <div>
         <h1>Orders</h1>
-        <div v-if="ordersDto.length === 0">
+        <div class="page-controls">
+            <select v-model="pageSize" @change="handlePageSizeChange">
+                <option v-for="size in pageSizeOptions" :key="size" :value="size">
+                    {{ size }}개씩 보기
+                </option>
+            </select>
+        </div>
+        <div v-if="orderPageDto.orders.length === 0">
             주문 내역이 없습니다.
         </div>
         <div v-else>
-            <div v-for="order in ordersDto" :key="order.id" class="order-item">
+            <div v-for="order in orderPageDto.orders" :key="order.id" class="order-item">
                 <RouterLink :to="`/orders/${order.id}`">
                     <div class="order-header">
                         <span>주문번호: {{ order.id }}</span>
@@ -33,15 +60,38 @@ fetchOrders();
                     </div>
                     <div class="order-content">
                         <span>총 금액: {{ order.totalPrice.toLocaleString() }}원</span>
-                        <span>상태: {{ order.status }}</span>
+                        <span>상태: {{ order.orderStatus }}</span>
+                    </div>
+                    <div class="order-products">
+                        <div v-for="product in order.products" :key="product.productId">
+                            {{ product.productName }}
+                        </div>
                     </div>
                 </RouterLink>
             </div>
+
+            <Pagination
+                v-if="orderPageDto.totalPages > 1"
+                :current-page="currentPage"
+                :total-pages="orderPageDto.totalPages"
+                @page-change="handlePageChange"
+            />
         </div>
     </div>
 </template>
 
 <style scoped>
+.page-controls {
+    margin-bottom: 1rem;
+}
+
+.page-controls select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
 .order-item {
     border: 1px solid #ddd;
     margin: 10px 0;
@@ -63,5 +113,11 @@ fetchOrders();
 .order-content {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.order-products {
+    font-size: 0.9em;
+    color: #666;
 }
 </style>

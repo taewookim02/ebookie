@@ -1,5 +1,16 @@
 package com.avad.ebookie.domain.order.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.dto.request.OrderCreateRequestDto;
 import com.avad.ebookie.domain.order.dto.response.OrderPageDetailResponseDto;
@@ -15,16 +26,8 @@ import com.avad.ebookie.domain.order_detail.mapper.OrderDetailMapper;
 import com.avad.ebookie.domain.order_detail.repository.OrderDetailRepository;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
-import com.avad.ebookie.domain.status.entity.Status;
-import com.avad.ebookie.domain.status.repository.StatusRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +36,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ProductRepository productRepository;
-    private final StatusRepository statusRepository;
     private final OrderMapper orderMapper;
     private final OrderDetailMapper orderDetailMapper;
 
@@ -111,19 +113,23 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderPageResponseDto getListOfOrders() {
+    public OrderPageResponseDto getListOfOrders(Pageable pageable) {
         // get member
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member loggedInMember = (Member) authentication.getPrincipal();
 
-        // get Order
-        List<Order> orders = loggedInMember.getOrders();
+        // get Orders with pagination, ordered by creation date descending
+        Page<Order> orderPage = orderRepository.findByMemberOrderByCreatedAtDesc(loggedInMember, pageable);
+        
+        List<OrderResponseDto> orderResponseDtos = orderPage.getContent().stream()
+                .map(orderMapper::toComplexDto)
+                .collect(Collectors.toList());
 
-        // get order details
-//        List<OrderDetail> orderDetails = orderDetailRepository.findAllByOrderIn(orders);
-
-//        System.out.println("orders = " + orders);
-        System.out.println("hello world");
-        return null;
+        return OrderPageResponseDto.builder()
+                .orders(orderResponseDtos)
+                .totalPages(orderPage.getTotalPages())
+                .totalElements(orderPage.getTotalElements())
+                .currentPage(orderPage.getNumber())
+                .build();
     }
 }

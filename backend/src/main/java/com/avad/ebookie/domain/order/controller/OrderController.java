@@ -6,6 +6,7 @@ import com.avad.ebookie.domain.order.dto.response.OrderPageResponseDto;
 import com.avad.ebookie.domain.order.dto.response.OrderResponseDto;
 import com.avad.ebookie.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,8 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<OrderPageResponseDto> getListOfOrders() {
-        OrderPageResponseDto responseDto = orderService.getListOfOrders();
+    public ResponseEntity<OrderPageResponseDto> getListOfOrders(Pageable pageable) {
+        OrderPageResponseDto responseDto = orderService.getListOfOrders(pageable);
         return ResponseEntity.ok(responseDto);
     }
 

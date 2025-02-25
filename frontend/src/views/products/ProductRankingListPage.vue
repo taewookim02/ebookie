@@ -196,7 +196,7 @@ const handlePageSizeChange = () => {
         <h3 v-if="isNew">신상품 순위</h3>
         <h3 v-if="isSale">세일 순위</h3>
 
-        <!-- Page size selector -->
+        <!-- 페이지 사이즈 선택 -->
         <div class="d-flex justify-content-end mb-3">
             <select class="form-select" style="width: auto;" v-model="pageSize" @change="handlePageSizeChange">
                 <option value="10">10개씩 보기</option>
@@ -205,14 +205,14 @@ const handlePageSizeChange = () => {
             </select>
         </div>
 
-        <!-- Loading state -->
+        <!-- 로딩 -->
         <div v-if="isLoading" class="text-center py-5">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
 
-        <!-- Empty state -->
+        <!-- 빈 상태 -->
         <div v-else-if="!productDtos.length" class="text-center py-5">
             <div class="empty-state">
                 <i class="bi bi-book" style="font-size: 4rem;"></i>
@@ -221,7 +221,7 @@ const handlePageSizeChange = () => {
             </div>
         </div>
 
-        <!-- Product list -->
+        <!-- 상품 리스트 -->
         <div v-else>
             <div class="product-item" v-for="(product, index) in productDtos" :key="product.id">
                 <div class="product-rank">
