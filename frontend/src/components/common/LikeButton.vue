@@ -8,7 +8,7 @@ const props = defineProps({
     },
     color: {
         type: String,
-        default: "#333333",
+        default: "var(--text-color)",
     },
     weight: {
         type: String,
@@ -27,16 +27,28 @@ const handleLikeClick = () => {
 
 <template>
     <button class="btn-like" @click="handleLikeClick">
-        <PhHeart v-if="!isActive" :size="size" :color="color" :weight="weight"  />
-        <PhHeart v-else :size="size" color="#FE4D4D" weight="fill"  />
+        <PhHeart v-if="!isActive" :size="size" :color="color" :weight="weight" />
+        <PhHeart v-else :size="size" color="var(--accent-color)" weight="fill" />
     </button>
 </template>
 
 <style scoped>
 .btn-like {
-    padding: .4rem;
-    border-radius: .8rem;
-    border: 1px solid #333333;
+    padding: .8rem;
+    border-radius: .6rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
+.btn-like:hover {
+    border-color: var(--accent-hover);
+    background-color: var(--background-color);
+}
+
+.btn-like:active {
+    border-color: var(--accent-active);
+    background-color: var(--surface-color);
 }
 </style>

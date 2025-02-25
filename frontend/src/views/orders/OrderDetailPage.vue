@@ -297,50 +297,84 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 6.4rem;
+    color: var(--text-color);
 }
 
 .order__info--table {
     word-break: keep-all;
+    border-color: var(--border-color);
+}
+
+.order__info--table thead {
+    background-color: var(--surface-color);
+}
+
+.order__info--table td {
+    vertical-align: middle;
+    border-color: var(--border-color);
 }
 
 .payment__action--button {
     max-width: 100%;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    transition: background-color 0.2s ease;
+}
+
+.payment__action--button:hover {
+    background-color: var(--primary-hover);
 }
 
 .order__status {
     text-align: center;
     padding: 2rem;
+    background-color: var(--surface-color);
+    border-radius: 0.5rem;
 }
 
 .status-message {
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: 0.5rem;
+    font-weight: 500;
 }
 
 .status-message.paid {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: var(--accent-color);
+    color: var(--background-color);
 }
 
 .status-message.cancelled {
-    background-color: #ffebee;
-    color: #c62828;
+    background-color: #ff4444;
+    color: var(--background-color);
 }
 
 .status-message.refunded {
-    background-color: #fff3e0;
-    color: #ef6c00;
+    background-color: var(--text-secondary-color);
+    color: var(--background-color);
 }
 
 .loading {
     text-align: center;
     padding: 4rem;
+    color: var(--primary-color);
 }
 
 .empty-state {
     text-align: center;
     padding: 4rem;
-    color: #6c757d;
+    color: var(--text-secondary-color);
+    background-color: var(--surface-color);
+    border-radius: 0.5rem;
+    margin: 2rem 0;
+}
+
+.empty-state h3 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary-color);
 }
 </style>

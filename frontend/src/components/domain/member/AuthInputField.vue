@@ -52,11 +52,10 @@ const emit = defineEmits(["update:modelValue"]);
 
 .input-field__label {
     position: absolute;
-    /* display: block; */
     top: 0.4rem;
     left: 0.8rem;
     font-size: 11px;
-    color: #333;
+    color: var(--text-secondary-color);
     letter-spacing: 0.55px;
     line-height: 125%;
     background-color: transparent;
@@ -68,16 +67,25 @@ const emit = defineEmits(["update:modelValue"]);
     padding: 1.6rem 0.8rem 0.4rem;
     font-size: 1.8rem;
     border-radius: 6px;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     font-weight: 320;
+    transition: border-color 0.2s ease;
 
     &:read-only {
-        border-color: #aaa;
-        background-color: #ccc;
+        border-color: var(--text-secondary-color);
+        background-color: var(--surface-color);
+        opacity: 0.7;
     }
-     &:focus-visible {
+
+    &:focus-visible {
         outline: none;
+        border-color: var(--primary-color);
+    }
+
+    &:hover:not(:read-only) {
+        border-color: var(--primary-hover);
     }
 }
 </style>

@@ -16,7 +16,7 @@ const totalElements = ref(0);
 const currentPage = ref(0);
 const isLoading = ref(false);
 const categoryName = ref('');
-const pageSize = ref(2);
+const pageSize = ref(20);
 
 const route = useRoute();
 const router = useRouter();
@@ -158,39 +158,41 @@ const handleCartAdd = async (productId) => {
                     </div>
                     <div class="product-info">
                         <span class="product-name">
-                            <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}</RouterLink>
+                            <RouterLink :to="`/products/${product.id}`" class="link-dark">{{ product.name }}
+                            </RouterLink>
                         </span>
                         <div>
-                            <span>{{ product.authorNames }} 저</span>
-                            <small>|</small>
-                            <span>{{ product.publisherName }}</span>
-                            <small>|</small>
-                            <span>{{ formatDateYYMMKr(product.publishedDate) }}</span>
+                            <small>{{ product.authorNames }} 저</small>
+                        </div>
+
+                        <div>
+                            <small>{{ product.publisherName }}</small>
+                        </div>
+
+                        <div>
+                            <small>{{ formatDateYYMMKr(product.publishedDate) }}</small>
                         </div>
                         <div>
                             <small class="text-decoration-line-through">{{ product.price.toLocaleString() }}원</small>
-                            <span class="product-price">{{ (product.price - product.price * product.discountRate / 100).toLocaleString() }}원</span>
-                            <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate }}%</span>
+                            <span class="product-price" style="color: var(--primary-color);">{{ (product.price -
+                                product.price * product.discountRate / 100).toLocaleString() }}원</span>
+                            <!-- <span v-if="product.discountRate" class="badge text-bg-danger">{{ product.discountRate }}%</span> -->
                         </div>
                         <div>
-                            <span>판매량 {{ product.sold.toLocaleString() }}부</span>
+                            <small>판매량 {{ product.sold.toLocaleString() }}부</small>
                         </div>
                     </div>
                     <div class="product-actions">
-                        <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
                         <LikeButton @like="handleLike(product.id)" :is-active="product.isLiked" />
                         <SaveButton @save="handleSave(product.id)" :is-active="product.isSaved" />
+                        <CartButton @cart="handleCartAdd(product.id)" :is-active="product.isInCart" />
                     </div>
                 </div>
             </div>
 
             <!-- Pagination -->
-            <Pagination 
-                v-if="totalPages > 0"
-                :current-page="currentPage + 1"
-                :total-pages="totalPages"
-                @page-change="handlePageChange"
-            />
+            <Pagination v-if="totalPages > 0" :current-page="currentPage + 1" :total-pages="totalPages"
+                @page-change="handlePageChange" />
         </div>
     </div>
 </template>
