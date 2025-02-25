@@ -1,110 +1,81 @@
 <script setup>
-import { register } from "swiper/element/bundle";
 import { ref, onMounted } from 'vue';
+import { getImageFromServer } from '@/helper/imgPath';
+import { RouterLink } from 'vue-router';
 
-// register();
+const props = defineProps({
+    topFiveProductDtos: Array
+});
 
 const swiperRef = ref(null);
 
 onMounted(() => {
-  const swiperContainer = swiperRef.value;
-  
-  const params = {
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    autoPlay: true,
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 0,
-      depth: 100,
-      modifier: 3,
-      slideShadows: true
-    },
-    loop: true,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true
-    },
-    breakpoints: {
-      640: { slidesPerView: 2 },
-      768: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 },
-      1560: { slidesPerView: 3 }
-    }
-  };
+    const swiperContainer = swiperRef.value;
+    const params = {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        autoPlay: true,
+        coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 3,
+            slideShadows: true
+        },
+        loop: false,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        },
+        breakpoints: {
+            640: { slidesPerView: 2 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1560: { slidesPerView: 3 }
+        }
+    };
 
-  Object.assign(swiperContainer, params);
-  swiperContainer.initialize();
+    Object.assign(swiperContainer, params);
+    swiperContainer.initialize();
 });
-
 
 </script>
 
 <template>
+
     <section class="hero">
+
         <header class="hero__header">
             <span class="hero__header-subtitle">
-                이번 달 TOP 5
+                TOP 5 베스트셀러
             </span>
             <h1 class="hero__header-title">
                 개발 추천도서
             </h1>
             <hr>
             <p class="hero__header-desc">
-                사람들이 가장 많이 찾는 도서를 만나보세요. 
+                사람들이 가장 많이 찾는 도서를 만나보세요.
             </p>
         </header>
-        
         <swiper-container ref="swiperRef" init="false" class="book-swiper">
-            <swiper-slide class="swiper-slide--1">
+            <swiper-slide v-for="(product, index) in topFiveProductDtos" :key="product.id"
+                :class="`swiper-slide--${index + 1}`">
                 <div class="book-card">
-                    <img src="@/assets/images/product/L (10).jpeg" alt="">
-                    <div class="book-card__info">
-                        <h2 class="book-card__title">클린 코드</h2>
-                        <p class="book-card__author">로버트 C. 마틴</p>
+                    <div class="book-card__rank">
+                        <span class="rank-number">{{ index + 1 }}</span>
                     </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide class="swiper-slide--2">
-                <div class="book-card">
-                    <img src="@/assets/images/product/L (11).jpeg" alt="">
+                    <img :src="getImageFromServer(product.thumbnail.fileName)" :alt="product.name">
                     <div class="book-card__info">
-                        <h2 class="book-card__title">리팩터링</h2>
-                        <p class="book-card__author">마틴 파울러</p>
-                    </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide class="swiper-slide--3">
-                <div class="book-card">
-                    <img src="@/assets/images/product/L (12).jpeg" alt="">
-                    <div class="book-card__info">
-                        <h2 class="book-card__title">도메인 주도 설계</h2>
-                        <p class="book-card__author">에릭 에반스</p>
-                    </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide class="swiper-slide--4">
-                <div class="book-card">
-                    <img src="@/assets/images/product/L (13).jpeg" alt="">
-                    <div class="book-card__info">
-                        <h2 class="book-card__title">객체지향의 사실과 오해</h2>
-                        <p class="book-card__author">조영호</p>
-                    </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide class="swiper-slide--5">
-                <div class="book-card">
-                    <img src="@/assets/images/product/L (14).jpeg" alt="">
-                    <div class="book-card__info">
-                        <h2 class="book-card__title">이펙티브 자바</h2>
-                        <p class="book-card__author">조슈아 블로크</p>
+                        <h2 class="book-card__title">{{ product.name }}</h2>
+                        <p class="book-card__author">{{ product.authorNames }}</p>
+                        <RouterLink :to="`/products/${product.id}`" class="book-card__link">
+                            자세히 보기
+                        </RouterLink>
                     </div>
                 </div>
             </swiper-slide>
         </swiper-container>
-        
-        <div class="swiper-pagination"></div>
     </section>
 </template>
 
@@ -152,15 +123,28 @@ hr {
 .book-card {
     background: rgba(255, 255, 255, 0.9);
     padding: 2rem;
-    /* border-radius: 8px; */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
+    position: relative;
 }
 
-
+.book-card__rank {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #333;
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
 
 .book-card__title {
     font-size: 1.5rem;
@@ -171,14 +155,22 @@ hr {
 .book-card__author {
     color: #666;
     font-size: 1rem;
+    margin-bottom: 1rem;
 }
 
-/* Swiper slide backgrounds */
-/* .swiper-slide--1 { background: linear-gradient(45deg, #ff6b6b, #ffd93d); }
-.swiper-slide--2 { background: linear-gradient(45deg, #4facfe, #00f2fe); }
-.swiper-slide--3 { background: linear-gradient(45deg, #43e97b, #38f9d7); }
-.swiper-slide--4 { background: linear-gradient(45deg, #fa709a, #fee140); }
-.swiper-slide--5 { background: linear-gradient(45deg, #6a11cb, #2575fc); } */
+.book-card__link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.book-card__link:hover {
+    background: #555;
+}
 
 :deep(.swiper-pagination-bullet) {
     width: 12px;

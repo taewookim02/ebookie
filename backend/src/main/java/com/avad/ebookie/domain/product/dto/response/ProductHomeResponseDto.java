@@ -11,7 +11,7 @@ import java.util.Map;
 @Getter
 @Builder
 public class ProductHomeResponseDto {
-    private List<ProductTopFiveResponseDto> topFiveSellingProducts;
+    private List<ProductRelatedResponseDto> topFiveSellingProducts;
     private List<CategoryProductsResponseDto> categoryProducts;
 //    private Map<Long, CategoryProductsResponseDto> categoryProducts;
 //    private Map<String, List<ProductRelatedResponseDto>> categoryProducts;

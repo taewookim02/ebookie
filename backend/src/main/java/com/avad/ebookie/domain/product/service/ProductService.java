@@ -1,5 +1,18 @@
 package com.avad.ebookie.domain.product.service;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.category.dto.response.CategoryProductsResponseDto;
@@ -11,28 +24,21 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
-import com.avad.ebookie.domain.product.dto.response.*;
+import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductLibraryItemResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListItemResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.mapper.ProductMapper;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.product_file.mapper.ProductFileMapper;
 import com.avad.ebookie.domain.saved_product.entity.SavedProduct;
 import com.avad.ebookie.domain.saved_product.repository.SavedProductRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -94,10 +100,13 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductHomeResponseDto home() {
         // 이번 달 Top 5
-        LocalDate startDateOfMonth = LocalDate.now().withDayOfMonth(1);
-        LocalDate endDateOfMonth = YearMonth.now().atEndOfMonth();
-        // TODO: orderRepository.findTop5ByCountProductIdBetween
+//        LocalDate startDateOfMonth = LocalDate.now().withDayOfMonth(1);
+//        LocalDate endDateOfMonth = YearMonth.now().atEndOfMonth();
 
+        List<Product> topFiveProducts = productRepository.findTop5ProductsBySold();
+        
+        List<ProductRelatedResponseDto> topFiveDto = productMapper.toRelatedDtos(topFiveProducts);
+        
         // 카테고리 별 추천 도서
         List<Category> categories = categoryRepository.findAll();
 
@@ -116,7 +125,7 @@ public class ProductService {
                 }).collect(Collectors.toList());
 
         return ProductHomeResponseDto.builder()
-                .topFiveSellingProducts(null)
+                .topFiveSellingProducts(topFiveDto)
                 .categoryProducts(collect)
                 .build();
     }
