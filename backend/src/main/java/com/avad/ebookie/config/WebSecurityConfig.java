@@ -42,6 +42,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // csrf 사용 x (REST)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/static/**", "/js/**", "/css/**", "/img/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll() // 로그인, 로그아웃, 토큰 관련
                         .requestMatchers("/api/v1/image").permitAll()   // 이미지는 허용
@@ -79,7 +80,7 @@ public class WebSecurityConfig {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
 //        cookie.setSecure(true); // TODO: localhost == true , 192.168.2.69:8080 == false
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         response.addCookie(cookie);
     }
 
