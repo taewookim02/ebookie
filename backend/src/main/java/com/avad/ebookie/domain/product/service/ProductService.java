@@ -2,8 +2,9 @@ package com.avad.ebookie.domain.product.service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -12,18 +13,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
 import com.avad.ebookie.domain.category.dto.response.CategoryProductsResponseDto;
 import com.avad.ebookie.domain.category.entity.Category;
-import com.avad.ebookie.domain.category.mapper.CategoryMapper;
 import com.avad.ebookie.domain.category.repository.CategoryRepository;
 import com.avad.ebookie.domain.liked_product.entity.LikedProduct;
 import com.avad.ebookie.domain.liked_product.repository.LikedProductRepository;
 import com.avad.ebookie.domain.member.entity.Member;
+import com.avad.ebookie.domain.order.entity.Order;
+import com.avad.ebookie.domain.order.entity.OrderStatus;
+import com.avad.ebookie.domain.order.repository.OrderRepository;
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductLibraryItemResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductListItemResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductRelatedResponseDto;
@@ -45,7 +51,8 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final CartRepository cartRepository;
     private final ProductMapper productMapper;
-    private final CategoryMapper categoryMapper;
+    private final OrderRepository orderRepository;
+
 
     public List<ProductDetailResponseDto> testProduct() {
         List<ProductDetailResponseDto> responses = productRepository.findAll()
@@ -57,6 +64,7 @@ public class ProductService {
         return responses;
     }
 
+    @Transactional(readOnly = true)
     public ProductDetailResponseDto details(Long productId) {
         // 상품 정보 얻기
         Product product = productRepository.findById(productId)
@@ -89,6 +97,7 @@ public class ProductService {
         return detailDto;
     }
 
+    @Transactional(readOnly = true)
     public ProductHomeResponseDto home() {
         // 이번 달 Top 5
         LocalDate startDateOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -118,6 +127,7 @@ public class ProductService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public ProductListResponseDto getProducts(Pageable pageable) {
         System.out.println("pageable = " + pageable);
         // 페이지네이션 조회
@@ -142,6 +152,7 @@ public class ProductService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public ProductListResponseDto getProductsByCategory(Long categoryId, Pageable pageable) {
         System.out.println("categoryId = " + categoryId);
         System.out.println("pageable = " + pageable);
@@ -159,6 +170,47 @@ public class ProductService {
                 .totalElements(totalElements)
                 .products(relatedDtos)
                 .categoryName(category.getName())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ProductLibraryListResponseDto getLibraryList(Pageable pageable) {
+        // get member
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member loggedInMember = (Member) authentication.getPrincipal();
+
+        // 결제완료된 주문 구하기
+        List<Order> paidOrders = orderRepository.findAllByMemberAndOrderStatus(loggedInMember, OrderStatus.PAID);
+
+        // 상품 목록 셋 구하기
+        Set<Product> allProducts = paidOrders.stream()
+                .flatMap(order -> order.getOrderDetails().stream())
+                .map(orderDetail -> orderDetail.getProduct())
+                .collect(Collectors.toCollection(HashSet::new));
+
+        // 상품목록에 pagination 적용
+        List<Product> paginatedProducts = allProducts.stream()
+                .skip(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .collect(Collectors.toList());
+
+        List<ProductLibraryItemResponseDto> libraryDtos = paginatedProducts.stream()
+                .map(product -> ProductLibraryItemResponseDto.builder()
+                        .productId(product.getId())
+                        .title(product.getName())
+                        .thumbnailUrl(product.getImages().get(0).getFileName())
+                        .build())
+                .collect(Collectors.toList());
+
+        int totalElements = allProducts.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
+        int currentPage = pageable.getPageNumber();
+
+        return ProductLibraryListResponseDto.builder()
+                .currentPage(currentPage)
+                .totalPages(totalPages)
+                .totalElements(totalElements)
+                .libraryDtos(libraryDtos)
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.avad.ebookie.domain.product.controller;
 
 import com.avad.ebookie.domain.product.dto.response.ProductDetailResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductHomeResponseDto;
+import com.avad.ebookie.domain.product.dto.response.ProductLibraryListResponseDto;
 import com.avad.ebookie.domain.product.dto.response.ProductListResponseDto;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
 import com.avad.ebookie.domain.product.service.ProductService;
@@ -57,6 +58,13 @@ public class ProductController {
     public ResponseEntity<ProductListResponseDto> getProductsByCategory(@PathVariable("categoryId") Long categoryId, Pageable pageable) {
         ProductListResponseDto responseDtos = productService.getProductsByCategory(categoryId, pageable);
         return ResponseEntity.ok(responseDtos);
+    }
+
+    // 서재
+    @GetMapping("/products/library")
+    public ResponseEntity<ProductLibraryListResponseDto> getLibraryList(Pageable pageable) {
+        ProductLibraryListResponseDto responseDto = productService.getLibraryList(pageable);
+        return ResponseEntity.ok(responseDto);
     }
 
 }
