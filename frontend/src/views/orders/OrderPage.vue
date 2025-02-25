@@ -26,7 +26,8 @@ const fetchOrders = async (page = 0) => {
 }
 
 const handlePageChange = (page) => {
-    fetchOrders(page);
+    // Subtract 1 from page since pagination component is 1-based but API is 0-based
+    fetchOrders(page - 1);
 }
 
 const handlePageSizeChange = () => {
@@ -72,7 +73,7 @@ fetchOrders();
 
             <Pagination
                 v-if="orderPageDto.totalPages > 1"
-                :current-page="currentPage"
+                :current-page="currentPage + 1"
                 :total-pages="orderPageDto.totalPages"
                 @page-change="handlePageChange"
             />
