@@ -2,6 +2,7 @@
 import IconToss from "@/assets/images/icons/icon_toss.gif";
 import IconKakao from "@/assets/images/icons/icon_kakaopay.gif";
 import IconPayco from "@/assets/images/icons/icon_payco.gif";
+import IconKg from "@/assets/images/icons/icon_kg.png"
 
 defineProps({
     totalFinalPrice: Number,
@@ -11,7 +12,8 @@ defineProps({
 
 const paymentMethods = [
     { id: 'kakao', name: 'Kakao', icon: IconKakao },
-    // { id: 'toss', name: 'Toss', icon: IconToss },
+    { id: 'toss', name: 'Toss', icon: IconToss },
+    // { id: 'kg', name: 'kg', icon: IconKg },
     // { id: 'payco', name: 'Payco', icon: IconPayco },
     // { id: 'bank-transfer', name: '계좌이체' },
     // { id: 'virtual-account', name: '무통장입금' }
@@ -30,10 +32,8 @@ const selectPaymentMethod = methodId => {
 
         <div class="payment__method">
             <div class="payment__method--list">
-                <div class="payment__method--list-item" 
-                    :class="{ selected: pgMethod === method.id }"
-                    :key="method.id" v-for="method in paymentMethods"
-                    @click="selectPaymentMethod(method.id)">
+                <div class="payment__method--list-item" :class="{ selected: pgMethod === method.id }" :key="method.id"
+                    v-for="method in paymentMethods" @click="selectPaymentMethod(method.id)">
                     <img :src="method.icon" :alt="method.name" v-if="method.icon">
                     <span v-else>{{ method.name }}</span>
                 </div>

@@ -86,6 +86,10 @@ const channelKey = computed(() => {
         case "kakao":
             // return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
             return "channel-key-bdb9666b-9eba-4cc3-bc3e-cca13a1ff2f9";
+        case "toss":
+            return "channel-key-4ab490c4-6acf-48d8-9439-c326b47656e3";
+        case "kg":
+            return "channel-key-0325f0f6-2588-4f62-993d-81e7ec9a6171";
         default:
             return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
     }
@@ -136,7 +140,9 @@ const handlePayment = async () => {
             productType: "PRODUCT_TYPE_DIGITAL",
             isCulturalExpense: true,
             customer: {
-                email: memberStore.getMemberEmail
+                email: memberStore.getMemberEmail,
+                // phoneNumber: "010-3620-7737", // temp fix for KG이니시스
+                // fullName: "아무개", // temp fix for KG이니시스
             },
             customData: {
                 item: res.data.paymentId
