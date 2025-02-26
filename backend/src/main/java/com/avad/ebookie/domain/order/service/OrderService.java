@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.common.exception.ForbiddenException;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -92,13 +96,13 @@ public class OrderService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member loggedInMember = (Member) authentication.getPrincipal();
 
-        // get Order TODO: exception handle
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("order not found with the id: " + orderId));
+        // get Order
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
 
         // 주문, 회원 검사
         boolean cannotAccess = !order.getMember().getId().equals(loggedInMember.getId());
         if (cannotAccess) {
-            throw new RuntimeException("member doesn't match");
+            throw new ForbiddenException(ErrorCode.INSUFFICIENT_RIGHTS);
         }
 
         // get all orderdetails
@@ -132,4 +136,5 @@ public class OrderService {
                 .currentPage(orderPage.getNumber())
                 .build();
     }
+
 }

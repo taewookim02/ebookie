@@ -3,6 +3,8 @@ package com.avad.ebookie.config.exception;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
 import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
+import com.avad.ebookie.domain.common.exception.BaseException;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -24,6 +26,28 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+
+
+    // 404
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
+
+    // 뭉탱이로 하나 잡고
+    // 빠져나가는거
+    // base exception
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
 
     // JWT 토큰 유효 x
     @ExceptionHandler(SignatureException.class)

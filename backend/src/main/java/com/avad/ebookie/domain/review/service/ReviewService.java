@@ -1,5 +1,7 @@
 package com.avad.ebookie.domain.review.service;
 
+import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -31,7 +33,7 @@ public class ReviewService {
         Member loggedInMember = (Member) authentication.getPrincipal();
 
         Product product = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> new RuntimeException("product not found: " + requestDto.getProductId()));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
 
         Review review = Review.builder()
@@ -53,7 +55,7 @@ public class ReviewService {
     @Transactional
     public ReviewResponseDto updateReview(Long reviewId, @Valid ReviewUpdateRequestDto requestDto) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new RuntimeException("review not found: " + reviewId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.REVIEW_NOT_FOUND));
         review.setContent(requestDto.getContent());
         reviewRepository.save(review);
         return reviewMapper.toDto(review);
