@@ -32,10 +32,4 @@ public class ProductDetailResponseDto {
     private List<AuthorResponseDto> authors;
     private List<ProductImageResponseDto> images;
     private List<ProductRelatedResponseDto> relatedProducts;
-
-    // TODO:
-    // 1. private List<ProductRelatedResponseDto> relatedProducts;
-    // 2. Review
-
-
 }
