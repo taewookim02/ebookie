@@ -34,13 +34,13 @@ const props = defineProps({
                     <td><span class="price-emphasis">{{ totalOriginalPrice.toLocaleString() }}</span>원</td>
                     <td class="icon-cell">
                         <div class="price-icon">
-                            <PhMinus :size="32" color="#71c1cc" weight="fill" />
+                            <PhMinus :size="32" color="var(--primary-color)" weight="fill" />
                         </div>
                     </td>
                     <td><span class="price-emphasis">{{ totalDiscountAmount.toLocaleString() }}</span>원</td>
                     <td class="icon-cell">
                         <div class="price-icon">
-                            <PhEquals :size="32" color="#71c1cc" weight="fill" />
+                            <PhEquals :size="32" color="var(--primary-color)" weight="fill" />
                         </div>
                     </td>
                     <td><span class="price-emphasis">{{ totalFinalPrice.toLocaleString() }}</span>원</td>
