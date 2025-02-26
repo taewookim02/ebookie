@@ -11,8 +11,8 @@ defineProps({
 
 const paymentMethods = [
     { id: 'kakao', name: 'Kakao', icon: IconKakao },
-    { id: 'toss', name: 'Toss', icon: IconToss },
-    { id: 'payco', name: 'Payco', icon: IconPayco },
+    // { id: 'toss', name: 'Toss', icon: IconToss },
+    // { id: 'payco', name: 'Payco', icon: IconPayco },
     // { id: 'bank-transfer', name: '계좌이체' },
     // { id: 'virtual-account', name: '무통장입금' }
 ];

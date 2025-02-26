@@ -11,7 +11,8 @@ const props = defineProps({
 
 <template>
     <section class="cart__numbers">
-        <table class="table table-borderless cart__numbers--table text-center">
+        <!-- Desktop view -->
+        <table class="table table-borderless cart__numbers--table text-center d-none d-md-table">
             <colgroup>
                 <col width="30%" />
                 <col width="5%" />
@@ -46,6 +47,22 @@ const props = defineProps({
                 </tr>
             </tbody>
         </table>
+
+        <!-- Mobile view -->
+        <div class="cart__numbers--mobile d-md-none">
+            <div class="price-row">
+                <div class="price-label">총 상품금액</div>
+                <div class="price-value"><span class="price-emphasis-mobile">{{ totalOriginalPrice.toLocaleString() }}</span>원</div>
+            </div>
+            <div class="price-row">
+                <div class="price-label">총 할인금액</div>
+                <div class="price-value"><span class="price-emphasis-mobile">{{ totalDiscountAmount.toLocaleString() }}</span>원</div>
+            </div>
+            <div class="price-row final">
+                <div class="price-label">최종 결제금액</div>
+                <div class="price-value"><span class="price-emphasis-mobile">{{ totalFinalPrice.toLocaleString() }}</span>원</div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -80,5 +97,43 @@ const props = defineProps({
 .price-emphasis {
     font-size: 3rem;
     font-weight: 600;
+}
+
+/* Mobile styles */
+.cart__numbers--mobile {
+    padding: 1rem;
+    background-color: var(--surface-color);
+    border-radius: 0.5rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.price-row.final {
+    border-bottom: none;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.price-label {
+    font-weight: 500;
+    color: var(--text-secondary-color);
+}
+
+.price-emphasis-mobile {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .price-emphasis-mobile {
+        font-size: 1.2rem;
+    }
 }
 </style>
