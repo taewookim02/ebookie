@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    // GENERAL
+    NOT_FOUND(HttpStatus.NOT_FOUND, "GENERAL_404", "존재하지 않는 엔티티입니다."),
+
+
     // member
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBER_409", "같은 이메일의 사용자가 있습니다."),
     PASSWORD_MISMATCH(HttpStatus.CONFLICT, "MEMBER_409", "비밀번호와 비밀번호 확인이 다릅니다."),
