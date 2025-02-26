@@ -128,7 +128,7 @@ const handlePayment = async () => {
             // storeId: import.meta.env.VITE_PORTONE_STORE_ID,
             storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
             channelKey: channelKey.value,
-            paymentId,
+            paymentId: res.data.paymentId,
             orderName: "ebookie 상품구매",
             totalAmount: totalFinalPrice.value,
             currency: "KRW",
@@ -139,7 +139,7 @@ const handlePayment = async () => {
                 email: memberStore.getMemberEmail
             },
             customData: {
-                item: paymentId
+                item: res.data.paymentId
             },
         });
 

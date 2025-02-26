@@ -5,7 +5,6 @@ import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
-import com.avad.ebookie.domain.order_detail.entity.OrderDetail;
 import com.avad.ebookie.domain.payment.dto.PaymentCompleteResponseDto;
 import com.avad.ebookie.domain.payment.dto.request.PaymentCompleteRequestDto;
 import com.avad.ebookie.domain.payment.dto.request.PaymentCreateRequestDto;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -52,22 +50,27 @@ public class PaymentService {
             throw new RuntimeException("권한이 없습니다");
         }
 
-        // build Payment
-        Payment payment = Payment.builder()
-                .id(requestDto.getPaymentId())
-                .member(loggedInMember)
-                .paymentStatus(requestDto.getPaymentStatus())
-                .paidPrice(requestDto.getPaidPrice())
-                .member(loggedInMember)
-                .order(order)
-                .build();
-        Payment savedPayment = paymentRepository.save(payment);
+        Payment existingPayment = order.getPayment();
+        boolean isPaymentExisting = existingPayment != null;
 
-        // save payment
-        return paymentMapper.toDto(savedPayment);
-        // make dto
+        if (isPaymentExisting) {
+            // edit payment
+            return paymentMapper.toDto(existingPayment);
+        } else {
+            // build Payment
+            Payment payment = Payment.builder()
+                    .id(requestDto.getPaymentId())
+                    .member(loggedInMember)
+                    .paymentStatus(requestDto.getPaymentStatus())
+                    .paidPrice(requestDto.getPaidPrice())
+                    .member(loggedInMember)
+                    .order(order)
+                    .build();
+            // save payment
+            Payment savedPayment = paymentRepository.save(payment);
+            return paymentMapper.toDto(savedPayment);
+        }
 
-        // return
     }
 
     @Transactional
@@ -104,9 +107,9 @@ public class PaymentService {
         payment.setPaymentStatus(PaymentStatus.PAID);
         Payment savedPayment = paymentRepository.save(payment);
         // TODO: 주문 상태 변경
-       order.setOrderStatus(OrderStatus.PAID);
-       orderRepository.save(order);
-        
+        order.setOrderStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+
 
         return PaymentCompleteResponseDto.builder()
                 .paymentId(savedPayment.getId())

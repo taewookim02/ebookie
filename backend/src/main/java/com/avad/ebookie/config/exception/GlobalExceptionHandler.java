@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex) {
         log.error("handleSignatureException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SIGNATURE_EXCEPTION);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     // JWT 토큰 malformed
@@ -38,42 +38,42 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException ex) {
         log.error("handleSignatureException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MALFORMED_JWT);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
         log.error("handleExpiredJwtException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.EXPIRED_JWT);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMemberNotFoundException(MemberNotFoundException ex) {
         log.error("handleMemberNotFoundException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MEMBER_NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
         log.error("handleBadCredentialsException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.BAD_CREDENTIALS);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(EmailDuplicateException.class)
     public ResponseEntity<ErrorResponse> handleEmailDuplicateException(EmailDuplicateException ex) {
         log.error("handleEmailDuplicateException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ErrorResponse> handlePasswordMismatchException(PasswordMismatchException ex) {
         log.error("handlePasswordMismatchException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     /**
