@@ -45,12 +45,14 @@ const handleLogin = async () => {
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+    <!--
     <div v-else-if="hasError" class="empty-state">
         <i class="bi bi-exclamation-circle" style="font-size: 4rem;"></i>
         <h3 class="mt-4">로그인에 실패했습니다</h3>
         <p class="text-muted">{{ errMsg }}</p>
         <ActionButton class="mt-3" @action="hasError = false">다시 시도</ActionButton>
     </div>
+    -->
     <section v-else class="auth">
         <form @submit.prevent="handleLogin" class="auth__form">
             <h1 class="auth__heading">로그인</h1>

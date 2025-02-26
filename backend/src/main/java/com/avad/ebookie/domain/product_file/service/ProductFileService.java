@@ -1,5 +1,7 @@
 package com.avad.ebookie.domain.product_file.service;
 
+import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
 import com.avad.ebookie.domain.order_detail.repository.OrderDetailRepository;
@@ -41,7 +43,7 @@ public class ProductFileService {
         Member loggedInMember = (Member) authentication.getPrincipal();
 
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("product not found: " + productId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
         List<ProductFile> files = product.getFiles();
 

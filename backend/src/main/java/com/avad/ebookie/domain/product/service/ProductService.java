@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,7 +71,7 @@ public class ProductService {
     public ProductDetailResponseDto details(Long productId) {
         // 상품 정보 얻기
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
         ProductDetailResponseDto detailDto = productMapper.toDetailDto(product);
 
         // 좋아요, 찜하기 정보 얻기
@@ -164,7 +166,7 @@ public class ProductService {
         long totalElements = productsPagination.getTotalElements();
 
         List<ProductListItemResponseDto> relatedDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("category not found: " + categoryId));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
 
         return ProductListResponseDto.builder()
                 .currentPage(pageable.getPageNumber())

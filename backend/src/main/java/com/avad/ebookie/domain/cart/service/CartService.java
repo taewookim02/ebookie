@@ -1,11 +1,13 @@
 package com.avad.ebookie.domain.cart.service;
 
+import com.avad.ebookie.config.exception.ErrorCode;
 import com.avad.ebookie.domain.cart.dto.request.BulkDeleteCartRequestDto;
 import com.avad.ebookie.domain.cart.dto.request.CartAddRequestDto;
 import com.avad.ebookie.domain.cart.dto.response.CartResponseDto;
 import com.avad.ebookie.domain.cart.entity.Cart;
 import com.avad.ebookie.domain.cart.mapper.CartMapper;
 import com.avad.ebookie.domain.cart.repository.CartRepository;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.product.entity.Product;
 import com.avad.ebookie.domain.product.repository.ProductRepository;
@@ -33,7 +35,7 @@ public class CartService {
         Cart cartProduct = cartRepository.findByProductIdAndMemberId(productId, loggedInMember.getId());
 
         // 카트에 추가할 상품
-        Product product = productRepository.findById(productId).orElse(null);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (cartProduct == null) {
             addCart(product, loggedInMember);
@@ -75,7 +77,7 @@ public class CartService {
 //            cartRepository.save(existingCart);
         } else {
             Product product = productRepository.findById(cartAddRequestDto.getProductId())
-                    .orElseThrow(() -> new RuntimeException("addToCart() product not found"));
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
             Cart newCart = Cart.builder()
                     .product(product)
                     .member(loggedInMember)

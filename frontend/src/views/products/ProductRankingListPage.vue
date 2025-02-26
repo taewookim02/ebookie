@@ -279,6 +279,9 @@ const handlePageSizeChange = () => {
     background: var(--background-color);
     min-height: 100vh;
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .product-list {
@@ -286,15 +289,18 @@ const handlePageSizeChange = () => {
     border-radius: 1rem;
     overflow: hidden;
     background: var(--surface-color);
+    max-width: 1200px;
+    width: 100%;
 }
 
 .product-item {
-    display: grid;
-    grid-template-columns: auto 150px 1fr auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 2.4rem;
     padding: 2.4rem;
     border-bottom: 1px solid var(--border-color);
     align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
 }
 
@@ -314,6 +320,13 @@ const handlePageSizeChange = () => {
     color: var(--background-color);
     border-radius: 50%;
     box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.product-image {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .product-image img {
@@ -333,6 +346,10 @@ const handlePageSizeChange = () => {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    flex: 1;
+    min-width: 300px;
+    align-items: center;
+    text-align: center;
 }
 
 .product-name {
@@ -354,15 +371,19 @@ const handlePageSizeChange = () => {
 
 .product-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
     color: var(--text-secondary-color);
     font-size: 1rem;
 }
 
 .product-price-info {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 1.2rem;
 }
 
@@ -392,9 +413,43 @@ const handlePageSizeChange = () => {
 
 .product-actions {
     display: flex;
-    flex-direction: column;
     gap: 1.2rem;
+    flex-wrap: wrap;
     min-width: 140px;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .product-list-page {
+        padding: 1rem;
+    }
+
+    .product-item {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .product-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .product-info {
+        width: 100%;
+    }
+
+    .product-image img {
+        width: 120px;
+        height: 160px;
+    }
+
+    .product-name {
+        font-size: 1.6rem;
+    }
+
+    .discounted-price {
+        font-size: 1.6rem;
+    }
 }
 
 .buy-button {
@@ -413,5 +468,8 @@ const handlePageSizeChange = () => {
     background: var(--surface-color);
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
 }
 </style>

@@ -1,17 +1,21 @@
 package com.avad.ebookie.domain.payment.service;
 
 import com.avad.ebookie.client.PortOneApiClient;
+import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.common.exception.ForbiddenException;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.order.entity.Order;
 import com.avad.ebookie.domain.order.entity.OrderStatus;
 import com.avad.ebookie.domain.order.repository.OrderRepository;
-import com.avad.ebookie.domain.order_detail.entity.OrderDetail;
 import com.avad.ebookie.domain.payment.dto.PaymentCompleteResponseDto;
 import com.avad.ebookie.domain.payment.dto.request.PaymentCompleteRequestDto;
 import com.avad.ebookie.domain.payment.dto.request.PaymentCreateRequestDto;
 import com.avad.ebookie.domain.payment.dto.response.PaymentResponseDto;
 import com.avad.ebookie.domain.payment.entity.Payment;
 import com.avad.ebookie.domain.payment.entity.PaymentStatus;
+import com.avad.ebookie.domain.payment.exception.PaymentAmountMismatchException;
+import com.avad.ebookie.domain.payment.exception.PaymentUncompletedException;
 import com.avad.ebookie.domain.payment.mapper.PaymentMapper;
 import com.avad.ebookie.domain.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -45,29 +48,34 @@ public class PaymentService {
 
         // get order
         Order order = orderRepository.findById(requestDto.getOrderId())
-                .orElseThrow(() -> new RuntimeException("주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.ORDER_NOT_FOUND));
 
         boolean isNotOrderOwner = !order.getMember().getId().equals(loggedInMember.getId());
         if (isNotOrderOwner) {
-            throw new RuntimeException("권한이 없습니다");
+            throw new ForbiddenException(ErrorCode.INSUFFICIENT_RIGHTS);
         }
 
-        // build Payment
-        Payment payment = Payment.builder()
-                .id(requestDto.getPaymentId())
-                .member(loggedInMember)
-                .paymentStatus(requestDto.getPaymentStatus())
-                .paidPrice(requestDto.getPaidPrice())
-                .member(loggedInMember)
-                .order(order)
-                .build();
-        Payment savedPayment = paymentRepository.save(payment);
+        Payment existingPayment = order.getPayment();
+        boolean isPaymentExisting = existingPayment != null;
 
-        // save payment
-        return paymentMapper.toDto(savedPayment);
-        // make dto
+        if (isPaymentExisting) {
+            // edit payment
+            return paymentMapper.toDto(existingPayment);
+        } else {
+            // build Payment
+            Payment payment = Payment.builder()
+                    .id(requestDto.getPaymentId())
+                    .member(loggedInMember)
+                    .paymentStatus(requestDto.getPaymentStatus())
+                    .paidPrice(requestDto.getPaidPrice())
+                    .member(loggedInMember)
+                    .order(order)
+                    .build();
+            // save payment
+            Payment savedPayment = paymentRepository.save(payment);
+            return paymentMapper.toDto(savedPayment);
+        }
 
-        // return
     }
 
     @Transactional
@@ -81,7 +89,7 @@ public class PaymentService {
 
         // 결제 정보 가져오기
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.PAYMENT_NOT_FOUND));
 
         // 주문 정보에서 총액 가져오기
         Order order = payment.getOrder();
@@ -90,23 +98,25 @@ public class PaymentService {
         if (!"PAID".equals(status)) {
             payment.setPaymentStatus(PaymentStatus.FAILED);
             paymentRepository.save(payment);
-            throw new RuntimeException("Payment not completed successfully");
+//            throw new RuntimeException("Payment not completed successfully");
+            throw new PaymentUncompletedException(ErrorCode.PAYMENT_UNCOMPLETED);
         }
 
         double tolerance = 0.01;
         if (Math.abs(expectedTotal - paid) > tolerance) {
             payment.setPaymentStatus(PaymentStatus.FAILED);
             paymentRepository.save(payment);
-            throw new RuntimeException("Payment amount mismatch. Expected: " + expectedTotal + ", Paid: " + paid);
+//            throw new RuntimeException("Payment amount mismatch. Expected: " + expectedTotal + ", Paid: " + paid);
+            throw new PaymentAmountMismatchException(ErrorCode.PAYMENT_AMOUNT_MISMATCH);
         }
 
         // 검사 완료,
         payment.setPaymentStatus(PaymentStatus.PAID);
         Payment savedPayment = paymentRepository.save(payment);
         // TODO: 주문 상태 변경
-       order.setOrderStatus(OrderStatus.PAID);
-       orderRepository.save(order);
-        
+        order.setOrderStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+
 
         return PaymentCompleteResponseDto.builder()
                 .paymentId(savedPayment.getId())

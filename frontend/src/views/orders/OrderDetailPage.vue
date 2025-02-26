@@ -128,7 +128,7 @@ const handlePayment = async () => {
             // storeId: import.meta.env.VITE_PORTONE_STORE_ID,
             storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
             channelKey: channelKey.value,
-            paymentId,
+            paymentId: res.data.paymentId,
             orderName: "ebookie 상품구매",
             totalAmount: totalFinalPrice.value,
             currency: "KRW",
@@ -139,7 +139,7 @@ const handlePayment = async () => {
                 email: memberStore.getMemberEmail
             },
             customData: {
-                item: paymentId
+                item: res.data.paymentId
             },
         });
 
@@ -213,50 +213,63 @@ onMounted(() => {
     <div v-else class="order">
         <section class="order__info">
             <h3>주문/결제</h3>
-            <table class="table order__info--table">
-                <colgroup>
-                    <col width="10%">
-                    <col width="45%">
-                    <col width="10%">
-                    <col width="5%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
-                </colgroup>
-                <thead class="text-center">
-                    <tr>
-                        <th colspan="2">상품명</th>
-                        <th>정가</th>
-                        <th>수량</th>
-                        <th>할인금액</th>
-                        <th>합계</th>
-                        <th>배송일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="dto in dtoList">
-                        <td>
-                            <img :src="getImageFromServer(dto.thumbnail)" alt="상품 이미지">
-                        </td>
-                        <td>{{ dto.name }}</td>
-                        <td class="text-center align-middle">
-                            {{ dto.originalPrice.toLocaleString() }}원
-                        </td>
-                        <td class="text-center align-middle">
-                            {{ dto.quantity }}
-                        </td>
-                        <td class="text-center align-middle">
-                            {{ formatDiscountAmount(dto.originalPrice, dto.discountRatePercentage) }}원
-                        </td>
-                        <td class="text-center align-middle">
-                            {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
-                        </td>
-                        <td class="text-center align-middle">
-                            무배송 (결제 후 다운로드)
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table order__info--table">
+                    <colgroup class="d-none d-md-table-column-group">
+                        <col width="10%">
+                        <col width="45%">
+                        <col width="10%">
+                        <col width="5%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead class="text-center">
+                        <tr>
+                            <th colspan="2">상품명</th>
+                            <th class="d-none d-md-table-cell">정가</th>
+                            <th class="d-none d-md-table-cell">수량</th>
+                            <th class="d-none d-md-table-cell">할인금액</th>
+                            <th class="d-none d-md-table-cell">합계</th>
+                            <th class="d-none d-md-table-cell">배송일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="dto in dtoList">
+                            <td>
+                                <img :src="getImageFromServer(dto.thumbnail)" alt="상품 이미지" class="product-image">
+                            </td>
+                            <td>
+                                <div class="product-info">
+                                    <span class="product-name">{{ dto.name }}</span>
+                                    <div class="d-md-none mobile-details">
+                                        <div>정가: {{ dto.originalPrice.toLocaleString() }}원</div>
+                                        <div>수량: {{ dto.quantity }}</div>
+                                        <div>할인: {{ formatDiscountAmount(dto.originalPrice, dto.discountRatePercentage) }}원</div>
+                                        <div>합계: {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원</div>
+                                        <div>배송: 무배송 (결제 후 다운로드)</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle d-none d-md-table-cell">
+                                {{ dto.originalPrice.toLocaleString() }}원
+                            </td>
+                            <td class="text-center align-middle d-none d-md-table-cell">
+                                {{ dto.quantity }}
+                            </td>
+                            <td class="text-center align-middle d-none d-md-table-cell">
+                                {{ formatDiscountAmount(dto.originalPrice, dto.discountRatePercentage) }}원
+                            </td>
+                            <td class="text-center align-middle d-none d-md-table-cell">
+                                {{ formatSellingPrice(dto.originalPrice, dto.discountRatePercentage) }}원
+                            </td>
+                            <td class="text-center align-middle d-none d-md-table-cell">
+                                무배송 (결제 후 다운로드)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <OrderPricesSection :total-original-price="totalOriginalPrice" :total-discount-amount="totalDiscountAmount"
@@ -289,13 +302,22 @@ onMounted(() => {
 .order {
     display: flex;
     flex-direction: column;
-    gap: 6.4rem;
+    gap: 3.2rem;
     color: var(--text-color);
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .order {
+        gap: 6.4rem;
+        padding: 2rem;
+    }
 }
 
 .order__info--table {
     word-break: keep-all;
     border-color: var(--border-color);
+    min-width: 280px;
 }
 
 .order__info--table thead {
@@ -305,6 +327,58 @@ onMounted(() => {
 .order__info--table td {
     vertical-align: middle;
     border-color: var(--border-color);
+}
+
+.product-image {
+    max-width: 80px;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .product-image {
+        max-width: 120px;
+    }
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-name {
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+
+@media (min-width: 768px) {
+    .product-name {
+        font-size: 1.4rem;
+    }
+}
+
+.mobile-details {
+    font-size: 1.4rem;
+    color: var(--text-secondary-color);
+}
+
+.payment__action {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--background-color);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+@media (min-width: 768px) {
+    .payment__action {
+        position: static;
+        padding: 0;
+        box-shadow: none;
+    }
 }
 
 .payment__action--button {
@@ -320,16 +394,28 @@ onMounted(() => {
 
 .order__status {
     text-align: center;
-    padding: 2rem;
+    padding: 1rem;
     background-color: var(--surface-color);
     border-radius: 0.5rem;
 }
 
+@media (min-width: 768px) {
+    .order__status {
+        padding: 2rem;
+    }
+}
+
 .status-message {
     margin-top: 1rem;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 0.5rem;
     font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    .status-message {
+        padding: 1.5rem;
+    }
 }
 
 .status-message.paid {
@@ -349,17 +435,30 @@ onMounted(() => {
 
 .loading {
     text-align: center;
-    padding: 4rem;
+    padding: 2rem;
     color: var(--primary-color);
+}
+
+@media (min-width: 768px) {
+    .loading {
+        padding: 4rem;
+    }
 }
 
 .empty-state {
     text-align: center;
-    padding: 4rem;
+    padding: 2rem;
     color: var(--text-secondary-color);
     background-color: var(--surface-color);
     border-radius: 0.5rem;
-    margin: 2rem 0;
+    margin: 1rem 0;
+}
+
+@media (min-width: 768px) {
+    .empty-state {
+        padding: 4rem;
+        margin: 2rem 0;
+    }
 }
 
 .empty-state h3 {

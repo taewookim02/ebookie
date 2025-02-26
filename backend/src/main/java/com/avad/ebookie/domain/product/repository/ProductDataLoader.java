@@ -67,14 +67,14 @@ public class ProductDataLoader {
                         .category(category)
                         .description(faker.lorem().paragraphs(3).toString())
                         .publishedDate(randomPastDate) // 랜덤 LocalDate
-                       .discountRate(randomDiscountRate) // 랜덤 할인율 (0~100)
+                        .discountRate(randomDiscountRate) // 랜덤 할인율 (0~50)
                         // .discountRate(10.0)
                         .sold(faker.random().nextLong(0, 25000))
                         .build();
                 productsToSave.add(product);
             }
         }
-
+        productsToSave.remove(productsToSave.size() - 1); // temp fix
         return productRepository.saveAll(productsToSave);
     }
 }

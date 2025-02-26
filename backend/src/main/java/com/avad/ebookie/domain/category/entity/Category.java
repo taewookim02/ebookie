@@ -29,6 +29,8 @@ public class Category {
     )
     @JsonManagedReference
     private List<Product> products = new ArrayList<>();
+
+    // toDto
 }
 
 /*

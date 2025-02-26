@@ -3,6 +3,8 @@ package com.avad.ebookie.config.exception;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
 import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
+import com.avad.ebookie.domain.common.exception.BaseException;
+import com.avad.ebookie.domain.common.exception.NotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -25,12 +27,34 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+
+
+    // 404
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
+
+    // 뭉탱이로 하나 잡고
+    // 빠져나가는거
+    // base exception
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
+
+
     // JWT 토큰 유효 x
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex) {
         log.error("handleSignatureException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.SIGNATURE_EXCEPTION);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     // JWT 토큰 malformed
@@ -38,42 +62,42 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException ex) {
         log.error("handleSignatureException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MALFORMED_JWT);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
         log.error("handleExpiredJwtException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.EXPIRED_JWT);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleMemberNotFoundException(MemberNotFoundException ex) {
         log.error("handleMemberNotFoundException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.MEMBER_NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
         log.error("handleBadCredentialsException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.BAD_CREDENTIALS);
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(EmailDuplicateException.class)
     public ResponseEntity<ErrorResponse> handleEmailDuplicateException(EmailDuplicateException ex) {
         log.error("handleEmailDuplicateException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ErrorResponse> handlePasswordMismatchException(PasswordMismatchException ex) {
         log.error("handlePasswordMismatchException", ex);
         ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
     }
 
     /**

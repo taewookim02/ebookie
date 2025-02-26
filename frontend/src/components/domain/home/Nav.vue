@@ -38,6 +38,7 @@ const handleLogout = (e) => {
     memberStore.setMember(null);
     alert("로그아웃 성공!");
     router.push("/");
+    closeMobileMenu();
 }
 
 const toggleMobileMenu = () => {
@@ -45,6 +46,11 @@ const toggleMobileMenu = () => {
     if (!isMobileMenuOpen.value) {
         isBottomNavOpen.value = false;
     }
+}
+
+const closeMobileMenu = () => {
+    isMobileMenuOpen.value = false;
+    isBottomNavOpen.value = false;
 }
 
 const toggleBottomNav = () => {
@@ -73,7 +79,7 @@ onMounted(() => {
     <nav class="navbar mt-5">
         <!-- 탑 네비게이션 START -->
         <div class="d-flex align-items-center w-100 justify-content-between flex-wrap">
-            <RouterLink to="/" class="navbar__logo">
+            <RouterLink to="/" class="navbar__logo" @click="closeMobileMenu">
                 <img src="@/assets/logo.png" alt="Logo">
             </RouterLink>
             
@@ -91,13 +97,13 @@ onMounted(() => {
             <div class="navbar__links" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
                 <!-- 로그인 안된 상태 -->
                 <template v-if="!tokenStore.isLoggedIn">
-                    <RouterLink to="/login" class="nav-link">로그인</RouterLink>
-                    <RouterLink to="/register" class="nav-link">회원가입</RouterLink>
+                    <RouterLink to="/login" class="nav-link" @click="closeMobileMenu">로그인</RouterLink>
+                    <RouterLink to="/register" class="nav-link" @click="closeMobileMenu">회원가입</RouterLink>
                 </template>
                 <!-- 로그인된 상태 -->
                 <template v-if="tokenStore.isLoggedIn">
-                    <RouterLink to="/member/edit" class="nav-link">마이페이지</RouterLink>
-                    <RouterLink to="/cart" class="nav-link">장바구니</RouterLink>
+                    <RouterLink to="/member/edit" class="nav-link" @click="closeMobileMenu">마이페이지</RouterLink>
+                    <RouterLink to="/cart" class="nav-link" @click="closeMobileMenu">장바구니</RouterLink>
                     <a class="nav-link" @click.prevent="handleLogout">로그아웃</a>
                 </template>
             </div>
@@ -107,18 +113,18 @@ onMounted(() => {
         <!-- 바텀 네비게이션 START -->
         <template v-if="shouldShowBottomNav && !shouldShowMemberNav">
             <div class="navbar__bottom" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
+                
+                <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="nav-item" @click="closeMobileMenu">베스트상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="nav-item" @click="closeMobileMenu">신상품</RouterLink>
+                <RouterLink to="/products?page=0&size=20&sort=discountRate,desc" class="nav-item" @click="closeMobileMenu">세일</RouterLink>
                 <a href="#" class="nav-item dropdown-toggle" role="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
                     aria-controls="navbarToggleExternalContent" aria-expanded="false"
                     aria-label="Toggle navigation" @click="toggleBottomNav">카테고리</a>
-                    
-                <RouterLink to="/products?page=0&size=20&sort=sold,desc" class="nav-item">베스트상품</RouterLink>
-                <RouterLink to="/products?page=0&size=20&sort=publishedDate,desc" class="nav-item">신상품</RouterLink>
-                <RouterLink to="/products?page=0&size=20&sort=discountRate,desc" class="nav-item">세일</RouterLink>
             </div>
             <div class="collapse category-menu" :class="{ 'show': isBottomNavOpen && isMobileWidth }" id="navbarToggleExternalContent" data-bs-theme="light">
                 <div class="category-list">
-                    <RouterLink class="category-item" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto">
+                    <RouterLink class="category-item" :to="`/categories/${dto.id}`" v-for="dto in categoriesDto" @click="closeMobileMenu">
                         {{ dto.name }}
                     </RouterLink>
                 </div>
@@ -129,11 +135,11 @@ onMounted(() => {
         <!-- 유저 정보 네비게이션 START -->
         <template v-if="shouldShowMemberNav">
             <div class="navbar__bottom" :class="{ 'mobile-menu-open': isMobileMenuOpen }">
-                <RouterLink to="/liked" class="nav-item">좋아요 목록</RouterLink>
-                <RouterLink to="/saved" class="nav-item">찜 목록</RouterLink>
-                <RouterLink to="/cart" class="nav-item">장바구니</RouterLink>
-                <RouterLink to="/orders" class="nav-item">주문 목록</RouterLink>
-                <RouterLink to="/library" class="nav-item">라이브러리</RouterLink>
+                <RouterLink to="/liked" class="nav-item" @click="closeMobileMenu">좋아요 목록</RouterLink>
+                <RouterLink to="/saved" class="nav-item" @click="closeMobileMenu">찜 목록</RouterLink>
+                <RouterLink to="/cart" class="nav-item" @click="closeMobileMenu">장바구니</RouterLink>
+                <RouterLink to="/orders" class="nav-item" @click="closeMobileMenu">주문 목록</RouterLink>
+                <RouterLink to="/library" class="nav-item" @click="closeMobileMenu">라이브러리</RouterLink>
             </div>
         </template>
         <!-- 유저 정보 네비게이션 END -->
@@ -210,6 +216,7 @@ onMounted(() => {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    justify-content: end;
 }
 
 .category-item {
@@ -272,13 +279,16 @@ onMounted(() => {
     }
 
     .nav-link {
-        padding: 1rem 0;
+        padding: 1rem;
         border-top: 1px solid #E5E5E5;
+        text-align: left;
     }
 
     .navbar__bottom {
         display: none;
         flex-direction: column;
+        align-items: flex-start;
+        margin-top: 0;
     }
 
     .navbar__bottom.mobile-menu-open {
@@ -288,17 +298,40 @@ onMounted(() => {
     .nav-item {
         width: 100%;
         border-bottom: 1px solid #E5E5E5;
+        text-align: left;
+        padding-left: 1rem;
+    }
+
+    .category-menu {
+        border-top: none;
+        margin-top: -1px; 
+    }
+
+    .category-list {
+        padding: 0.5rem 1rem;
+    }
+
+    .category-item {
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-radius: 0;
+        border-bottom: 1px solid #E5E5E5;
+    }
+
+    .category-item:last-child {
+        border-bottom: none;
     }
 }
 
 @media (max-width: 480px) {
     .category-list {
-        padding: 1rem;
-        gap: 1rem;
+        padding: 0;
+        gap: 0;
     }
 
     .category-item {
-        width: calc(50% - 0.5rem);
+        width: 100%;
     }
 }
 </style>
