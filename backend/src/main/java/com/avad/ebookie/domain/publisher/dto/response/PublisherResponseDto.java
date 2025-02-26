@@ -1,12 +1,9 @@
 package com.avad.ebookie.domain.publisher.dto.response;
 
 import com.avad.ebookie.domain.publisher.entity.Publisher;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
