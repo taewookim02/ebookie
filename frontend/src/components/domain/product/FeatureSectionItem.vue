@@ -19,7 +19,8 @@ const formattedCurrency = computed(() => {
 });
 
 // 이미지 경로
-const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = window.location.origin;
 
 const imageUrl = computed(() => {
     if (props.imgSrc) {
