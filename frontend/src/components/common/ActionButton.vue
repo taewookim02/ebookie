@@ -31,6 +31,7 @@ const handleClick = () => {
     transition: all 0.2s ease;
     flex-grow: 1;
     max-width: 14.4rem;
+    max-height: 6.4rem;
     word-break: keep-all;
 }
 
