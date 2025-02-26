@@ -80,7 +80,7 @@ public class WebSecurityConfig {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
 //        cookie.setSecure(true); // TODO: localhost == true , 192.168.2.69:8080 == false
-        cookie.setSecure(true);
+        cookie.setSecure(false);
         response.addCookie(cookie);
     }
 

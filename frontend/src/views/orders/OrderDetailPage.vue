@@ -84,7 +84,8 @@ const totalFinalPrice = computed(() => {
 const channelKey = computed(() => {
     switch (pgMethod.value) {
         case "kakao":
-            return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
+            // return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
+            return "channel-key-bdb9666b-9eba-4cc3-bc3e-cca13a1ff2f9";
         default:
             return import.meta.env.VITE_PORTONE_CHANNEL_KEY_KAKAO;
     }
@@ -110,12 +111,6 @@ const handlePayment = async () => {
             return;
         }
 
-        console.log('Payment Config:', {
-            storeId: import.meta.env.VITE_PORTONE_STORE_ID,
-            channelKey: channelKey.value,
-            amount: totalFinalPrice.value
-        });
-
         const res = await customAxios.post("/api/v1/payments", {
             paymentId,
             orderId,
@@ -128,12 +123,10 @@ const handlePayment = async () => {
             return;
         }
 
-        console.log(import.meta.env.VITE_PORTONE_STORE_ID);
-        console.log(channelKey.value);
-
         paymentStatus.value = ({ status: "PENDING" });
         const payment = await PortOne.requestPayment({
-            storeId: import.meta.env.VITE_PORTONE_STORE_ID,
+            // storeId: import.meta.env.VITE_PORTONE_STORE_ID,
+            storeId: "store-40493184-ea60-455e-93b1-94dc0b39f87f",
             channelKey: channelKey.value,
             paymentId,
             orderName: "ebookie 상품구매",
