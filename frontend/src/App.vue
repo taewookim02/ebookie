@@ -1,18 +1,16 @@
 <script setup>
 import Nav from '@/components/domain/home/Nav.vue';
 import Footer from '@/components/domain/home/Footer.vue';
-import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 import { useMemberStore } from './store/memberStore';
 
-
-const route = useRoute();
+// Use
 const tokenStore = useTokenStore();
 const memberStore = useMemberStore();
 
-
+// Actions
 const renewToken = async () => {
     try {
         const res = await customAxios
@@ -37,23 +35,22 @@ const renewToken = async () => {
 const fetchMemberInfo = async () => {
     try {
         if (tokenStore.accessToken) {
-
             const res = await customAxios.get("/api/v1/members/info");
             memberStore.setMember(res.data)
         }
-        // TODO: set memberStore;
     } catch (err) {
         console.log("fetchMemberInfo() err:", err);
         memberStore.setMember(null);
     }
 };
 
+
+// LifeCycle hook
 onMounted(() => {
     renewToken();
 })
 </script>
 
-// 기본 레이아웃
 <template>
     <div class="template-container container">
         <Nav />
@@ -72,10 +69,4 @@ onMounted(() => {
     flex-direction: column;
     gap: 6.4rem;
 }
-
-/* 
-.template-container {
-    max-width: 1200px;
-    margin: auto;
-} */
 </style>

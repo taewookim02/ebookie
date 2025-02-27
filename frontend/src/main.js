@@ -25,7 +25,7 @@ const toastOptions = {
         },
     },
     transition: "Vue-Toastification__fade",
-    position: "bottom-right",
+    position: "top-right",
 };
 
 register();
