@@ -17,6 +17,7 @@ const isLoading = ref(false);
 const hasError = ref(false);
 const toast = useToast();
 
+// actions
 const handleLogin = async () => {
     try {
         isLoading.value = true;

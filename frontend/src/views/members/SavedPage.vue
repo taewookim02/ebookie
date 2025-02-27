@@ -2,7 +2,7 @@
 import ActionButton from '@/components/common/ActionButton.vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
 // state
@@ -13,16 +13,6 @@ const allChecked = ref(false);
 
 
 // actions
-const fetchSavedProducts = async () => {
-    try {
-        const res = await customAxios.get(`/api/v1/saved`);
-        savedDto.value = res.data;
-    } catch (err) {
-        console.log("fetchSavedProducts() err:", err);
-    }
-}
-fetchSavedProducts();
-
 const handleCartClick = async (productId) => {
     try {
         // add to cart
@@ -68,9 +58,6 @@ const toggleCheck = (productId) => {
 }
 
 const handleCheckedDelete = async () => {
-    // 체크박스 체크 된 아이템들의 productId 구하기
-    // 서버에 productId 리스트를 보내기
-    // 서버에서 productId 일치하는 아이템들 삭제
     if (checkedItems.value.size === 0) {
         toast.warning("삭제할 상품을 선택해주세요");
         return;
@@ -86,7 +73,6 @@ const handleCheckedDelete = async () => {
             dto => !checkedItems.value.has(dto.productId)
         );
 
-        // hmm?
         checkedItems.value.clear();
         allChecked.value = false;
         toast.info(`${productIds.length}개 상품이 찜 목록에서 삭제되었습니다`);
@@ -95,6 +81,20 @@ const handleCheckedDelete = async () => {
         toast.error("선택한 상품 삭제 중 에러가 발생했습니다!");
     }
 };
+
+const fetchSavedProducts = async () => {
+    try {
+        const res = await customAxios.get(`/api/v1/saved`);
+        savedDto.value = res.data;
+    } catch (err) {
+        console.log("fetchSavedProducts() err:", err);
+    }
+}
+
+// Lifecycle hooks
+onMounted(() => {
+    fetchSavedProducts();
+})
 
 </script>
 

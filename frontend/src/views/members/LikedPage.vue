@@ -2,7 +2,7 @@
 import ActionButton from '@/components/common/ActionButton.vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { customAxios } from '@/plugins/axios';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 
 // state
@@ -13,16 +13,6 @@ const allChecked = ref(false);
 
 
 // actions
-const fetchLikedProducts = async () => {
-    try {
-        const res = await customAxios.get(`/api/v1/liked`);
-        likedDto.value = res.data;
-    } catch (err) {
-        console.log("fetchLikedProducts() err:", err);
-    }
-}
-fetchLikedProducts();
-
 const handleCartClick = async (productId) => {
     try {
         // add to cart
@@ -96,6 +86,19 @@ const handleCheckedDelete = async () => {
     }
 };
 
+const fetchLikedProducts = async () => {
+    try {
+        const res = await customAxios.get(`/api/v1/liked`);
+        likedDto.value = res.data;
+    } catch (err) {
+        console.log("fetchLikedProducts() err:", err);
+    }
+}
+
+// Lifecycle hooks
+onMounted(() => {
+    fetchLikedProducts();
+});
 </script>
 
 
