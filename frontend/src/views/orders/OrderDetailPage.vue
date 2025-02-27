@@ -26,43 +26,6 @@ const orderStatus = ref("PENDING");
 const isLoading = ref(true);
 const hasError = ref(false);
 
-// actions
-const fetchOrderDetail = async (orderId) => {
-    try {
-        isLoading.value = true;
-        hasError.value = false;
-        
-        const res = await customAxios.get(`/api/v1/orders/${orderId}`);
-        
-        if (!res.data) {
-            throw new Error("주문을 찾을 수 없습니다.");
-        }
-
-        if (!res.data.orderStatus) {
-            throw new Error("Server response missing orderStatus");
-        }
-
-        dtoList.value = res.data.orderDetailDtos;
-        orderStatus.value = res.data.orderStatus;
-
-    } catch (error) {
-        console.error("Order detail fetch error:", error);
-        hasError.value = true;
-        
-        if (error.response?.status === 403) {
-            toast.error("접근 권한이 없는 주문입니다.");
-            router.push('/orders');
-        } else if (error.response?.status === 404) {
-            toast.error("존재하지 않는 주문입니다.");
-            router.push('/orders');
-        } else {
-            toast.error("주문 정보 로드에 실패했습니다!");
-        }
-    } finally {
-        isLoading.value = false;
-    }
-}
-
 // computed
 const totalOriginalPrice = computed(() => {
     return dtoList.value.reduce((sum, dto) => sum + dto.originalPrice, 0);
@@ -197,6 +160,42 @@ const handlePayment = async () => {
     }
 }
 
+const fetchOrderDetail = async (orderId) => {
+    try {
+        isLoading.value = true;
+        hasError.value = false;
+        
+        const res = await customAxios.get(`/api/v1/orders/${orderId}`);
+        
+        if (!res.data) {
+            throw new Error("주문을 찾을 수 없습니다.");
+        }
+
+        if (!res.data.orderStatus) {
+            throw new Error("Server response missing orderStatus");
+        }
+
+        dtoList.value = res.data.orderDetailDtos;
+        orderStatus.value = res.data.orderStatus;
+
+    } catch (error) {
+        console.error("Order detail fetch error:", error);
+        hasError.value = true;
+        
+        if (error.response?.status === 403) {
+            toast.error("접근 권한이 없는 주문입니다.");
+            router.push('/orders');
+        } else if (error.response?.status === 404) {
+            toast.error("존재하지 않는 주문입니다.");
+            router.push('/orders');
+        } else {
+            toast.error("주문 정보 로드에 실패했습니다!");
+        }
+    } finally {
+        isLoading.value = false;
+    }
+}
+
 // Lifecycle hooks
 onMounted(() => {
     fetchOrderDetail(orderId);
@@ -210,12 +209,11 @@ onMounted(() => {
         </div>
     </div>
     <div v-else-if="hasError" class="empty-state">
-        <PhExclamationMark :size="40" weight="fill" color="#333333" />
+        <PhExclamationMark :size="40" weight="fill" color="var(--muted-color)" />
         <h3 class="mt-4">주문 정보를 불러올 수 없습니다</h3>
         <p class="text-muted">잠시 후 다시 시도해주세요.</p>
     </div>
     <div v-else-if="!dtoList.length" class="empty-state">
-        <i class="bi bi-cart" style="font-size: 4rem;"></i>
         <h3 class="mt-4">주문 내역이 없습니다</h3>
         <p class="text-muted">주문하신 상품이 없습니다.</p>
         <ActionButton class="mt-3" @action="router.push('/products')">상품 보러가기</ActionButton>

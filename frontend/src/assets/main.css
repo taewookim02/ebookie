@@ -19,6 +19,9 @@
     --accent-color: #22C55E;        /* 성공 */
     --accent-hover: #16A34A;
     --accent-active: #15803D;   
+
+
+    --muted-color: #6c757d;
 }
 
 #app,

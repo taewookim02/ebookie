@@ -9,7 +9,14 @@ import LikeButton from '@/components/common/LikeButton.vue';
 import SaveButton from '@/components/common/SaveButton.vue';
 import { useToast } from 'vue-toastification';
 import Pagination from '@/components/common/Pagination.vue';
+import { PhBookOpen } from '@phosphor-icons/vue';
 
+// use
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
+
+// state
 const productDtos = ref([]);
 const totalPages = ref(0);
 const totalElements = ref(0);
@@ -18,42 +25,10 @@ const isLoading = ref(false);
 const categoryName = ref('');
 const pageSize = ref(20);
 
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
+// computed
 const categoryId = computed(() => route.params.id);
 
-const fetchProducts = async () => {
-    isLoading.value = true;
-    try {
-        const res = await customAxios.get(`/api/v1/products/categories/${categoryId.value}?page=${currentPage.value}&size=${pageSize.value}`);
-        productDtos.value = res.data.products;
-        totalPages.value = res.data.totalPages;
-        totalElements.value = res.data.totalElements;
-        currentPage.value = res.data.currentPage;
-        categoryName.value = res.data.categoryName;
-    } catch (err) {
-        console.error("Failed to fetch products:", err);
-        productDtos.value = [];
-    } finally {
-        isLoading.value = false;
-    }
-}
-
-onMounted(() => {
-    const page = Number(route.query.page) || 0;
-    currentPage.value = page;
-    fetchProducts();
-})
-
-watch(
-    () => route.params.id,
-    (newId, oldId) => {
-        currentPage.value = 0;
-        fetchProducts();
-    }
-)
-
+// actions
 const handlePageChange = (page) => {
     currentPage.value = page - 1;
     router.push({
@@ -124,6 +99,41 @@ const handleCartAdd = async (productId) => {
         }
     }
 }
+
+const fetchProducts = async () => {
+    isLoading.value = true;
+    try {
+        const res = await customAxios.get(`/api/v1/products/categories/${categoryId.value}?page=${currentPage.value}&size=${pageSize.value}`);
+        productDtos.value = res.data.products;
+        totalPages.value = res.data.totalPages;
+        totalElements.value = res.data.totalElements;
+        currentPage.value = res.data.currentPage;
+        categoryName.value = res.data.categoryName;
+    } catch (err) {
+        console.error("Failed to fetch products:", err);
+        productDtos.value = [];
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+// Lifecycle hooks
+onMounted(() => {
+    const page = Number(route.query.page) || 0;
+    currentPage.value = page;
+    fetchProducts();
+})
+
+// watch
+watch(
+    () => route.params.id,
+    (newId, oldId) => {
+        currentPage.value = 0;
+        fetchProducts();
+    }
+)
+
+
 </script>
 
 <template>
@@ -141,7 +151,7 @@ const handleCartAdd = async (productId) => {
         <!-- Empty state -->
         <div v-else-if="!productDtos.length" class="text-center py-5">
             <div class="empty-state">
-                <i class="bi bi-book" style="font-size: 4rem;"></i>
+                <PhBookOpen :size="40" color="var(--muted-color)" />
                 <h3 class="mt-4">상품이 없습니다</h3>
                 <p class="text-muted">해당하는 상품을 찾을 수 없습니다.</p>
             </div>

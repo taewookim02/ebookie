@@ -11,62 +11,20 @@ import { useToast } from 'vue-toastification';
 import { formatDateYYMMKr } from '@/helper/format';
 import Pagination from '@/components/common/Pagination.vue';
 
-// state
+// Use
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
+
+// State
 const productDtos = ref([]);
 const totalPages = ref(0);
 const totalElements = ref(0);
 const currentPage = ref(0);
 const isLoading = ref(false);
 const pageSize = ref(20);
-
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
-
-// 쿼리 빌딩
 const query = ref(route.query);
-const paginationQueryString = ref(new URLSearchParams(query.value).toString());
-console.log(paginationQueryString.value);
-
-const fetchProducts = async () => {
-    isLoading.value = true;
-    try {
-        const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}&size=${pageSize.value}`);
-        productDtos.value = res.data.products;
-        totalPages.value = res.data.totalPages;
-        totalElements.value = res.data.totalElements;
-        currentPage.value = res.data.currentPage;
-    } catch (err) {
-        console.error("Failed to fetch products:", err);
-        productDtos.value = [];
-    } finally {
-        isLoading.value = false;
-    }
-};
-
-// 마운트되면 페이지 사이즈 초기화
-onMounted(() => {
-    const urlSize = Number(route.query.size);
-    if (urlSize) {
-        pageSize.value = urlSize;
-    }
-    fetchProducts();
-});
-
-watch(route, (newValue, oldValue) => {
-    query.value = newValue.query;
-    paginationQueryString.value = new URLSearchParams(query.value).toString();
-
-    // 쿼리 변경되면 페이지 사이즈 초기화
-    const newSize = Number(newValue.query.size);
-    if (newSize && newSize !== pageSize.value) {
-        pageSize.value = newSize;
-    }
-
-    fetchProducts();
-}, { deep: true })
-
-
+const paginationQueryString = ref(new URLSearchParams(query.value).toString()); // 페이지네이션 쿼리 빌딩
 
 // computed
 const isBestSeller = computed(() => {
@@ -81,7 +39,6 @@ const isNew = computed(() => {
 const isSale = computed(() => {
     return paginationQueryString.value.includes('discountRate') && paginationQueryString.value.includes('desc');
 })
-
 
 // actions
 const handleSave = async (productId) => {
@@ -188,6 +145,44 @@ const handlePageSizeChange = () => {
     });
 };
 
+const fetchProducts = async () => {
+    isLoading.value = true;
+    try {
+        const res = await customAxios.get(`/api/v1/products?${paginationQueryString.value}&size=${pageSize.value}`);
+        productDtos.value = res.data.products;
+        totalPages.value = res.data.totalPages;
+        totalElements.value = res.data.totalElements;
+        currentPage.value = res.data.currentPage;
+    } catch (err) {
+        console.error("Failed to fetch products:", err);
+        productDtos.value = [];
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+// Lifecycle hook
+onMounted(() => {
+    const urlSize = Number(route.query.size);
+    if (urlSize) {
+        pageSize.value = urlSize; // 마운트되면 페이지 사이즈 초기화
+    }
+    fetchProducts();
+});
+
+// URL 감시
+watch(route, (newValue, oldValue) => {
+    query.value = newValue.query;
+    paginationQueryString.value = new URLSearchParams(query.value).toString();
+
+    // 쿼리 변경되면 페이지 사이즈 초기화
+    const newSize = Number(newValue.query.size);
+    if (newSize && newSize !== pageSize.value) {
+        pageSize.value = newSize;
+    }
+
+    fetchProducts();
+}, { deep: true })
 </script>
 
 <template>
@@ -419,6 +414,27 @@ const handlePageSizeChange = () => {
     justify-content: center;
 }
 
+.buy-button {
+    width: 100%;
+    padding: 1rem;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+}
+
+.buy-button:hover {
+    transform: translateY(-2px);
+}
+
+.empty-state {
+    padding: 6rem 2rem;
+    background: var(--surface-color);
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
 @media (max-width: 768px) {
     .product-list-page {
         padding: 1rem;
@@ -450,26 +466,5 @@ const handlePageSizeChange = () => {
     .discounted-price {
         font-size: 1.6rem;
     }
-}
-
-.buy-button {
-    width: 100%;
-    padding: 1rem;
-    font-weight: 600;
-    transition: transform 0.2s ease;
-}
-
-.buy-button:hover {
-    transform: translateY(-2px);
-}
-
-.empty-state {
-    padding: 6rem 2rem;
-    background: var(--surface-color);
-    border-radius: 1rem;
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 100%;
-    max-width: 1200px;
 }
 </style>
