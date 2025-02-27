@@ -1,18 +1,11 @@
 <script setup>
 import { formatYYYYMMDDKr } from '@/helper/format';
-import { computed, onMounted } from 'vue';
 
 const props = defineProps({
     detailDto: Object
 });
 
-const myDate = computed(() => {
-    return formatYYYYMMDDKr(props.detailDto.publishedDate);
-})
 
-onMounted(() => {
-    // console.log(props.detailDto.publishedDate);
-})
 </script>
 
 <template>

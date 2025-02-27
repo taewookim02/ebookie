@@ -3,15 +3,30 @@ import ActionButton from '@/components/common/ActionButton.vue';
 import { computed, ref, defineProps } from 'vue';
 import { PhStar } from '@phosphor-icons/vue';
 
-// state
+// State
 const props = defineProps({
     detailDto: Object
 });
 const rawContent = ref("");
 const rating = ref(0);
+
+// Emit
 const emit = defineEmits(["save"]);
 
-// computed
+
+// Actions
+const handleSave = () => {
+    emit("save", {
+        content: reviewContent.value,
+        rating: rating.value
+    });
+};
+
+const handleStarClick = (starIndex) => {
+    rating.value = starIndex;
+};
+
+// Computed
 const reviewContent = computed({
     get: () => rawContent.value,
     set: (value) => {
@@ -32,23 +47,9 @@ const computedStars = computed(() => {
     }
     return stars;
 });
-
-// actions
-const handleSave = () => {
-    emit("save", {
-        content: reviewContent.value,
-        rating: rating.value
-    });
-};
-
-const handleStarClick = (starIndex) => {
-    rating.value = starIndex;
-};
-
 </script>
 
 <template>
-    <!-- TODO: if logged in -->
     <form class="review-form" @submit.prevent="handleSave">
         <h3>리뷰 작성</h3>
         <div class="review-form__rating">

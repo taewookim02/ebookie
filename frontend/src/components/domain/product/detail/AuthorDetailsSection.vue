@@ -14,7 +14,6 @@ defineProps({
                     <span class="author-header__name">{{ author.name }} 저</span>
                 </div>
                 <div class="author-body">
-                    <!-- <img class="author-img" src="https://placehold.co/120x120/orange/white/png" alt="profileimg"> -->
                     <p>{{ author.description }}</p>
                 </div>
             </div>

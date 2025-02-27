@@ -6,28 +6,31 @@ import { useTokenStore } from '@/store/tokenStore';
 import { PhStar } from '@phosphor-icons/vue';
 import { computed, ref } from 'vue';
 
-// state
+// Use
+const memberStore = useMemberStore();
+
+// State
 const props = defineProps({
     review: Object,
     isEditing: Boolean
 })
-const memberStore = useMemberStore();
 const emit = defineEmits(['edit', 'editOpen', 'editCancel', 'delete']);
+
 const editContent = ref(props.review.content);
 
-// actions
+// Actions
 const handleEditSubmit = () => {
     emit('edit', props.review.id, editContent.value);
 };
+
 const handleDelete = () => {
     emit('delete', props.review.id);
 };
 
 const handleEdit = () => {
-    // props.isEditing.valueo = true;
     emit('editOpen', props.review.id);
-    // console.log("handleEdit");
 }
+
 const handleEditCancel = () => {
     // props.isEditing.value = false;
     console.log("handleEditCancel");
@@ -35,6 +38,8 @@ const handleEditCancel = () => {
     editContent.value = props.review.content;
     emit('editCancel');
 }
+
+// Computed
 const isOwner = computed(() => {
     return memberStore.getMemberEmail === props.review.writerEmail;
 })

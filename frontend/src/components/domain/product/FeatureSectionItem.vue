@@ -1,6 +1,8 @@
 <script setup>
 import { PhStar } from "@phosphor-icons/vue";
-import { computed, onMounted, ref } from "vue";
+import { computed } from "vue";
+
+// State
 const props = defineProps({
     imgSrc: String,
     title: String,
@@ -12,16 +14,15 @@ const props = defineProps({
     id: Number,
 });
 
-
-
+// Computed
 const formattedCurrency = computed(() => {
     return props.price ? `${new Intl.NumberFormat().format(props.price)}원` : "무료";
 });
 
-// 이미지 경로
 // const SERVER_URL = "http://localhost:8080";
 const SERVER_URL = window.location.origin;
 
+// 이미지 경로
 const imageUrl = computed(() => {
     if (props.imgSrc) {
         return `${SERVER_URL}/api/v1/image?name=${props.imgSrc}`;
@@ -58,7 +59,6 @@ const imageUrl = computed(() => {
 .features__item {
     display: flex;
     flex-direction: column;
-    /* gap: .8rem; */
     align-items: start;
 }
 

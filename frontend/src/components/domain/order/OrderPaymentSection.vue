@@ -4,11 +4,12 @@ import IconKakao from "@/assets/images/icons/icon_kakaopay.gif";
 import IconPayco from "@/assets/images/icons/icon_payco.gif";
 import IconKg from "@/assets/images/icons/icon_kg.png"
 
+
+// State
 defineProps({
     totalFinalPrice: Number,
     pgMethod: String
 });
-
 
 const paymentMethods = [
     { id: 'kakao', name: 'Kakao', icon: IconKakao },
@@ -19,7 +20,10 @@ const paymentMethods = [
     // { id: 'virtual-account', name: '무통장입금' }
 ];
 
+
+// Emit
 const emit = defineEmits(['update:pgMethod']);
+
 const selectPaymentMethod = methodId => {
     emit("update:pgMethod", methodId);
 }

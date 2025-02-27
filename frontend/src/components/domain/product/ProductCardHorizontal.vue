@@ -1,6 +1,8 @@
 <script setup>
 import { PhStar } from "@phosphor-icons/vue";
 import { computed } from "vue";
+
+// State
 const props = defineProps({
     rank: Number,
     imgSrc: String,
@@ -13,10 +15,7 @@ const props = defineProps({
     id: Number,
 });
 
-const formattedCurrency = computed(() => {
-    return props.price ? `${new Intl.NumberFormat().format(props.price)}원` : "무료";
-})
-
+// Actions
 const getImageUrl = () => {
     return new URL(`/src/assets/images/product/${props.imgSrc}`, import.meta.url);
 }
@@ -28,7 +27,6 @@ const getImageUrl = () => {
         </RouterLink>
         <div class="features__item-info">
             <span class="features__item--rank">
-                <!-- TODO: -->
                 {{ rank }}
             </span>
             <div class="features__item--title pt-3">

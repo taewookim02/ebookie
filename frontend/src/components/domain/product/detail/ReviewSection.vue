@@ -1,5 +1,4 @@
 <script setup>
-import ActionButton from '@/components/common/ActionButton.vue';
 import ReviewBody from './ReviewBody.vue';
 import ReviewStats from './ReviewStats.vue';
 import ReviewForm from './ReviewForm.vue';
@@ -7,14 +6,17 @@ import { customAxios } from '@/plugins/axios';
 import { useToast } from 'vue-toastification';
 import { ref } from 'vue';
 
-
-// state
+// Use
 const toast = useToast();
+
+// State
 const props = defineProps({
     detailDto: Object
 });
 const editingReviewId = ref(null);
 
+
+// Actions
 const handleReviewSave = async (reviewContent) => {
     // check if rating is set
     if (reviewContent.rating === 0) {
@@ -93,7 +95,6 @@ const handleEditCancel = () => {
                 :is-editing="editingReviewId === review.id"
             />
         </template>
-        <!-- <ReviewBody /> -->
     </section>
 </template>
 

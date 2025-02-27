@@ -1,30 +1,36 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 import { useMemberStore } from '@/store/memberStore';
-// const route = useRoute();
 
-// state
+// Use
 const tokenStore = useTokenStore();
 const memberStore = useMemberStore();
+
+// State
 const categoriesDto = ref([]);
 const isMobileMenuOpen = ref(false);
 const isBottomNavOpen = ref(false);
 
+// Computed
 const shouldShowBottomNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
     return !["/login", "/register"].includes(currentURLPath);
-})
+});
+
 const shouldShowMemberNav = computed(() => {
     const currentURLPath = router.currentRoute.value.path;
     return ["/member/edit", "/liked", "/saved", "/cart", "/orders", "/library"].includes(currentURLPath);
-})
+});
 
-// actions
+const isMobileWidth = computed(() => {
+    return window.innerWidth < 768;
+});
+
+// Actions
 const handleLogout = (e) => {
     customAxios
         .get("/api/v1/auth/logout", {
@@ -65,10 +71,8 @@ const fetchCategories = async () => {
         console.log(err);
     }
 };
-const isMobileWidth = computed(() => {
-    return window.innerWidth < 768;
-})
 
+// Lifecycle hooks
 onMounted(() => {
     fetchCategories();
 })
@@ -83,7 +87,7 @@ onMounted(() => {
                 <img src="@/assets/logo.png" alt="Logo">
             </RouterLink>
             
-            <!-- Mobile Menu Toggle -->
+            <!-- 모바일 메뉴 -->
             <button class="mobile-menu-toggle" @click="toggleMobileMenu">
                 <span></span>
                 <span></span>
@@ -232,7 +236,7 @@ onMounted(() => {
     color: #1A1A1A;
 }
 
-/* Mobile Menu Toggle Button */
+/* 모바일 메뉴 */
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
