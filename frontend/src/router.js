@@ -8,6 +8,7 @@ import { watch } from 'vue';
 const routes = [
     // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
+    { path: '/home', component: Home },
     { path: '/login', component: () => import('@/views/members/LoginPage.vue') },
     { path: '/register', component: () => import('@/views/members/RegisterPage.vue') },
     {

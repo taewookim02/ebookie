@@ -6,12 +6,14 @@ import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 import ActionButton from '@/components/common/ActionButton.vue';
+import { useToast } from 'vue-toastification';
 // state
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const errMsg = ref("");
 const store = useTokenStore();
+const toast = useToast();
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,11 +40,10 @@ const handleSubmit = (e) => {
             
             // 메모리에 저장
             store.setAccessToken(res.data.accessToken);
+            toast.success("회원가입 성공!")
 
             // 보호된 페이지로 이동
-            router.push("/member/edit");
-            console.log("router.pushed");
-            console.log("router:", router);
+            router.push("/");
         }).catch(err => {
             console.log(err);
             // 에러 메세지 

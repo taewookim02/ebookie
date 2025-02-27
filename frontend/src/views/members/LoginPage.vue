@@ -6,6 +6,7 @@ import AuthInputField from '@/components/domain/member/AuthInputField.vue';
 import ActionButton from '@/components/common/ActionButton.vue';
 import router from '@/router';
 import { useTokenStore } from '@/store/tokenStore';
+import { useToast } from "vue-toastification";
 
 // state
 const email = ref("");
@@ -14,6 +15,7 @@ const errMsg = ref("");
 const store = useTokenStore();
 const isLoading = ref(false);
 const hasError = ref(false);
+const toast = useToast();
 
 const handleLogin = async () => {
     try {
@@ -22,12 +24,12 @@ const handleLogin = async () => {
             email: email.value,
             password: password.value
         });
+        toast.success("로그인 성공!");
         
         // 메모리에 토큰 저장
         store.setAccessToken(res.data.accessToken);
-
-        // 보호된 url로 
-        router.push("/member/edit");
+        // 홈 이동
+        router.push("/");
     } catch (err) {
         console.log(err);
         hasError.value = true;
