@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from "@/views/HomePage.vue";
 import NotFoundPage from '@/views/NotFoundPage.vue';
 import { useTokenStore } from '@/store/tokenStore';
@@ -6,7 +6,6 @@ import { watch } from 'vue';
 
 // URL 목록
 const routes = [
-    // TODO: maybe the lazy loading is showing another page for a split second
     { path: '/', component: Home },
     { path: '/home', component: Home },
     { path: '/login', component: () => import('@/views/members/LoginPage.vue') },
@@ -42,11 +41,15 @@ const routes = [
     {
         path: "/products", component: () => import("@/views/products/ProductRankingListPage.vue"),
     },
+    {
+        path: "/products/search/result", component: () => import("@/views/products/ProductSearchListPage.vue"),
+    },
     { path: '/products/:id', component: () => import('@/views/products/ProductDetailPage.vue') },
     { path: '/categories/:id', component: () => import('@/views/products/ProductCategoryListPage.vue') },
     { path: '/:pathMatch(.*)*', component: NotFoundPage },
 ];
 
+// vue router 설정
 const router = createRouter({
     //   history: createWebHashHistory(), // hash mode
     history: createWebHistory(),
@@ -57,14 +60,11 @@ const router = createRouter({
     }
 });
 
-
-// 라우팅 가드
+// 라우팅 가드 (URL 보호함)
 router.beforeEach(async (to, from, next) => { // 페이지 이동하기 전에 호출
 
     const store = useTokenStore();
-    // Wait for initial token check to complete
     if (store.isLoading) {
-        // Create a promise that resolves when loading is complete
         await new Promise(resolve => {
             const unwatch = watch(
                 () => store.isLoading,

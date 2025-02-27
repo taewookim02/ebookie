@@ -28,7 +28,7 @@ const toastOptions = {
     position: "top-right",
 };
 
-register();
+register(); // swiper init
 const pinia = createPinia();
 const app = createApp(App);
 app.use(pinia);

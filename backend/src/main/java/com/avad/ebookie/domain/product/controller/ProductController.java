@@ -70,4 +70,13 @@ public class ProductController {
         List<ProductSearchResponseDto> responseDtos = productService.searchProducts(query);
         return ResponseEntity.ok(responseDtos);
     }
+
+    // onkeyup
+    @GetMapping("/products/search/result")
+    public ResponseEntity<ProductListResponseDto> searchProductsList(@RequestParam("query") String query, Pageable pageable) {
+        ProductListResponseDto responseDto = productService.getProductsBySearch(query, pageable);
+        System.out.println("\"helloworld\" = " + "helloworld");
+        return ResponseEntity.ok(responseDto);
+    }
+
 }
