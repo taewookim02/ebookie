@@ -78,7 +78,7 @@ fetchOrders();
                 </option>
             </select>
         </div>
-        <div v-if="orderPageDto.orders.length === 0">
+        <div v-if="orderPageDto.orders.length === 0" class="order-empty text-muted">
             주문 내역이 없습니다.
         </div>
         <div v-else>
@@ -122,6 +122,12 @@ fetchOrders();
     border: 1px solid #ddd;
     border-radius: 4px;
     background: white;
+}
+
+.order-empty {
+    text-align: center;
+    padding: 3.2rem;
+    font-size: 1.4rem;
 }
 
 .order-item {

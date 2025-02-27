@@ -66,7 +66,7 @@ const handleLogin = async () => {
             <span class="auth__err">{{errMsg}}</span>
 
             <div class="auth__link">
-                <RouterLink to="/reset-password" class="auth__link--item">비밀번호 찾기</RouterLink>
+                <!-- <RouterLink to="/reset-password" class="auth__link--item">비밀번호 찾기</RouterLink> -->
                 <span>회원이 아니신가요?
                     <RouterLink to="/register" class="auth__link--item">회원가입</RouterLink>
                 </span>

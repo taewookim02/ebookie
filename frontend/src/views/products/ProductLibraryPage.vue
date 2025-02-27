@@ -125,6 +125,7 @@ onMounted(() => {
     text-align: center;
     padding: 40px;
     color: #666;
+    font-size: 1.4rem;
 }
 
 .library-grid {
