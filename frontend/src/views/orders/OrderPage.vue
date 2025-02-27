@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { customAxios } from '@/plugins/axios';
 import Pagination from '@/components/common/Pagination.vue';
 
@@ -64,7 +64,10 @@ const getStatusColor = status => {
     }
 }
 
-fetchOrders();
+// Lifecycle hooks
+onMounted(() => {
+    fetchOrders();
+})
 
 </script>
 

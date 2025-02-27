@@ -3,12 +3,14 @@ import { ref, onMounted } from 'vue';
 import { getImageFromServer } from '@/helper/imgPath';
 import { RouterLink } from 'vue-router';
 
+// State
 const props = defineProps({
     topFiveProductDtos: Array
 });
 
 const swiperRef = ref(null);
 
+// Lifecycle hooks
 onMounted(() => {
     const swiperContainer = swiperRef.value;
     const params = {
@@ -78,6 +80,7 @@ onMounted(() => {
         </swiper-container>
     </section>
 </template>
+
 <style scoped>
 .hero {
     padding: 5rem 2rem;

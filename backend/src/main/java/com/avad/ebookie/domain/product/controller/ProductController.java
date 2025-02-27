@@ -64,10 +64,19 @@ public class ProductController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 상품 검색 (이름, 저자, 카테고리)
+    // 검색 시 연관 검색리스트 (이름, 저자, 카테고리)
     @GetMapping("/products/search")
     public ResponseEntity<List<ProductSearchResponseDto>> searchProducts(@RequestParam("query") String query) {
         List<ProductSearchResponseDto> responseDtos = productService.searchProducts(query);
         return ResponseEntity.ok(responseDtos);
     }
+
+    // 상품 검색
+    @GetMapping("/products/search/result")
+    public ResponseEntity<ProductListResponseDto> searchProductsList(@RequestParam("query") String query, Pageable pageable) {
+        ProductListResponseDto responseDto = productService.getProductsBySearch(query, pageable);
+        System.out.println("\"helloworld\" = " + "helloworld");
+        return ResponseEntity.ok(responseDto);
+    }
+
 }

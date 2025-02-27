@@ -7,17 +7,17 @@ import { PhStar } from '@phosphor-icons/vue';
 import { computed, onMounted, ref } from 'vue';
 import { VueSpinner } from "vue3-spinners";
 
-// state
+// State
 const props = defineProps({
     detailDto: Object
 });
-// const isActive = ref(true);
+
 // const SERVER_URL = "http://localhost:8080";
 const SERVER_URL = window.location.origin;
 
 
 
-// actions
+// Actions
 const emit = defineEmits(["scrollToReview", "save", "like", "cart", "buy"]);
 const handleReviewClick = () => {
     emit("scrollToReview");
@@ -28,6 +28,7 @@ const handleCartClick = () => emit("cart");
 const handleBuyClick = () => emit("buy");
 
 
+// Computed
 // 이미지 경로
 const imageUrl = computed(() => {
     if (props.detailDto && props.detailDto.images && props.detailDto.images.length > 0) {
@@ -68,13 +69,10 @@ const computedReviewAvg = computed(() => {
 });
 
 // 판매가
-// TODO: is determining price on frontend ideal?
 const computedSellingPrice = computed(() => {
     return (props.detailDto.price - (props.detailDto.price * props.detailDto.discountRate / 100)).toLocaleString();
 })
 
-
-// 
 const computedStars = computed(() => {
     const avg = parseFloat(computedReviewAvg.value);
     const stars = [];
@@ -89,11 +87,6 @@ const computedStars = computed(() => {
 </script>
 
 <template>
-    <!-- 히어로 -->
-    <!-- 히어로__정보 -->
-    <!-- 히어로__이미지 -->
-    <!-- 정보 -->
-    <!-- 액션 -->
     <section class="hero">
         <div class="hero__image" :class="{ 'loading': !imageUrl }">
             <img :src="imageUrl" alt="도서 썸네일" v-if="imageUrl">
@@ -197,7 +190,6 @@ const computedStars = computed(() => {
 
 strong.price {
     font-size: 2.4rem;
-    /* color:  */
 }
 
 .info-bottom__action {

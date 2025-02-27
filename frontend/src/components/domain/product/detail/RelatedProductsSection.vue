@@ -1,16 +1,13 @@
 <script setup>
-import { onMounted } from 'vue';
 import ProductSliderList from '@/components/domain/product/ProductSliderList.vue';
 
 
-// state
+// State
 const props = defineProps({
     productId: String,
     detailDto: Object,
     categoryId: Number
 });
-
-
 </script>
 
 

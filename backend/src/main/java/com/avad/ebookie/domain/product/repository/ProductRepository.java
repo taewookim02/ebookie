@@ -38,4 +38,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             OR c.name LIKE %:query%
             """)
     List<Product> findAllBySearchQuery(@Param("query") String query);
+
+    @Query("""
+            SELECT DISTINCT p
+            FROM Product p
+            LEFT JOIN FETCH p.authors a
+            LEFT JOIN FETCH a.author
+            LEFT JOIN FETCH p.category c
+            WHERE p.name LIKE %:query%
+            OR a.author.name LIKE %:query%
+            OR c.name LIKE %:query%
+            """)
+    Page<Product> findAllBySearchQuery(@Param("query") String query, Pageable pageable);
 }

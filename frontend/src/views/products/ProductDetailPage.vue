@@ -13,53 +13,21 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
-// 상품id 가져오기
+// Use
 const route = useRoute();
 const router = useRouter();
 
-// state
+// State
 const reviewSection = ref(null);
 const detailDto = ref({});
 const toast = useToast();
 const isLoading = ref(true);
 const hasError = ref(false);
 
-// actions
+// Actions
 const scrollToReview = () => {
     reviewSection.value.$el.scrollIntoView({ behavior: "smooth" });
 }
-
-const fetchProductDetailDto = async (id) => {
-    try {
-        isLoading.value = true;
-        hasError.value = false;
-        const res = await customAxios.get(`/api/v1/products/${id}`);
-        detailDto.value = res.data;
-    } catch (err) {
-        console.log("err:", err);
-        hasError.value = true;
-        if (err.response?.status === 404) {
-            toast.error("존재하지 않는 상품입니다.");
-            router.push('/products');
-        } else {
-            toast.error("상품 정보를 불러올 수 없습니다.");
-        }
-    } finally {
-        isLoading.value = false;
-    }
-}
-
-// url path variable watch
-watch(
-    () => route.params.id,
-    (newId) => {
-        if (newId) {
-            fetchProductDetailDto(newId);
-        }
-    },
-    { immediate: true }
-)
-
 
 const handleSave = async () => {
     try {
@@ -134,51 +102,70 @@ const handleBuy = async () => {
         }
     }
 }
+
+
+const fetchProductDetailDto = async (id) => {
+    try {
+        isLoading.value = true;
+        hasError.value = false;
+        const res = await customAxios.get(`/api/v1/products/${id}`);
+        detailDto.value = res.data;
+    } catch (err) {
+        console.log("err:", err);
+        hasError.value = true;
+        if (err.response?.status === 404) {
+            toast.error("존재하지 않는 상품입니다.");
+            router.push('/products');
+        } else {
+            toast.error("상품 정보를 불러올 수 없습니다.");
+        }
+    } finally {
+        isLoading.value = false;
+    }
+}
+
+// url path variable watch
+watch(
+    () => route.params.id,
+    (newId) => {
+        if (newId) {
+            fetchProductDetailDto(newId);
+        }
+    },
+    { immediate: true }
+)
 </script>
 
 <template>
     <div v-if="isLoading" class="loading">
         <LoadingSpinner />
     </div>
+    
     <div v-else-if="hasError" class="empty-state">
         <i class="bi bi-exclamation-circle" style="font-size: 4rem;"></i>
         <h3 class="mt-4">상품 정보를 불러올 수 없습니다</h3>
         <p class="text-muted">잠시 후 다시 시도해주세요.</p>
         <ActionButton class="mt-3" @action="router.push('/products')">상품 목록으로</ActionButton>
     </div>
+
     <template v-else-if="detailDto">
         <!-- 히어로 -->
-        <!-- 히어로__이미지 -->
-        <!-- 히어로__정보 -->
-        <!-- 정보 -->
-        <!-- 액션 -->
         <HeroSection :detail-dto="detailDto" @scroll-to-review="scrollToReview" @save="handleSave" @like="handleLike"
             @cart="handleCart" @buy="handleBuy" />
 
-        <!-- 관련상품 -->
-        <!-- 슬라이더 -->
+        <!-- 관련상품 슬라이더 -->
         <RelatedProductsSection :detail-dto="detailDto" :category-id="detailDto.categoryId" />
-
-        <!-- _상세 네비게이션 -->
-        <!-- <DetailNavSection /> -->
 
         <!-- 도서정보 -->
         <ProductDetailsSection :detail-dto="detailDto" />
 
         <!-- 도서소개 -->
-        <!-- 목차 -->
-        <!-- 이미지 -->
         <BookDetailsSection :detail-dto="detailDto" />
 
         <!-- 저자소개 -->
-        <!-- 만든이 -->
-        <!-- 추천평 -->
         <AuthorDetailsSection :detail-dto="detailDto" />
 
         <!-- 리뷰 -->
-        <!-- 헤더 -->
-        <!-- 별점 UI -->
-        <!-- 리뷰   -->
         <ReviewSection ref="reviewSection" :detail-dto="detailDto" />
 
         <!-- 관련상품 -->

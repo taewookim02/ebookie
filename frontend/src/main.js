@@ -25,10 +25,10 @@ const toastOptions = {
         },
     },
     transition: "Vue-Toastification__fade",
-    position: "bottom-right",
+    position: "top-right",
 };
 
-register();
+register(); // swiper init
 const pinia = createPinia();
 const app = createApp(App);
 app.use(pinia);

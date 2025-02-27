@@ -10,11 +10,9 @@ defineProps({
         <div class="details-container">
             <div class="details-category">
                 <h4 class="details-category__heading">이 상품이 속한 분야</h4>
-                <!-- TODO: 서버에서 카테고리 가져오기 -->
                 <span>eBook > IT > {{ detailDto.categoryName }}</span>
             </div>
             <div class="details-info">
-                <!-- TODO: 서버에서 내용 가져오기 -->
                 <p>
                     파일은 결제내역 > 결제상세 > 다운로드 버튼을 눌러 다운로드 받으실 수 있습니다.
                     (단, 로그인 및 결제 후 다운로드 이용 가능)

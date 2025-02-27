@@ -1,17 +1,13 @@
 <script setup>
-import { PhStar, PhStarHalf } from '@phosphor-icons/vue';
-import { onUpdated, computed } from 'vue';
+import { PhStar } from '@phosphor-icons/vue';
+import { computed } from 'vue';
+
+// State
 const props = defineProps({
     detailDto: Object
 });
 
-
-onUpdated(() => {
-    // console.log(props.detailDto);
-})
-
-
-// computed
+// Computed
 const computedAvgRating = computed(() => {
     if (!props.detailDto.reviews?.length) return 0;
     const sum = props.detailDto.reviews.reduce((acc, review) => acc + review.rating, 0);

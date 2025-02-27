@@ -7,6 +7,7 @@ import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 import ActionButton from '@/components/common/ActionButton.vue';
 import { useToast } from 'vue-toastification';
+
 // state
 const email = ref("");
 const password = ref("");
@@ -15,7 +16,9 @@ const errMsg = ref("");
 const store = useTokenStore();
 const toast = useToast();
 
-const handleSubmit = (e) => {
+
+// actions
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     // if password.value.length <8 {
@@ -30,25 +33,25 @@ const handleSubmit = (e) => {
         return;
     }
 
+    try {
+        const res = await customAxios.post("/api/v1/auth/register", {
+            email: email.value,
+            password: password.value,
+            confirmPassword: confirmPassword.value
+        })
 
-    customAxios.post("/api/v1/auth/register", {
-        email: email.value,
-        password: password.value,
-        confirmPassword: confirmPassword.value
-    })
-        .then(res => {
-            
-            // 메모리에 저장
-            store.setAccessToken(res.data.accessToken);
-            toast.success("회원가입 성공!")
+        // 메모리에 저장
+        store.setAccessToken(res.data.accessToken);
+        toast.success("회원가입 성공!")
 
-            // 보호된 페이지로 이동
-            router.push("/");
-        }).catch(err => {
-            console.log(err);
-            // 에러 메세지 
-            errMsg.value = err.response.data.message;
-        });
+        // 보호된 페이지로 이동
+        router.push("/");
+    } catch (error) {
+        console.log(err);
+        // 에러 메세지 
+        errMsg.value = err.response.data.message;
+    }
+
 }
 </script>
 

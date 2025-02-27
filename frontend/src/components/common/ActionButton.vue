@@ -1,12 +1,12 @@
 <script setup>
 defineProps({
-    // text: String,
     isActive: Boolean,
-    // icon: Object
 })
 
+// emit
 const emit = defineEmits(["action"]);
 
+// actions
 const handleClick = () => {
     emit("action")
 }

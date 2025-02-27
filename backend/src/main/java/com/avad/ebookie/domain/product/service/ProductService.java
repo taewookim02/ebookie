@@ -165,14 +165,14 @@ public class ProductService {
         int totalPages = productsPagination.getTotalPages();
         long totalElements = productsPagination.getTotalElements();
 
-        List<ProductListItemResponseDto> relatedDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
+        List<ProductListItemResponseDto> productListItemResponseDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException(ErrorCode.CATEGORY_NOT_FOUND));
 
         return ProductListResponseDto.builder()
                 .currentPage(pageable.getPageNumber())
                 .totalPages(totalPages)
                 .totalElements(totalElements)
-                .products(relatedDtos)
+                .products(productListItemResponseDtos)
                 .categoryName(category.getName())
                 .build();
     }
@@ -223,6 +223,8 @@ public class ProductService {
                 .libraryDtos(libraryDtos)
                 .build();
     }
+
+    @Transactional(readOnly = true)
     public List<ProductSearchResponseDto> searchProducts(String query) {
         List<Product> products = productRepository.findAllBySearchQuery(query);
 
@@ -238,5 +240,21 @@ public class ProductService {
             .collect(Collectors.toList());
 
         return productDtos;
+    }
+
+    @Transactional(readOnly = true)
+    public ProductListResponseDto getProductsBySearch(String query, Pageable pageable) {
+        Page<Product> productsPagination = productRepository.findAllBySearchQuery(query, pageable);
+        int totalPages = productsPagination.getTotalPages();
+        long totalElements = productsPagination.getTotalElements();
+
+        List<ProductListItemResponseDto> productListItemResponseDtos = productMapper.toProductListDto(productsPagination.stream().collect(Collectors.toList()));
+        return ProductListResponseDto.builder()
+                .currentPage(pageable.getPageNumber())
+                .totalPages(totalPages)
+                .totalElements(totalElements)
+                .products(productListItemResponseDtos)
+                .categoryName(query)
+                .build();
     }
 }

@@ -1,4 +1,5 @@
 <script setup>
+// State
 const props = defineProps({
     currentPage: {
         type: Number,
@@ -10,8 +11,10 @@ const props = defineProps({
     }
 });
 
+// Emit
 const emit = defineEmits(['page-change']);
 
+// Actions
 const changePage = (page) => {
     emit('page-change', page);
 };

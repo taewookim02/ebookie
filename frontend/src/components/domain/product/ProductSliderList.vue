@@ -4,16 +4,14 @@ import { onMounted, onUpdated, ref, computed, watch } from "vue";
 import FeatureSectionItem from "@/components/domain/product/FeatureSectionItem.vue";
 import { PhCaretRight } from "@phosphor-icons/vue";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
-import { useRoute } from "vue-router";
 
+
+// State
 const props = defineProps({
     sliderTitle: String,
     products: Array, // ProductRelatedResponseDto
     categoryId: Number
 });
-
-const route = useRoute();
-
 const swiperRef = ref(null);
 const paginationRef = ref(null);
 const breakpoints = {
@@ -24,6 +22,7 @@ const breakpoints = {
     1560: 6
 };
 
+// Computed
 const slidesPerView = computed(() => {
     const windowWidth = window.innerWidth;
     
@@ -40,11 +39,10 @@ const slidesPerView = computed(() => {
     }
 });
 
-// register();
+// Actions
 const initSwiper = () => {
     const swiperContainer = swiperRef.value;
     if (!swiperContainer) {
-        // console.log("Swiper 컨테이너 부착 전");
         return;
     }
     const params = {
@@ -87,8 +85,8 @@ const initSwiper = () => {
 
 onMounted(() => {
     initSwiper();
-    
 })
+
 onUpdated(() => {
     initSwiper();
 });
@@ -136,8 +134,6 @@ swiper-container {
     --swiper-navigation-color: #333;
     --swiper-pagination-color: #333;
     --swiper-pagination-bullet-inactive-color: #333;
-    /* --swiper-pagination-top: -15px; */
-    /* --swiper-pagination-bottom: auto; */
 }
 
 swiper-container {

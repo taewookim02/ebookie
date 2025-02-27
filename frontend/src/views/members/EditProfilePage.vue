@@ -1,8 +1,6 @@
 <script setup>
 import AuthInputField from '@/components/domain/member/AuthInputField.vue';
-import { PhArrowLeft } from '@phosphor-icons/vue';
 import { onMounted, ref } from 'vue';
-import { useTokenStore } from '@/store/tokenStore';
 import { customAxios } from '@/plugins/axios';
 import { useToast } from 'vue-toastification';
 import router from '@/router';

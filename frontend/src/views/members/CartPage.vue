@@ -207,8 +207,8 @@ const handleOrderClick = async (productId) => {
                                     }}원</span>
                                 </div>
                             </td>
-                            <td>
-                                <!-- TODO: quantity -->
+                            <td> 
+                                <!-- eBook 개수 1개 고정-->
                                 1
                             </td>
                             <td class="fw-bold">

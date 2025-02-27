@@ -1,10 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { PhCaretRight, PhRows } from '@phosphor-icons/vue';
+import { PhCaretRight } from '@phosphor-icons/vue';
 import ProductCardHorizontal from '@/components/domain/product/ProductCardHorizontal.vue';
-// import { register } from 'swiper/element';
-
-// register();
 
 // 상태
 const swiperRef = ref(null);
@@ -12,7 +9,6 @@ const swiperRef = ref(null);
 // 액션
 const handleDailyClick = () => {
     console.log("handleDailyClick!");
-    // 서버 api call
 }
 
 const handleWeeklyClick = () => {
@@ -36,17 +32,6 @@ onMounted((e) => {
             rows: 2,
             fill: "row"
         },
-        // TODO: breakpoints
-        // breakpoints: {
-        //     640: {
-        //     },
-        //     768: {
-        //     },
-        //     1024: {
-        //     },
-        //     1560: {
-        //     }
-        // },
     }
 
     Object.assign(swiperContainer, params);

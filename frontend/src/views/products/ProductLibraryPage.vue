@@ -7,6 +7,7 @@ import { useToast } from 'vue-toastification';
 import Pagination from '@/components/common/Pagination.vue';
 import { PhDownloadSimple } from '@phosphor-icons/vue';
 
+// State
 const libraryPageDto = ref({
     libraryDtos: [],
     totalPages: 0,
@@ -18,7 +19,7 @@ const pageSize = ref(10);
 const pageSizeOptions = [5, 10, 20, 50];
 const toast = useToast();
 
-// actions
+// Actions
 const fetchLibrary = async (page = 0) => {
     try {
         const res = await customAxios.get(`/api/v1/products/library?page=${page}&size=${pageSize.value}`);
@@ -63,6 +64,7 @@ const handleDownload = async (productId) => {
     }
 }
 
+// Lifecycle hook
 onMounted(() => {
     fetchLibrary();
 });
@@ -106,10 +108,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.library {
-    /* padding: 20px; */
-}
-
 .page-controls {
     margin-bottom: 1rem;
 }

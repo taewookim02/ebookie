@@ -5,7 +5,7 @@
         <RouterLink to="/" class="footer__logo">
           <img src="@/assets/logo.png" alt="Logo" class="logo__img">
         </RouterLink>
-        <p class="footer__copyright">© {{ new Date().getFullYear() }} 북스토어. All rights reserved.</p>
+        <p class="footer__copyright">© {{ new Date().getFullYear() }} eBookie. All rights reserved.</p>
       </div>
 
       <div class="footer__links">

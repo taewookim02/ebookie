@@ -1,6 +1,7 @@
 <script setup>
 import { PhBookmarkSimple } from '@phosphor-icons/vue';
 
+// State
 const props = defineProps({
     size: {
         type: Number,
@@ -17,9 +18,10 @@ const props = defineProps({
     isActive: Boolean
 });
 
-
+// Emit
 const emit = defineEmits(['save']);
 
+// Actions
 const handleSaveClick = () => {
     emit('save');
 };
