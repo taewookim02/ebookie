@@ -1,15 +1,18 @@
 package com.avad.ebookie.domain.auth.service;
 
 import com.avad.ebookie.config.exception.ErrorCode;
+import com.avad.ebookie.domain.auth.dto.request.ForgotPasswordRequestDto;
 import com.avad.ebookie.domain.auth.dto.request.LoginRequestDto;
 import com.avad.ebookie.domain.auth.dto.request.RegisterRequestDto;
 import com.avad.ebookie.domain.auth.dto.response.AuthResponseDto;
+import com.avad.ebookie.domain.auth.dto.response.ForgotPasswordResponseDto;
 import com.avad.ebookie.domain.auth.exception.EmailDuplicateException;
 import com.avad.ebookie.domain.auth.exception.MemberNotFoundException;
 import com.avad.ebookie.domain.auth.exception.PasswordMismatchException;
 import com.avad.ebookie.domain.auth.entity.Token;
 import com.avad.ebookie.domain.auth.entity.TokenType;
 import com.avad.ebookie.domain.auth.repository.TokenRepository;
+import com.avad.ebookie.domain.email.service.EmailService;
 import com.avad.ebookie.domain.member.entity.Member;
 import com.avad.ebookie.domain.member.entity.Role;
 import com.avad.ebookie.domain.member.repository.MemberRepository;
@@ -19,6 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
+import net.datafaker.providers.base.Text;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +31,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static net.datafaker.providers.base.Text.DIGITS;
+import static net.datafaker.providers.base.Text.EN_UPPERCASE;
 
 
 @Slf4j
@@ -38,6 +46,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
 
     @Transactional
@@ -66,14 +75,14 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(savedMember);
         log.info(accessToken);
         log.info(refreshToken);
-        
-        
+
+
         // 토큰 저장
         saveMemberToken(savedMember, accessToken);
         // 리프레시 토큰 쿠키에 추가
         addRefreshTokenCookie(response, refreshToken);
-        
-        
+
+
         // 응답
         return AuthResponseDto
                 .builder()
@@ -161,12 +170,12 @@ public class AuthService {
             // 이메일로 유저정보 추출
             Member userDetails = memberRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
-            
+
             // 리프레시 토큰이 유효할 경우 
             if (jwtService.isTokenValid(refreshToken, userDetails)) {
                 // 새로운 accessToken 발급
                 String accessToken = jwtService.generateToken(userDetails);
-                
+
                 // 존재했던 토큰 만료
                 revokeAllMemberTokens(userDetails);
                 // 새로 발급된 accessToken 저장
@@ -193,5 +202,32 @@ public class AuthService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    public ForgotPasswordResponseDto forgotPassword(ForgotPasswordRequestDto requestDto) {
+        // get email
+        Member member = memberRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // generate random password
+        Faker faker = new Faker();
+        String randomPassword = faker.text().text(Text.TextSymbolsBuilder.builder()
+                .len(8)
+                .with(EN_UPPERCASE, 2)
+                .with(DIGITS, 3).build());
+
+        // set random password for the member with the email
+        member.updatePassword(passwordEncoder.encode(randomPassword));
+
+        // send email to the email with the random password
+        emailService.sendForgotPasswordMail(requestDto.getEmail(), randomPassword);
+
+        memberRepository.save(member);
+
+        return ForgotPasswordResponseDto.builder()
+                .email(requestDto.getEmail())
+                .message("SUCCESS")
+                .build();
     }
 }

@@ -27,18 +27,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-//	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // thymeleaf
-//	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' // thymeleaf layout
-
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // 유효성검사
 
-//	implementation 'io.portone:server-sdk:0.15.0' // 포트원 결제
-	// https://mvnrepository.com/artifact/com.github.iamport/iamport-rest-client-java
-//	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
-
 	implementation 'org.springframework.boot:spring-boot-starter-webflux' //
+	implementation 'org.springframework.boot:spring-boot-starter-mail' // 비밀번호찾기 메일
 
 
 	implementation 'net.datafaker:datafaker:2.4.2' // 더미데이터 용도

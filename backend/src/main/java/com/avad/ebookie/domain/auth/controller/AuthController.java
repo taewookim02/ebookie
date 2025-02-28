@@ -1,8 +1,10 @@
 package com.avad.ebookie.domain.auth.controller;
 
+import com.avad.ebookie.domain.auth.dto.request.ForgotPasswordRequestDto;
 import com.avad.ebookie.domain.auth.dto.request.RegisterRequestDto;
 import com.avad.ebookie.domain.auth.dto.request.LoginRequestDto;
 import com.avad.ebookie.domain.auth.dto.response.AuthResponseDto;
+import com.avad.ebookie.domain.auth.dto.response.ForgotPasswordResponseDto;
 import com.avad.ebookie.domain.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +36,11 @@ public class AuthController {
     @GetMapping("/refresh-token")
     public ResponseEntity<AuthResponseDto> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         return ResponseEntity.ok(authService.refreshToken(request, response));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ForgotPasswordResponseDto> forgotPassword(@RequestBody ForgotPasswordRequestDto requestDto) {
+        return ResponseEntity.ok(authService.forgotPassword(requestDto));
     }
 
 
