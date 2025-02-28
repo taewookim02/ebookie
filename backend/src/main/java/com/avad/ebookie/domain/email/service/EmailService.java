@@ -19,7 +19,7 @@ public class EmailService {
     private String from;
 
     public void sendForgotPasswordMail(@NotBlank @Email String email, String randomPassword) {
-        String title = "테스트: 임시 비밀번호 안내 이메일입니다.";
+        String title = "[eBookie] 임시 비밀번호 안내 이메일입니다.";
         String content = """
              <!DOCTYPE html>
              <html lang="ko">
@@ -28,7 +28,7 @@ public class EmailService {
                <meta charset="UTF-8">
                <meta name="viewport" content="width=device-width,initial-scale=1">
                <meta name="x-apple-disable-message-reformatting">
-               <title>이메일 템플릿</title>
+               <title>eBookie 임시 비밀번호 안내</title>
              </head>
 
              <body style="margin:0;padding:0;">
