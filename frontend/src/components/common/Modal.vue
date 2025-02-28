@@ -5,11 +5,16 @@ import { ref } from 'vue';
 
 // State
 const dialog = ref(null);
-defineProps({
-    title: String
+const props = defineProps({
+    title: String,
+    isLoading: Boolean
 })
 // Actions
 const handleBackdropClick = (e) => {
+    if (props.isLoading) {
+        return;
+    }
+
     const dialogDimensions = dialog.value.getBoundingClientRect();
     if (
         e.clientX < dialogDimensions.left ||

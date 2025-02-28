@@ -23,6 +23,7 @@ const toast = useToast();
 const modalRef = ref(null);
 const forgotPasswordEmail = ref("");
 const forgotPasswordErrMsg = ref("");
+
 // actions
 const handleLogin = async () => {
     try {
@@ -106,7 +107,7 @@ const handleForgotPasswordClose = () => {
             </div>
         </form>
 
-        <Modal ref="modalRef" title="비밀번호 찾기" @close="handleForgotPasswordClose">
+        <Modal ref="modalRef" title="비밀번호 찾기" @close="handleForgotPasswordClose" :is-loading="isMailLoading">
             <div>
                 <form class="modal__form" @submit.prevent="handleForgotPasswordSubmit">
                     <p>임시 비밀번호를 받을 이메일을 입력해주세요</p>
