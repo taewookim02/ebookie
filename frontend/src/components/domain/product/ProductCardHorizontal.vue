@@ -1,6 +1,6 @@
 <script setup>
+import { getImageFromServer } from "@/helper/imgPath";
 import { PhStar } from "@phosphor-icons/vue";
-import { computed } from "vue";
 
 // State
 const props = defineProps({
@@ -15,15 +15,12 @@ const props = defineProps({
     id: Number,
 });
 
-// Actions
-const getImageUrl = () => {
-    return new URL(`/src/assets/images/product/${props.imgSrc}`, import.meta.url);
-}
 </script>
 
 <template>
     <div class="features__item">
-        <RouterLink :to="`/products/${id}`"><img :src="getImageUrl()" class="features__img" alt="feature img" />
+        <RouterLink :to="`/products/${id}`">
+            <img :src="getImageFromServer(imgSrc)" class="features__img" alt="feature img" />
         </RouterLink>
         <div class="features__item-info">
             <span class="features__item--rank">

@@ -4,7 +4,7 @@ import CartButton from '@/components/common/CartButton.vue';
 import LikeButton from '@/components/common/LikeButton.vue';
 import SaveButton from '@/components/common/SaveButton.vue';
 import { PhStar } from '@phosphor-icons/vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { VueSpinner } from "vue3-spinners";
 
 // State
