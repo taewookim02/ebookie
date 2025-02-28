@@ -1,7 +1,7 @@
 <script setup>
 import { register } from "swiper/element/bundle";
 import { onMounted, onUpdated, ref, computed, watch } from "vue";
-import FeatureSectionItem from "@/components/domain/product/FeatureSectionItem.vue";
+import ProductCard from "@/components/domain/product/ProductCard.vue";
 import { PhCaretRight } from "@phosphor-icons/vue";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 
@@ -111,7 +111,7 @@ onUpdated(() => {
             <swiper-container ref="swiperRef" init="false">
                 <swiper-slide v-for="product in products">
                     <div class="slide-div">
-                        <FeatureSectionItem :title="product.name" :author="product.authorNames"
+                        <ProductCard :title="product.name" :author="product.authorNames"
                             :img-src="product.thumbnail.fileName" :price="product.price"
                             :publisher="product.publisherName" :rating-avg="product.reviewRating"
                             :rating-cnt="product.reviewCount" :id="product.id" />
