@@ -221,9 +221,10 @@ public class AuthService {
         member.updatePassword(passwordEncoder.encode(randomPassword));
 
         // send email to the email with the random password
-        emailService.forgotPassword(requestDto.getEmail(), randomPassword);
+        emailService.sendForgotPasswordMail(requestDto.getEmail(), randomPassword);
 
         memberRepository.save(member);
+
         return ForgotPasswordResponseDto.builder()
                 .email(requestDto.getEmail())
                 .message("SUCCESS")
