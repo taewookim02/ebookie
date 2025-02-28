@@ -5,7 +5,6 @@ spring:
     import: env.properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/${DB_DATABASE_NAME}?useUnicode=true&characterEncoding=utf8
     url: jdbc:mysql://localhost:3306/${DB_DATABASE_NAME}?useUnicode=true&characterEncoding=utf8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -22,14 +21,14 @@ spring:
     livereload:
       enabled: true  # 정적 리소스에 변화가 있을 때 바로 반영한다.
       restart: true
-#  thymeleaf:
-#    # 참조 경로
-#    enabled: true
-#    prefix: classpath:/templates/
-#    suffix: .html
-#    cache: false # thymeleaf에 대한 캐시를 남기지 않는다. cache=false 설정(운영시는 true)
-#    check-template-location: true # templates 디렉토리에 파일이 있는지 없는지 체크, 없으면 에러를 발생시킨다.
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: {GMAIL_ID}@gmail.com
+    password: {GMAIL_APP_KEY}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 application:
   security:
     jwt:
@@ -50,7 +49,6 @@ logging:
             bind: trace
 server:
   port: 8080
-
 app:
   upload:
 #    img-dir: c:/dev/fs/ebookie/product_images/
